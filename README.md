@@ -44,6 +44,7 @@ Yes. There is still a lot of reverse-engineering to do:
     * [ ] build configuration file to manage (multiple) devices
     * [ ] build search tool to find displays nearby
     * [ ] build 
+* [ ] Build RestAPI to interact with the device remotely
 
 ## how to use?
 not usable yet
