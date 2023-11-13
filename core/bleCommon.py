@@ -93,3 +93,25 @@ class bleCommon:
             logging.error(
                 'could not set the time of the device: {}'.format(
                     error))
+
+    def setJoint(self, mode):
+        """ Currently no Idea what this is doing.
+
+        Args:
+            mode (int): set the joint mode
+
+        Returns:
+            _type_: byte array of the command which needs to be sent to the device
+        """
+        try:
+            return bytearray([
+                5,
+                0,
+                12,
+                128,
+                int(mode) % 256
+            ])
+        except BaseException as error:
+            logging.error(
+                'could not change the device joint: {}'.format(
+                    error))
