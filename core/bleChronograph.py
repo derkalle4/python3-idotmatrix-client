@@ -7,6 +7,9 @@ class bleChronograph:
 
         Args:
             mode (int): 0 = reset, 1 = (re)start, 2 = pause, 3 = start after pause
+
+        Returns:
+            _type_: byte array of the command which needs to be sent to the device
         """
         try:
             return bytearray([
