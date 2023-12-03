@@ -1,82 +1,13 @@
+import io
 import logging
 import struct
 import zlib
+from PIL import Image
 
 
 class bleDIY:
-    def payload(self, i, data, total_data, i2, i3, i4):
-        def get_data_type(i):
-            data_type_dict = {
-                0: bytearray([0, 0]),
-                1: bytearray([1, 0]),
-                2: bytearray([2, 0]),
-                3: bytearray([3, 0]),
-                4: bytearray([0, 1]),
-                5: bytearray([5, 1]),
-                6: bytearray([0, 0]),
-            }
-            return data_type_dict.get(i, bytearray([0, 0]))
-
-        def should_crc(i):
-            return i in {2, 1, 3, 4}
-
-        def change_light(i, b_arr):
-            length = len(b_arr)
-            for i2 in range(length):
-                b_arr[i2] = (b_arr[i2] * i // 100) & 0xFF
-
-        def crc32_checksum(data):
-            return zlib.crc32(bytes(data)) & 0xFFFFFFFF
-
-        data_type = get_data_type(i)
-        should_crc_value = should_crc(i)
-
-        if i != 5:
-            header_size = 9 if i != 4 else 10
-        else:
-            header_size = 5
-
-        b_arr3 = bytearray(header_size)
-
-        length = len(data) + header_size + (5 if should_crc_value else 0)
-
-        # Payload Size Encoding
-        b_arr3[0:2] = struct.pack('<H', length)
-
-        # Payload Data Encoding
-        b_arr3[2:4] = data_type
-        b_arr3[4] = i2
-
-        if i != 5:
-            # Encode length of payload
-            b_arr3[5:9] = struct.pack('<I', len(data))
-
-        # Handling Special Case (i4)
-        if i4 != 100:
-            change_light(i4, data)
-
-        if not should_crc_value:
-            # If CRC is not needed, return the concatenation of the header and data
-            return b_arr3 + bytes(data)
-
-        # CRC Calculation
-        crc_data = total_data if i == 1 or i == 3 else data
-        crc_value = crc32_checksum(crc_data)
-
-        # Log CRC32
-        print("#1.0# CRC32 src: ", crc_value)
-
-        b_arr4 = bytearray(struct.pack('<I', crc_value))
-
-        if i == 3:
-            b_arr4[4] = 2
-
-        # Ensure that data is a bytearray before concatenation
-        if not isinstance(data, bytearray):
-            data = bytearray(data)
-
-        # Return the concatenation of header, CRC, and data
-        return b_arr3 + b_arr4 + data
+    def __init__(self, mtu_size):
+        self.mtu_size = mtu_size
 
     def enter(self, mode=1):
         """ Enter the DIY draw mode of the iDotMatrix device.
@@ -100,12 +31,65 @@ class bleDIY:
                 'could not enter DIY mode: {}'.format(
                     error))
 
-    def sendDIYMatrix(self):
-        color_bytes = [
-            (255 >> 16) & 0xFF,
-            (255 >> 8) & 0xFF,
-            255 & 0xFF,
-            10,
-            10
-        ]
-        return bytearray(self.payload(4, color_bytes, color_bytes, 42, len(color_bytes), 99))
+    def splitIntoMultipleLists(self, list_, max_elems_per_list):
+        """
+        Returns a list containing lists with the elements from `list_`.
+        It is ensured that the lists have a maximum length of `max_elems_per_list`.
+
+        Derived from `private List<byte[]> getSendData4096(byte[] bArr)`
+        in `com/tech/idotmatrix/core/data/ImageAgreement1.java:259`.
+        """
+        chunks = []
+        len_ = len(list_)
+        for start in range(0, len_, max_elems_per_list):
+            end = start + min(len_ - start, max_elems_per_list)
+            chunks.append(list_[start:end])
+        return chunks
+
+    def sendDIYMatrix(self, img: Image.Image):
+        """
+        Returns a list of byte arrays to be sent individually to the device,
+        which once sent will bring the device to display the specified image.
+
+        Derived from `public void sendDIYImageData(BleDevice bleDevice, byte[] bArr, int i, TextAgreementListener textAgreementListener)`
+        in `com/tech/idotmatrix/core/data/ImageAgreement1.java:177`.
+        """
+        payloads = []
+
+        if img.size[0] > 32 or img.size[1] > 32:
+            raise Exception('Image needs to be smaller than 32 pixels in width and height.')
+        elif img.size[0] != img.size[1]:
+            raise Exception('Image needs to be square.')
+        # TODO ensure it has the exact format needed by the currently connected device
+
+        # compress image to PNG
+        png_buf = io.BytesIO()
+        img.save(png_buf, format='PNG')
+        png_complete = png_buf.getvalue()
+
+        # make 4096 byte chunks out of the compressed image
+        png_chunks = self.splitIntoMultipleLists(png_complete, 4096)
+
+        # arbitrary metadata number
+        idk = len(png_complete) + len(png_chunks) * 9  # no idea what the 9 tells us
+
+        # convert some metadata to byte form
+        png_len_bytes = struct.pack('i', len(png_complete))
+        idk_bytes = struct.pack('h', idk)  # convert to 16bit signed int
+
+        for i in range(len(png_chunks)):
+            payload = idk_bytes + bytearray([
+                0,
+                0,
+                2 if i > 0 else 0
+            ]) + png_len_bytes + png_chunks[i]
+            payloads.append(payload)
+
+        # At this point, the original code got me confused...
+        # In `ImageAgreement1.java:158` there is a really weird loop that breaks after the first iteration.
+        # That's why it just takes the first payload (so the first 4096 byte PNG chunk + some metadata) and sends it.
+        # The rest is discarded - but why did we do this elaborate process in the first place then!?
+        # Maybe the decompiler made some mistake, or the original code does not make a ton of sense to begin with.
+
+        # split byte array into multiple MTUs
+        return self.splitIntoMultipleLists(payloads[0], self.mtu_size)
