@@ -30,6 +30,7 @@ Yes. There is still a lot of reverse-engineering to do:
     * [X] Chronograph
     * [X] Clock
     * [X] Countdown
+    * [x] Graffiti Board
     * [ ] DIY-Mode
     * [ ] Animated Images
     * [ ] Cloud-API to download images

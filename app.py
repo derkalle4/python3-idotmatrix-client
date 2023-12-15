@@ -9,6 +9,7 @@ from core.bleDIY import bleDIY
 from core.bleFullscreenColor import bleFullscreenColor
 from core.bleMusicSync import bleMusicSync
 from core.bleScoreboard import bleScoreboard
+from core.bleGraffiti import bleGraffiti
 
 # pip3 install bleak -> https://github.com/hbldh/bleak
 # async def main():
@@ -33,6 +34,25 @@ async def connect(address):
             UUID_WRITE_DATA,
             bleDIY().enter(1)
         )
+
+        time.sleep(1)
+        #load graffiti board and color pixel 0,0 red
+        await client.write_gatt_char(
+            UUID_WRITE_DATA,
+            bleGraffiti().setPixelColor(255,0,0,0,0)
+        )
+        #load graffitti board and color pixel 1,1 green
+        await client.write_gatt_char(
+            UUID_WRITE_DATA,
+            bleGraffiti().setPixelColor(0,255,0,1,1)
+        )
+        #load graffitti board and color pixel 2,2 blue
+        await client.write_gatt_char(
+            UUID_WRITE_DATA,
+            bleGraffiti().setPixelColor(0,0,255,2,2)
+        )
+
+
         time.sleep(1)
         await client.write_gatt_char(
             UUID_WRITE_DATA,
