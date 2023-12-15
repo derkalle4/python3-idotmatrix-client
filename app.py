@@ -10,7 +10,7 @@ from core.bleFullscreenColor import bleFullscreenColor
 from core.bleMusicSync import bleMusicSync
 from core.bleScoreboard import bleScoreboard
 from core.bleGraffiti import bleGraffiti
-
+import sys
 # pip3 install bleak -> https://github.com/hbldh/bleak
 # async def main():
 #    #devices = await BleakScanner.discover()
@@ -19,7 +19,11 @@ from core.bleGraffiti import bleGraffiti
 
 # asyncio.run(main())
 
-address = 'E2:39:3C:0A:6C:68'
+#Accept command line argument for device mac address
+if sys.argv[1] == "-address":
+    address = sys.argv[2]
+else:
+    address = 'E2:39:3C:0A:6C:68'
 UUID_WRITE_DATA = '0000fa02-0000-1000-8000-00805f9b34fb'
 
 

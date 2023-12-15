@@ -49,3 +49,14 @@ Yes. There is still a lot of reverse-engineering to do:
 
 ## how to use?
 not usable yet
+
+## command line arguments
+
+### -address
+
+Used to specify mac address of the device will default to address in app. Must be first argument with address as second.
+
+Example:
+```bash
+python .\app.py -address 00:11:22:33:44:ff
+```
