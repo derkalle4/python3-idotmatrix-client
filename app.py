@@ -1,5 +1,6 @@
 import asyncio
 import time
+import zlib
 from bleak import BleakScanner, BleakClient
 from core.bleChronograph import bleChronograph
 from core.bleClock import bleClock
@@ -20,20 +21,32 @@ import sys
 # asyncio.run(main())
 
 #Accept command line argument for device mac address
-if sys.argv[1] == "-address":
-    address = sys.argv[2]
-else:
-    address = 'E2:39:3C:0A:6C:68'
+address = 'E2:39:3C:0A:6C:68'  #Default change if you don't want to keep sending argment
+if len(sys.argv) >= 3:
+    if sys.argv[1] == "-address":
+        address = sys.argv[2]
 UUID_WRITE_DATA = '0000fa02-0000-1000-8000-00805f9b34fb'
+UUID_READ_DATA = '0000fa03-0000-1000-8000-00805f9b34fb'
+
+#Response Message Handler
+def notification_handler(sender, data):
+    """Simple notification handler which prints the data received."""
+    output_numbers = list(data)
+    print(output_numbers)
 
 
 async def connect(address):
     async with BleakClient(address) as client:
         gatt_characteristic = client.services.get_characteristic(UUID_WRITE_DATA)
         mtu_size = gatt_characteristic.max_write_without_response_size
-        # for char in client.services.characteristics:
+        #Initialise Response Message Handler
+        await client.start_notify(UUID_READ_DATA, notification_handler)
+        
+        #for char in client.services.characteristics:
         #    time.sleep(2)
         #    print(char)
+        
+        #expect a 50411 response message from this call
         await client.write_gatt_char(
             UUID_WRITE_DATA,
             bleDIY().enter(1)
@@ -62,6 +75,8 @@ async def connect(address):
             UUID_WRITE_DATA,
             bleDIY().sendDIYMatrix()
         )
+
+        await client.stop_notify(UUID_READ_DATA)
 
 if __name__ == "__main__":
     asyncio.run(connect(address))
