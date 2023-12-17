@@ -143,8 +143,8 @@ Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.c
 
 ## Authors
 
-* **Kalle Minkner** - *IT Guy* - [Kalle Minkner](https://github.com/derkalle4) - *Project Founder*
-* **Jon-Mailes Graeffe** - *Contributor* - [Jon-Mailes Graeffe](https://github.com/jmgraeffe) - *Co-Founder*
+* [Kalle Minkner](https://github.com/derkalle4) - *Project Founder*
+* [Jon-Mailes Graeffe](https://github.com/jmgraeffe) - *Co-Founder*
 
 ## Acknowledgements
 
