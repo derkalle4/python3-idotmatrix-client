@@ -2,7 +2,7 @@ import logging
 import struct
 
 
-class bleScoreboard:
+class Scoreboard:
     """ This class contains the Scorboard management of the iDotMatrix device.
     """
 

@@ -1,9 +1,8 @@
-# python imports
 from datetime import datetime
 import logging
 
 
-class bleCommon:
+class Common:
     """ This class contains generic bluetooth functions for the iDotMatrix.
         Based on the BleProtocolN.java file of the iDotMatrix Android App.
     """

@@ -1,7 +1,7 @@
 import logging
 
 
-class bleEco:
+class Eco:
     """ This class contains code for the eco mode of the iDotMatrix device.
         With this class you can enable or disable the screen and change the brightness automatically depending on the time.
         Based on the BleProtocolN.java file of the iDotMatrix Android App.

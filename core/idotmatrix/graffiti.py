@@ -1,8 +1,7 @@
 import logging
-import struct
 
 
-class bleGraffiti:
+class Graffiti:
     """ This class contains the Graffiti controls for the iDotMatrix device.
     """
 

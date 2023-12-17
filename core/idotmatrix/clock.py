@@ -1,7 +1,7 @@
 import logging
 
 
-class bleClock:
+class Clock:
     """ This class contains the management of the iDotMatrix clock.
     Based on the BleProtocolN.java file of the iDotMatrix Android App.
     """

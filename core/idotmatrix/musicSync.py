@@ -1,7 +1,7 @@
 import logging
 
 
-class bleMusicSync:
+class MusicSync:
     def setMicType(self, type):
         """ Set the microphone type. Not referenced anywhere in the iDotMatrix Android App. So not used atm.
 

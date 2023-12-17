@@ -1,7 +1,7 @@
 import logging
 
 
-class bleFullscreenColor:
+class FullscreenColor:
     """ This class contains the management of the iDotMatrix fullscreen color mode.
         Based on the BleProtocolN.java file of the iDotMatrix Android App.
     """

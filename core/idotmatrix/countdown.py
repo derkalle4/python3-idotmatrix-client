@@ -1,7 +1,7 @@
 import logging
 
 
-class bleCountdown:
+class Countdown:
     """ This class contains the management of the Countdown of the iDotMatrix device.
     """
     def setCountdown(self, mode, minutes, seconds):

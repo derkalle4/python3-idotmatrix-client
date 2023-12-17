@@ -1,8 +1,7 @@
 from cryptography.fernet import Fernet
-import logging
 
 
-class bleSystem:
+class System:
     """ This class contains system calls for the iDotMatrix device
     """
 

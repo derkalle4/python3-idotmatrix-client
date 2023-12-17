@@ -1,11 +1,10 @@
 import io
 import logging
 import struct
-import zlib
 from PIL import Image
 
 
-class bleDIY:
+class DIY:
     def __init__(self, mtu_size):
         self.mtu_size = mtu_size
 
