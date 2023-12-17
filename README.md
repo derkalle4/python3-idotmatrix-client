@@ -85,13 +85,13 @@ python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
 
 #### command line arguments
 
-##### -address (required)
+##### --address (required)
 
 Specifies the address of the pixel display device.
 
 Example:
 ```sh
-./run_in_venv.sh -address 00:11:22:33:44:ff
+./run_in_venv.sh --address 00:11:22:33:44:ff
 ```
 
 ## Roadmap
