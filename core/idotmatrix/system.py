@@ -2,11 +2,10 @@ from cryptography.fernet import Fernet
 
 
 class System:
-    """ This class contains system calls for the iDotMatrix device
-    """
+    """This class contains system calls for the iDotMatrix device"""
 
     def deleteDeviceData(self):
-        """ Deletes the device data and resets it to defaults.
+        """Deletes the device data and resets it to defaults.
 
         Returns:
             _type_: byte array of the command which needs to be sent to the device
@@ -19,7 +18,7 @@ class System:
         return encrypted_data
 
     def getDeviceLocation(self):
-        """ Gets the device location (untested yet). Missing some AES encryption stuff of iDotMatrix to work.
+        """Gets the device location (untested yet). Missing some AES encryption stuff of iDotMatrix to work.
 
         Returns:
             _type_: byte array of the command which needs to be sent to the device

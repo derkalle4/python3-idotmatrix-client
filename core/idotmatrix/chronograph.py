@@ -12,14 +12,14 @@ class Chronograph:
             _type_: byte array of the command which needs to be sent to the device
         """
         try:
-            return bytearray([
-                5,
-                0,
-                9,
-                128,
-                int(mode) % 256
-            ])
+            return bytearray(
+                [
+                    5,
+                    0,
+                    9,
+                    128,
+                    int(mode) % 256,
+                ]
+            )
         except BaseException as error:
-            logging.error(
-                'could not set the chronograph: {}'.format(
-                    error))
+            logging.error("could not set the chronograph: {}".format(error))
