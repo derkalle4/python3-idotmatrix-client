@@ -31,7 +31,7 @@ Yes. There is still a lot of reverse-engineering to do:
     * [X] Clock
     * [X] Countdown
     * [x] Graffiti Board
-    * [ ] DIY-Mode
+    * [X] DIY-Mode
     * [ ] Animated Images
     * [ ] Cloud-API to download images
     * [ ] Cloud-API to upload images to device
