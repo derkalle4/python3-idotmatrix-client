@@ -24,11 +24,10 @@ import sys
 # asyncio.run(main())
 
 # Accept command line argument for device mac address
+address = "E2:39:3C:0A:6C:68"
 if len(sys.argv) >= 3:
     if sys.argv[1] == "-address":
-        address = sys.argv[2]
-    else:
-        address = "E2:39:3C:0A:6C:68"
+        address = sys.argv[2]        
 UUID_WRITE_DATA = "0000fa02-0000-1000-8000-00805f9b34fb"
 UUID_READ_DATA = "0000fa03-0000-1000-8000-00805f9b34fb"
 
