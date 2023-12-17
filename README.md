@@ -98,28 +98,28 @@ Example:
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!
 
-    * [ ] Reverse Engineering
-        * [X] Chronograph
-        * [X] Clock
-        * [X] Countdown
-        * [x] Graffiti Board
-        * [X] DIY-Mode
-        * [ ] Animated Images
-        * [ ] Cloud-API to download images
-        * [ ] Cloud-API to upload images to device
-        * [ ] Cloud-Firmware Update possible?
-        * [X] Eco-Mode
-        * [X] Fullscreen Color
-        * [ ] MusicSync
-        * [X] Scoreboard
-        * [ ] bluetooth pasword protection
-    * [ ] build configuration file to manage (multiple) devices
-    * [ ] Build command line interface with all features to interact with the device
-    * [ ] Build RestAPI to interact with the device remotely
-    * [ ] Build GUI to allow non-technical people to use this software
-    * [ ] build search tool to find displays nearby
-    * [ ] make this software compatible with Windows and Linux
-    * [ ] provide executables for Windows
+* [ ] Reverse Engineering
+    * [X] Chronograph
+    * [X] Clock
+    * [X] Countdown
+    * [x] Graffiti Board
+    * [X] DIY-Mode
+    * [ ] Animated Images
+    * [ ] Cloud-API to download images
+    * [ ] Cloud-API to upload images to device
+    * [ ] Cloud-Firmware Update possible?
+    * [X] Eco-Mode
+    * [X] Fullscreen Color
+    * [ ] MusicSync
+    * [X] Scoreboard
+    * [ ] bluetooth pasword protection
+* [ ] build configuration file to manage (multiple) devices
+* [ ] Build command line interface with all features to interact with the device
+* [ ] Build RestAPI to interact with the device remotely
+* [ ] Build GUI to allow non-technical people to use this software
+* [ ] build search tool to find displays nearby
+* [ ] make this software compatible with Windows and Linux
+* [ ] provide executables for Windows
 
 ## Contributing
 
