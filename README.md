@@ -139,7 +139,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ## License
 
-Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.com/derkalle4/python3-idotmatrix-client/blob/main/LICENSE.md) for more information.
+Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.com/derkalle4/python3-idotmatrix-client/blob/main/LICENSE) for more information.
 
 ## Authors
 
