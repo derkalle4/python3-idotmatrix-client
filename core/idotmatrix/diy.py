@@ -9,7 +9,7 @@ class DIY:
         self.mtu_size = mtu_size
 
     def enter(self, mode=1):
-        """ Enter the DIY draw mode of the iDotMatrix device.
+        """Enter the DIY draw mode of the iDotMatrix device.
 
         Args:
             mode (int): 0 = disable DIY, 1 = enable DIY, 2 = ?, 3 = ?. Defaults to 1.
@@ -18,17 +18,17 @@ class DIY:
             _type_: byte array of the command which needs to be sent to the device
         """
         try:
-            return bytearray([
-                5,
-                0,
-                4,
-                1,
-                int(mode) % 256
-            ])
+            return bytearray(
+                [
+                    5,
+                    0,
+                    4,
+                    1,
+                    int(mode) % 256,
+                ]
+            )
         except BaseException as error:
-            logging.error(
-                'could not enter DIY mode: {}'.format(
-                    error))
+            logging.error("could not enter DIY mode: {}".format(error))
 
     def splitIntoMultipleLists(self, list_, max_elems_per_list):
         """
@@ -56,14 +56,16 @@ class DIY:
         payloads = []
 
         if img.size[0] > 32 or img.size[1] > 32:
-            raise Exception('Image needs to be smaller than 32 pixels in width and height.')
+            raise Exception(
+                "Image needs to be smaller than 32 pixels in width and height."
+            )
         elif img.size[0] != img.size[1]:
-            raise Exception('Image needs to be square.')
+            raise Exception("Image needs to be square.")
         # TODO ensure it has the exact format needed by the currently connected device
 
         # compress image to PNG
         png_buf = io.BytesIO()
-        img.save(png_buf, format='PNG')
+        img.save(png_buf, format="PNG")
         png_complete = png_buf.getvalue()
 
         # make 4096 byte chunks out of the compressed image
@@ -73,15 +75,22 @@ class DIY:
         idk = len(png_complete) + len(png_chunks) * 9  # no idea what the 9 tells us
 
         # convert some metadata to byte form
-        png_len_bytes = struct.pack('i', len(png_complete))
-        idk_bytes = struct.pack('h', idk)  # convert to 16bit signed int
+        png_len_bytes = struct.pack("i", len(png_complete))
+        idk_bytes = struct.pack("h", idk)  # convert to 16bit signed int
 
         for i in range(len(png_chunks)):
-            payload = idk_bytes + bytearray([
-                0,
-                0,
-                2 if i > 0 else 0
-            ]) + png_len_bytes + png_chunks[i]
+            payload = (
+                idk_bytes
+                + bytearray(
+                    [
+                        0,
+                        0,
+                        2 if i > 0 else 0,
+                    ]
+                )
+                + png_len_bytes
+                + png_chunks[i]
+            )
             payloads.append(payload)
 
         # At this point, the original code got me confused...
@@ -91,4 +100,4 @@ class DIY:
         # Maybe the decompiler made some mistake, or the original code does not make a ton of sense to begin with.
 
         # split byte array into multiple MTUs
-        return self.splitIntoMultipleLists(payloads[0], self.mtu_size)
+        return payloads[0]

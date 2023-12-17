@@ -1,5 +1,6 @@
 # python imports
 import argparse
+import asyncio
 
 # idotmatrix imports
 from core.cmd import CMD
@@ -14,8 +15,13 @@ def main():
         action="store",
         help="the bluetooth address of the device",
     )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="run the test function from the command line class",
+    )
     args = parser.parse_args()
-    CMD(args)
+    asyncio.run(CMD().run(args))
 
 
 if __name__ == "__main__":
