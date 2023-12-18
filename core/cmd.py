@@ -19,6 +19,13 @@ class CMD:
     bluetooth = Bluetooth()
     mtu_size = None
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--test",
+            action="store_true",
+            help="run the test function from the command line class",
+        )
+
     async def run(self, args):
         if args.address:
             await self.bluetooth.connect(args.address)
