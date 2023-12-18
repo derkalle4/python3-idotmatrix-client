@@ -35,7 +35,7 @@ class Bluetooth:
     async def disconnect(self):
         if self.client is not None:
             await self.client.stop_notify(UUID_READ_DATA)
-            self.client.disconnect()
+            await self.client.disconnect()
 
     def splitIntoMultipleLists(self, data):
         """
