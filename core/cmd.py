@@ -39,6 +39,12 @@ class CMD:
             help="optionally set time to sync to device (use with --sync-time)",
             default=datetime.now().strftime("%d-%m-%Y-%H:%M:%S"),
         )
+        parser.add_argument(
+            "--rotate180degrees",
+            action="store",
+            help="enable 180 degree device rotation (true = enable, false = disable)",
+            default="true",
+        )
 
     async def run(self, args):
         if args.address:
@@ -50,6 +56,8 @@ class CMD:
         # arguments which can be run in parallel
         if args.sync_time:
             await self.sync_time(args.set_time)
+        if args.rotate180degrees:
+            await self.rotate180degrees(args.rotate180degrees)
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
@@ -111,3 +119,10 @@ class CMD:
                 date.second,
             )
         )
+
+    async def rotate180degrees(self, argument):
+        """rotate device 180 degrees"""
+        if argument.lower() == "true":
+            await self.bluetooth.send(Common().rotate180degrees(1))
+        else:
+            await self.bluetooth.send(Common().rotate180degrees(0))
