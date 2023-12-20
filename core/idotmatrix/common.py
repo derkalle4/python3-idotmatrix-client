@@ -74,7 +74,6 @@ class Common:
         """
         try:
             date = datetime(year, month, day, hour, minute, second)
-            week = int(date.strftime("%U"))
             return bytearray(
                 [
                     11,
@@ -84,7 +83,7 @@ class Common:
                     int(year) % 256,
                     int(month) % 256,
                     int(day) % 256,
-                    int(week) % 256,
+                    int(int(date.weekday()) + 1) % 256,
                     int(hour) % 256,
                     int(minute) % 256,
                     int(second) % 256,
