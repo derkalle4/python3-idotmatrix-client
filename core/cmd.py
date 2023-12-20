@@ -38,16 +38,19 @@ class CMD:
             action="store",
             help="optionally set time to sync to device (use with --sync-time)",
         )
+        # device screen rotation
         parser.add_argument(
             "--rotate180degrees",
             action="store",
             help="enable 180 degree device rotation (true = enable, false = disable)",
         )
+        # screen toggle
         parser.add_argument(
             "--togglescreen",
             action="store_true",
             help="toggles the screen on or off",
         )
+        # chronograph
         parser.add_argument(
             "--chronograph",
             action="store",
