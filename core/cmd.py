@@ -78,6 +78,18 @@ class CMD:
             help="sets the color of the clock. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
             default="255-255-255",
         )
+        # countdown
+        parser.add_argument(
+            "--countdown",
+            action="store",
+            help="sets the countdown mode: 0 = disable, 1 = start, 2 = pause, 3 = restart",
+        )
+        parser.add_argument(
+            "--countdown-time",
+            action="store",
+            help="sets the countdown mode: <MINUTES>-<SECONDS> (example: 10-30)",
+            default="5-0",
+        )
 
     async def run(self, args):
         if args.address:
@@ -100,6 +112,8 @@ class CMD:
             await self.chronograph(args.chronograph)
         elif args.clock:
             await self.clock(args)
+        elif args.countdown:
+            await self.countdown(args)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -195,3 +209,30 @@ class CMD:
             )
         else:
             raise SystemExit("wrong argument for --clock")
+
+    async def countdown(self, args):
+        """sets the countdown mode"""
+        if not int(args.countdown) in range(0, 4):
+            raise SystemExit("wrong argument for --countdown")
+        times = args.countdown_time.split("-")
+        if not len(times) == 2:
+            raise SystemExit("wrong argument for --countdown-time")
+        if int(times[0]) < 0 or int(times[0]) > 99:
+            raise SystemExit(
+                "wrong argument for --countdown-time - minutes must be between 0 and 99"
+            )
+        if int(times[1]) < 0 or int(times[1]) > 59:
+            raise SystemExit(
+                "wrong argument for --countdown-time - seconds must be between 0 and 59"
+            )
+        if int(times[0]) == 0 and int(times[1]) == 0:
+            raise SystemExit(
+                "wrong argument for --countdown-time - time cannot be zero"
+            )
+        await self.bluetooth.send(
+            Countdown().setCountdown(
+                mode=int(args.countdown),
+                minutes=int(times[0]),
+                seconds=int(times[1]),
+            )
+        )

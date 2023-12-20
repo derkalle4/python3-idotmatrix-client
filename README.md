@@ -179,6 +179,27 @@ Sets the color of the clock in format <R0-255>-<G0-255>-<B0-255>
 ./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-color 255-0-0
 ```
 
+##### --countdown
+
+Sets the mode of the countdown:
+
+- 0 = disable
+- 1 = start
+- 2 = pause
+- 3 = restart
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --countdown 1
+```
+
+###### --countdown-time
+
+Sets the time of the countdown in format <MINUTES>-<SECONDS>
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --countdown 1 --countdown-time 5-0
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!
