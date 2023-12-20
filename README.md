@@ -121,6 +121,15 @@ Example:
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --rotate180degrees true
 ```
 
+##### --togglescreen
+
+Disables or enables the screen. Does not seem to work currently.
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --togglescreen
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!

@@ -37,13 +37,17 @@ class CMD:
             "--set-time",
             action="store",
             help="optionally set time to sync to device (use with --sync-time)",
-            default=datetime.now().strftime("%d-%m-%Y-%H:%M:%S"),
         )
         parser.add_argument(
             "--rotate180degrees",
             action="store",
             help="enable 180 degree device rotation (true = enable, false = disable)",
             default="true",
+        )
+        parser.add_argument(
+            "--togglescreen",
+            action="store_true",
+            help="toggles the screen on or off",
         )
 
     async def run(self, args):
@@ -58,6 +62,8 @@ class CMD:
             await self.sync_time(args.set_time)
         if args.rotate180degrees:
             await self.rotate180degrees(args.rotate180degrees)
+        if args.togglescreen:
+            await self.togglescreen()
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
@@ -126,3 +132,7 @@ class CMD:
             await self.bluetooth.send(Common().rotate180degrees(1))
         else:
             await self.bluetooth.send(Common().rotate180degrees(0))
+
+    async def togglescreen(self):
+        """toggles the screen on or off"""
+        await self.bluetooth.send(Common().toggleScreenFreeze())
