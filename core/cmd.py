@@ -48,6 +48,11 @@ class CMD:
             action="store_true",
             help="toggles the screen on or off",
         )
+        parser.add_argument(
+            "--chronograph",
+            action="store",
+            help="sets the chronograph mode: 0 = reset, 1 = (re)start, 2 = pause, 3 = continue after pause",
+        )
 
     async def run(self, args):
         if args.address:
@@ -66,6 +71,8 @@ class CMD:
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
+        elif args.chronograph:
+            await self.chronograph(args.chronograph)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -135,3 +142,10 @@ class CMD:
     async def togglescreen(self):
         """toggles the screen on or off"""
         await self.bluetooth.send(Common().toggleScreenFreeze())
+
+    async def chronograph(self, argument):
+        """sets the chronograph mode"""
+        if int(argument) in range(0, 4):
+            await self.bluetooth.send(Chronograph().setChronograph(int(argument)))
+        else:
+            raise SystemExit("wrong argument for chronograph mode")

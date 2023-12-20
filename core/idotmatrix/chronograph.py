@@ -6,7 +6,7 @@ class Chronograph:
         """Starts/Stops the Chronograph.
 
         Args:
-            mode (int): 0 = reset, 1 = (re)start, 2 = pause, 3 = start after pause
+            mode (int): 0 = reset, 1 = (re)start, 2 = pause, 3 = continue after pause
 
         Returns:
             _type_: byte array of the command which needs to be sent to the device

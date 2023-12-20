@@ -130,6 +130,20 @@ Example:
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --togglescreen
 ```
 
+##### --chronograph
+
+Sets the mode of the cronograph:
+
+- 0 = reset
+- 1 = (re)start
+- 2 = pause
+- 3 = continue after pause
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --chronograph 0
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!
