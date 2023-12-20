@@ -89,7 +89,6 @@ python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
 
 Specifies the address of the pixel display device.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff
 ```
@@ -98,7 +97,6 @@ Example:
 
 Sets the time of the device to the current local time.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time
 ```
@@ -107,7 +105,6 @@ Example:
 
 Sets the time of the device to any time you want.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --set-time 18-12-2023-19:10:10
 ```
@@ -116,7 +113,6 @@ Example:
 
 Rotates the device display 180 degrees. True to rotate. False to disable rotation.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --rotate180degrees true
 ```
@@ -125,7 +121,6 @@ Example:
 
 Disables or enables the screen. Does not seem to work currently.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --togglescreen
 ```
@@ -139,7 +134,6 @@ Sets the mode of the cronograph:
 - 2 = pause
 - 3 = continue after pause
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --chronograph 0
 ```
@@ -157,7 +151,6 @@ Sets the mode of the clock:
 - 6 = frame 2
 - 7 = frame 3
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0
 ```
@@ -166,7 +159,6 @@ Example:
 
 Shows the date in addition to the time.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-with-date
 ```
@@ -175,7 +167,6 @@ Example:
 
 Shows the time in 24h format.
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-24h
 ```
@@ -184,7 +175,6 @@ Example:
 
 Sets the color of the clock in format <R0-255>-<G0-255>-<B0-255>
 
-Example:
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-color 255-0-0
 ```
