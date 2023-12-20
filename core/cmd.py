@@ -1,4 +1,5 @@
 # python imports
+from datetime import datetime
 from PIL import Image
 import time
 
@@ -20,21 +21,36 @@ class CMD:
     mtu_size = None
 
     def add_arguments(self, parser):
+        # test
         parser.add_argument(
             "--test",
             action="store_true",
             help="run the test function from the command line class",
         )
+        # time sync
+        parser.add_argument(
+            "--sync-time",
+            action="store_true",
+            help="sync time to device",
+        )
+        parser.add_argument(
+            "--set-time",
+            action="store",
+            help="optionally set time to sync to device (use with --sync-time)",
+            default=datetime.now().strftime("%d-%m-%Y-%H:%M:%S"),
+        )
 
     async def run(self, args):
         if args.address:
-            await self.bluetooth.connect(args.address)
-            if not self.bluetooth:
+            if not await self.bluetooth.connect(args.address):
                 raise SystemExit("could not connect to bluetooth")
             self.mtu_size = await self.bluetooth.get_mtu_size()
         else:
             raise SystemExit("no address for device given")
-        # check for test routine
+        # arguments which can be run in parallel
+        if args.sync_time:
+            await self.sync_time(args.set_time)
+        # arguments which cannot run in parallel
         if args.test:
             await self.test()
 
@@ -76,3 +92,22 @@ class CMD:
         await self.bluetooth.send(DIY(self.mtu_size).enter(1))
         img = Image.open("demo.png")
         await self.bluetooth.send(DIY(self.mtu_size).sendDIYMatrix(img))
+
+    async def sync_time(self, argument):
+        """Synchronize local time to device"""
+        try:
+            date = datetime.strptime(argument, "%d-%m-%Y-%H:%M:%S")
+        except ValueError:
+            raise SystemExit(
+                "wrong format of --set-time: please use dd-mm-YYYY-HH-MM-SS"
+            )
+        await self.bluetooth.send(
+            Common().setTime(
+                date.year,
+                date.month,
+                date.day,
+                date.hour,
+                date.minute,
+                date.second,
+            )
+        )

@@ -94,6 +94,24 @@ Example:
 ./run_in_venv.sh --address 00:11:22:33:44:ff
 ```
 
+##### --sync-time
+
+Sets the time of the device to the current local time.
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time
+```
+
+##### --set-time
+
+Sets the time of the device to any time you want.
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --set-time 18-12-2023-19:10:10
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!
