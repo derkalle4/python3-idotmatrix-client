@@ -144,6 +144,51 @@ Example:
 ./run_in_venv.sh --address 00:11:22:33:44:ff --chronograph 0
 ```
 
+##### --clock
+
+Sets the mode of the clock:
+
+- 0 = default
+- 1 = christmas
+- 2 = racing
+- 3 = inverted full screen
+- 4 = animated hourglass
+- 5 = frame 1
+- 6 = frame 2
+- 7 = frame 3
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0
+```
+
+###### --clock-with-date
+
+Shows the date in addition to the time.
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-with-date
+```
+
+###### --clock-24h
+
+Shows the time in 24h format.
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-24h
+```
+
+###### --clock-color
+
+Sets the color of the clock in format <R0-255>-<G0-255>-<B0-255>
+
+Example:
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --clock 0 --clock-color 255-0-0
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!

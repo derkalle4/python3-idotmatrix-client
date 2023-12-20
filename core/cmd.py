@@ -53,6 +53,28 @@ class CMD:
             action="store",
             help="sets the chronograph mode: 0 = reset, 1 = (re)start, 2 = pause, 3 = continue after pause",
         )
+        # clock
+        parser.add_argument(
+            "--clock",
+            action="store",
+            help="sets the clock mode: 0 = default, 1 = christmas, 2 = racing, 3 = inverted full screen, 4 = animated hourglass, 5 = frame 1, 6 = frame 2, 7 = frame 3",
+        )
+        parser.add_argument(
+            "--clock-with-date",
+            action="store_true",
+            help="shows the current date in addition to the current time.",
+        )
+        parser.add_argument(
+            "--clock-24h",
+            action="store_true",
+            help="shows the current time in 24h format.",
+        )
+        parser.add_argument(
+            "--clock-color",
+            action="store",
+            help="sets the color of the clock. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
+            default="255-255-255",
+        )
 
     async def run(self, args):
         if args.address:
@@ -73,6 +95,8 @@ class CMD:
             await self.test()
         elif args.chronograph:
             await self.chronograph(args.chronograph)
+        elif args.clock:
+            await self.clock(args)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -149,3 +173,22 @@ class CMD:
             await self.bluetooth.send(Chronograph().setChronograph(int(argument)))
         else:
             raise SystemExit("wrong argument for chronograph mode")
+
+    async def clock(self, args):
+        """sets the clock mode"""
+        if int(args.clock) in range(0, 8):
+            color = args.clock_color.split("-")
+            if len(color) < 3:
+                raise SystemExit("wrong argument for --clock-color")
+            await self.bluetooth.send(
+                Clock().setClockMode(
+                    style=int(args.clock),
+                    visibleDate=args.clock_with_date,
+                    hour24=args.clock_24h,
+                    r=int(color[0]),
+                    g=int(color[1]),
+                    b=int(color[2]),
+                )
+            )
+        else:
+            raise SystemExit("wrong argument for --clock")
