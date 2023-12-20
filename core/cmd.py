@@ -37,6 +37,7 @@ class CMD:
             "--set-time",
             action="store",
             help="optionally set time to sync to device (use with --sync-time)",
+            default=datetime.now().strftime("%d-%m-%Y-%H:%M:%S"),
         )
         # device screen rotation
         parser.add_argument(
