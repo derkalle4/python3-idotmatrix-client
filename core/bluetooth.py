@@ -16,8 +16,10 @@ class Bluetooth:
         print(output_numbers)
 
     async def connect(self, address):
-        self.client = BleakClient(address)
         try:
+            # create client
+            self.client = BleakClient(address)
+            # connect client
             await self.client.connect()
             # get mtu size
             gatt_characteristic = self.client.services.get_characteristic(
@@ -28,7 +30,8 @@ class Bluetooth:
             await self.client.start_notify(UUID_READ_DATA, self.response_handler)
         except Exception as e:
             print(e)
-            self.disconnect()
+            if self.client.is_connected:
+                self.disconnect()
             return False
         return True
 
