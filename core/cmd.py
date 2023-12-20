@@ -42,7 +42,6 @@ class CMD:
             "--rotate180degrees",
             action="store",
             help="enable 180 degree device rotation (true = enable, false = disable)",
-            default="true",
         )
         parser.add_argument(
             "--togglescreen",
