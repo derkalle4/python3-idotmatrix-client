@@ -91,6 +91,13 @@ class CMD:
             help="sets the countdown mode: <MINUTES>-<SECONDS> (example: 10-30)",
             default="5-0",
         )
+        # fullscreen color
+        parser.add_argument(
+            "--fullscreen-color",
+            action="store",
+            help="sets a fullscreen color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
+            default="255-255-255",
+        )
 
     async def run(self, args):
         if args.address:
@@ -115,6 +122,8 @@ class CMD:
             await self.clock(args)
         elif args.countdown:
             await self.countdown(args)
+        elif args.fullscreen_color:
+            await self.fullscreenColor(args.fullscreen_color)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -235,5 +244,18 @@ class CMD:
                 mode=int(args.countdown),
                 minutes=int(times[0]),
                 seconds=int(times[1]),
+            )
+        )
+
+    async def fullscreenColor(self, argument):
+        """sets a given fullscreen color"""
+        color = argument.split("-")
+        if len(color) != 3:
+            raise SystemExit("wrong argument for --fullscreen-color")
+        await self.bluetooth.send(
+            FullscreenColor().setColor(
+                int(color[0]),
+                int(color[1]),
+                color[2],
             )
         )
