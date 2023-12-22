@@ -43,7 +43,11 @@ The initial reason for this project was to have a foundation to update one or mu
 
 ## Built With
 
-Love for Open Source :D and Python 3.
+* [Python 3](https://www.python.org/downloads/)
+* [argparse](https://docs.python.org/3/library/argparse.html)
+* [asyncio](https://docs.python.org/3/library/asyncio.html)
+* [bleak](https://github.com/hbldh/bleak)
+* [pillow](https://python-pillow.org)
 
 ## Getting Started
 
