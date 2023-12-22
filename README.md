@@ -213,7 +213,7 @@ Sets all pixels to the given color in format <R0-255>-<G0-255>-<B0-255>
 Sets one or multiple pixels to the given color in format <PIXEL-X>-<PIXEL-Y>-<R0-255>-<G0-255>-<B0-255>
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --fullscreen-color 255-255-255
+./run_in_venv.sh --address 00:11:22:33:44:ff --pixel-color 10-10-255-255-255
 ```
 
 ##### --scoreboard
