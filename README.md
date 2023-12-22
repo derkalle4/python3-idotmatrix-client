@@ -216,6 +216,14 @@ Sets one or multiple pixels to the given color in format <PIXEL-X>-<PIXEL-Y>-<R0
 ./run_in_venv.sh --address 00:11:22:33:44:ff --fullscreen-color 255-255-255
 ```
 
+##### --scoreboard
+
+Sets the score of the scoreboard <0-999>-<0-999>
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --scoreboard 21-12
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.

@@ -104,6 +104,12 @@ class CMD:
             help="sets a pixel to a specific color. Could be used multiple times. Format: <PIXEL-X>-<PIXEL-Y>-<R0-255>-<G0-255>-<B0-255> (example: 0-0-255-255-255)",
             nargs="+",
         )
+        # scoreboard
+        parser.add_argument(
+            "--scoreboard",
+            action="store",
+            help="shows the scoreboard with the given scores. Format: <0-999>-<0-999>",
+        )
 
     async def run(self, args):
         if args.address:
@@ -132,6 +138,8 @@ class CMD:
             await self.fullscreenColor(args.fullscreen_color)
         elif args.pixel_color:
             await self.pixelColor(args.pixel_color)
+        elif args.scoreboard:
+            await self.scoreboard(args.scoreboard)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -316,3 +324,19 @@ class CMD:
                     b=int(split[4]),
                 )
             )
+
+    async def scoreboard(self, argument):
+        """sets given score on the scoreboard and shows it"""
+        scores = argument.split("-")
+        if len(scores) != 2:
+            raise SystemExit("wrong argument for --scoreboard")
+        if int(scores[0]) < 0 or int(scores[1]) < 0:
+            raise SystemExit("no negative values allowed for --scoreboard")
+        if int(scores[0]) > 999 or int(scores[1]) > 999:
+            raise SystemExit("exceeded maximum value of 999 for --scoreboard")
+        await self.bluetooth.send(
+            Scoreboard().setScoreboard(
+                count1=int(scores[0]),
+                count2=int(scores[1]),
+            )
+        )
