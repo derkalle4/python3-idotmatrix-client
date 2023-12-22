@@ -277,6 +277,7 @@ If you want to contribute please focus on the reverse-engineering part because m
     * [x] Graffiti Board
     * [X] DIY-Mode
     * [X] Animated Images
+    * [ ] Display Text
     * [ ] Cloud-API to download images
     * [ ] Cloud-API to upload images to device
     * [ ] Cloud-Firmware Update possible?
