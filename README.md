@@ -237,7 +237,7 @@ Wether to enable the image display mode or not. Set to true show an image or fal
 Path to an image to display on the device. See --process-image for more information!
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --image --set-image ./demo.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo.png
 ```
 
 ###### --process-image
@@ -247,7 +247,7 @@ If specified it will process the given image. If used, the Python3 library Pillo
 If you do not want to process the image: when using Gimp I had to export the file to a 32x32 pixel PNG (for my 32x32 Pixel Display) and disable all features except the "save resolution" feature.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --image --set-image ./demo.png --process-image 32
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo.png --process-image 32
 ```
 
 ## Roadmap
