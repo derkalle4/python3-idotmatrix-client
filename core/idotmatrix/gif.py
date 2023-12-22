@@ -102,23 +102,21 @@ class Gif:
         try:
             # Open the gif file
             with PilImage.open(file_path) as img:
-                if img.size != (pixel_size, pixel_size):
-                    # resize each frame of the gif
-                    frames = []
-                    try:
-                        count = 0
-                        while True:
-                            count += 1
+                # resize each frame of the gif
+                frames = []
+                try:
+                    while True:
+                        if img.size != (pixel_size, pixel_size):
                             # Resize the current frame
-                            frame = img.resize(
+                            img = img.resize(
                                 (pixel_size, pixel_size), PilImage.Resampling.NEAREST
                             )
-                            # Copy the frame and append it to the list
-                            frames.append(frame)
-                            # Move to the next frame
-                            img.seek(img.tell() + 1)
-                    except EOFError:
-                        pass  # End of sequence
+                        # Copy the frame and append it to the list
+                        frames.append(img.copy())
+                        # Move to the next frame
+                        img.seek(img.tell() + 1)
+                except EOFError:
+                    pass  # End of sequence
                 # Create a BytesIO object to hold the GIF data
                 gif_buffer = io.BytesIO()
                 # Save the resized image as GIF to the BytesIO object
