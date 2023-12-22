@@ -101,7 +101,7 @@ Sets the time of the device to the current local time.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time
 ```
 
-##### --set-time
+###### --set-time
 
 Sets the time of the device to any time you want.
 
@@ -114,7 +114,7 @@ Sets the time of the device to any time you want.
 Rotates the device display 180 degrees. True to rotate. False to disable rotation.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --rotate180degrees true
+./run_in_venv.sh --address 00:11:22:33:44:ff --rotate180degrees true
 ```
 
 ##### --togglescreen
@@ -122,7 +122,7 @@ Rotates the device display 180 degrees. True to rotate. False to disable rotatio
 Disables or enables the screen. Does not seem to work currently.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --togglescreen
+./run_in_venv.sh --address 00:11:22:33:44:ff --togglescreen
 ```
 
 ##### --chronograph
