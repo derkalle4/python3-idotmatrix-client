@@ -109,13 +109,14 @@ class Image:
             # Open the image file
             with PilImage.open(file_path) as img:
                 # Resize the image
-                img_resized = img.resize(
-                    (pixel_size, pixel_size), PilImage.Resampling.LANCZOS
-                )
+                if img.size != (pixel_size, pixel_size):
+                    img = img.resize(
+                        (pixel_size, pixel_size), PilImage.Resampling.LANCZOS
+                    )
                 # Create a BytesIO object to hold the PNG data
                 png_buffer = io.BytesIO()
                 # Save the resized image as PNG to the BytesIO object
-                img_resized.save(png_buffer, format="PNG")
+                img.save(png_buffer, format="PNG")
                 # Seek to the start of the PNG buffer
                 png_buffer.seek(0)
                 # Return the PNG data
