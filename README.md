@@ -208,6 +208,14 @@ Sets all pixels to the given color in format <R0-255>-<G0-255>-<B0-255>
 ./run_in_venv.sh --address 00:11:22:33:44:ff --fullscreen-color 255-255-255
 ```
 
+##### --pixel-color
+
+Sets one or multiple pixels to the given color in format <PIXEL-X>-<PIXEL-Y>-<R0-255>-<G0-255>-<B0-255>
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --fullscreen-color 255-255-255
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!

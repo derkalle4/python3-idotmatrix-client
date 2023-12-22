@@ -299,10 +299,12 @@ class CMD:
         # validate all pixels and send them
         for pixel in pixels:
             split = pixel.split("-")
+            # check if we got all data
             if len(split) != 5:
                 raise SystemExit(
                     "need exactly 5 arguments for a single pixel in --pixel-color"
                 )
+            # TODO: proper check if we are within the pixel range of the device
             # TODO: maybe we can use a delimiter to make use of the MTU size (sending chunks instead of separate requests)
             # TODO: when filling 32x32 pixels it seems to have trouble to send all pixels. One pixel will be "forgotten" somehow
             await self.bluetooth.send(
