@@ -1,6 +1,6 @@
 import io
-import struct
 from PIL import Image as PilImage
+import struct
 
 
 class Image:
