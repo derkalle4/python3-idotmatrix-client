@@ -96,7 +96,6 @@ class CMD:
             "--fullscreen-color",
             action="store",
             help="sets a fullscreen color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
-            default="255-255-255",
         )
 
     async def run(self, args):
