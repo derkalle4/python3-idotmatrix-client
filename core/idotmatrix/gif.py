@@ -106,13 +106,14 @@ class Gif:
                 frames = []
                 try:
                     while True:
-                        if img.size != (pixel_size, pixel_size):
+                        frame = img.copy()
+                        if frame.size != (pixel_size, pixel_size):
                             # Resize the current frame
-                            img = img.resize(
+                            frame = frame.resize(
                                 (pixel_size, pixel_size), PilImage.Resampling.NEAREST
                             )
                         # Copy the frame and append it to the list
-                        frames.append(img.copy())
+                        frames.append(frame.copy())
                         # Move to the next frame
                         img.seek(img.tell() + 1)
                 except EOFError:
