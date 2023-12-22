@@ -224,6 +224,32 @@ Sets the score of the scoreboard <0-999>-<0-999>
 ./run_in_venv.sh --address 00:11:22:33:44:ff --scoreboard 21-12
 ```
 
+##### --image
+
+Wether to enable the image display mode or not. Set to true show an image or false to hide.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true
+```
+
+###### --set-image
+
+Path to an image to display on the device. See --process-image for more information!
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --image --set-image ./demo.png
+```
+
+###### --process-image
+
+If specified it will process the given image. If used, the Python3 library Pillow will be utilized to convert the given image to a PNG with the given amount of pixels (e.g. 32 for 32x32 or 16 for 16x16 pixels). Technically you could use all kind of sizes and variations of images. Keep in mind: processing could take some time depending on your computer. In my tests the given demo.png file takes around 1 second without processing and three seconds with processing.
+
+If you do not want to process the image: when using Gimp I had to export the file to a 32x32 pixel PNG (for my 32x32 Pixel Display) and disable all features except the "save resolution" feature.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --image --set-image ./demo.png --process-image 32
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.

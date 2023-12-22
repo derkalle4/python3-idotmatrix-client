@@ -9,7 +9,7 @@ from .idotmatrix.chronograph import Chronograph
 from .idotmatrix.clock import Clock
 from .idotmatrix.common import Common
 from .idotmatrix.countdown import Countdown
-from .idotmatrix.diy import DIY
+from .idotmatrix.image import Image
 from .idotmatrix.fullscreenColor import FullscreenColor
 from .idotmatrix.musicSync import MusicSync
 from .idotmatrix.scoreboard import Scoreboard
@@ -110,6 +110,22 @@ class CMD:
             action="store",
             help="shows the scoreboard with the given scores. Format: <0-999>-<0-999>",
         )
+        # image upload
+        parser.add_argument(
+            "--image",
+            action="store",
+            help="enables or disables the image mode (true = enable, false = disable)",
+        )
+        parser.add_argument(
+            "--set-image",
+            action="store",
+            help="uploads a given image file (fastest is png, max. pixel depending on your display). Format: ./path/to/image.png",
+        )
+        parser.add_argument(
+            "--process-image",
+            action="store",
+            help="processes the image instead of sending it raw (useful when the size does not match or it is not a png). Format: <AMOUNT_PIXEL>",
+        )
 
     async def run(self, args):
         if args.address:
@@ -140,6 +156,8 @@ class CMD:
             await self.pixelColor(args.pixel_color)
         elif args.scoreboard:
             await self.scoreboard(args.scoreboard)
+        elif args.image:
+            await self.image(args)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -176,9 +194,8 @@ class CMD:
         await self.bluetooth.send(Graffiti().setPixelColor(0, 0, 255, 2, 2))
         time.sleep(5)
         ## diy image (png)
-        await self.bluetooth.send(DIY(self.mtu_size).enter(1))
-        img = Image.open("demo.png")
-        await self.bluetooth.send(DIY(self.mtu_size).sendDIYMatrix(img))
+        await self.bluetooth.send(Image().show(1))
+        await self.bluetooth.send(Image().upload_unprocessed("./demo.png"))
 
     async def sync_time(self, argument):
         """Synchronize local time to device"""
@@ -340,3 +357,33 @@ class CMD:
                 count2=int(scores[1]),
             )
         )
+
+    async def image(self, args):
+        """enables or disables the image mode and uploads a given image file"""
+        image = Image()
+        if args.image == "false":
+            await self.bluetooth.send(
+                image.show(
+                    mode=0,
+                )
+            )
+        else:
+            await self.bluetooth.send(
+                image.show(
+                    mode=1,
+                )
+            )
+            if args.set_image:
+                if args.process_image:
+                    await self.bluetooth.send(
+                        image.upload_processed(
+                            file_path=args.set_image,
+                            pixel_size=int(args.process_image),
+                        )
+                    )
+                else:
+                    await self.bluetooth.send(
+                        image.upload_unprocessed(
+                            file_path=args.set_image,
+                        )
+                    )
