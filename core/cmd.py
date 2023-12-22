@@ -9,6 +9,7 @@ from .idotmatrix.chronograph import Chronograph
 from .idotmatrix.clock import Clock
 from .idotmatrix.common import Common
 from .idotmatrix.countdown import Countdown
+from .idotmatrix.gif import Gif
 from .idotmatrix.image import Image
 from .idotmatrix.fullscreenColor import FullscreenColor
 from .idotmatrix.musicSync import MusicSync
@@ -126,6 +127,17 @@ class CMD:
             action="store",
             help="processes the image instead of sending it raw (useful when the size does not match or it is not a png). Format: <AMOUNT_PIXEL>",
         )
+        # gif upload
+        parser.add_argument(
+            "--set-gif",
+            action="store",
+            help="uploads a given gif file (pixel depending on your display). Format: ./path/to/image.gif",
+        )
+        parser.add_argument(
+            "--process-gif",
+            action="store",
+            help="processes the gif instead of sending it raw (useful when the size does not match). Format: <AMOUNT_PIXEL>",
+        )
 
     async def run(self, args):
         if args.address:
@@ -158,6 +170,8 @@ class CMD:
             await self.scoreboard(args.scoreboard)
         elif args.image:
             await self.image(args)
+        elif args.set_gif:
+            await self.gif(args)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -387,3 +401,20 @@ class CMD:
                             file_path=args.set_image,
                         )
                     )
+
+    async def gif(self, args):
+        """enables or disables the gif mode and uploads a given gif file"""
+        gif = Gif()
+        if args.process_gif:
+            await self.bluetooth.send(
+                gif.upload_processed(
+                    file_path=args.set_gif,
+                    pixel_size=int(args.process_gif),
+                )
+            )
+        else:
+            await self.bluetooth.send(
+                gif.upload_unprocessed(
+                    file_path=args.set_gif,
+                )
+            )

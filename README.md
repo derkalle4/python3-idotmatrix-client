@@ -250,6 +250,22 @@ If you do not want to process the image: when using Gimp I had to export the fil
 ./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo.png --process-image 32
 ```
 
+##### --set-gif
+
+Path to an GIF to display on the device. See --process-gif for more information! The [Demo GIF](https://opengameart.org/content/animated-pixel-torch) was downloaded from OpenGameArt.org.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./demo.gif
+```
+
+###### --process-gif
+
+If specified it will process the given image. If used, the Python3 library Pillow will be utilized to convert the given image to a GIF with the given amount of pixels (e.g. 32 for 32x32 or 16 for 16x16 pixels). Technically you could use all kind of sizes for the GIF. Keep in mind: processing could take some time depending on your computer and using larger GIFs may result in a bad image quality. You should hand-craft your GIFs in the correct format for best results!
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./demo.gif --process-gif 32
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
@@ -260,7 +276,7 @@ If you want to contribute please focus on the reverse-engineering part because m
     * [X] Countdown
     * [x] Graffiti Board
     * [X] DIY-Mode
-    * [ ] Animated Images
+    * [X] Animated Images
     * [ ] Cloud-API to download images
     * [ ] Cloud-API to upload images to device
     * [ ] Cloud-Firmware Update possible?
