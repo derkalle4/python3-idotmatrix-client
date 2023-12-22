@@ -200,7 +200,7 @@ Sets the time of the countdown in format <MINUTES>-<SECONDS>
 ./run_in_venv.sh --address 00:11:22:33:44:ff --countdown 1 --countdown-time 5-0
 ```
 
-###### --fullscreen-color
+##### --fullscreen-color
 
 Sets all pixels to the given color in format <R0-255>-<G0-255>-<B0-255>
 

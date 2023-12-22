@@ -97,6 +97,13 @@ class CMD:
             action="store",
             help="sets a fullscreen color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
         )
+        # pixel color
+        parser.add_argument(
+            "--pixel-color",
+            action="append",
+            help="sets a pixel to a specific color. Could be used multiple times. Format: <PIXEL-X>-<PIXEL-Y>-<R0-255>-<G0-255>-<B0-255> (example: 0-0-255-255-255)",
+            nargs="+",
+        )
 
     async def run(self, args):
         if args.address:
@@ -123,6 +130,8 @@ class CMD:
             await self.countdown(args)
         elif args.fullscreen_color:
             await self.fullscreenColor(args.fullscreen_color)
+        elif args.pixel_color:
+            await self.pixelColor(args.pixel_color)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -277,3 +286,31 @@ class CMD:
                 color[2],
             )
         )
+
+    async def pixelColor(self, argument):
+        """sets the given pixel colors"""
+        if len(argument) <= 0:
+            raise SystemExit("wrong argument for --pixel-color")
+        pixels = []
+        # get all pixels to set
+        for params in argument:
+            for pixel in params:
+                pixels.append(pixel)
+        # validate all pixels and send them
+        for pixel in pixels:
+            split = pixel.split("-")
+            if len(split) != 5:
+                raise SystemExit(
+                    "need exactly 5 arguments for a single pixel in --pixel-color"
+                )
+            # TODO: maybe we can use a delimiter to make use of the MTU size (sending chunks instead of separate requests)
+            # TODO: when filling 32x32 pixels it seems to have trouble to send all pixels. One pixel will be "forgotten" somehow
+            await self.bluetooth.send(
+                Graffiti().setPixelColor(
+                    x=int(split[0]),
+                    y=int(split[1]),
+                    r=int(split[2]),
+                    g=int(split[3]),
+                    b=int(split[4]),
+                )
+            )
