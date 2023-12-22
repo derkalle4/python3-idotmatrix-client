@@ -218,7 +218,7 @@ Sets one or multiple pixels to the given color in format <PIXEL-X>-<PIXEL-Y>-<R0
 
 ## Roadmap
 
-If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions!
+If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
 
 * [ ] Reverse Engineering
     * [X] Chronograph
