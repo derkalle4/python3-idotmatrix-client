@@ -1,7 +1,7 @@
 #!/bin/bash
-
+set -e
 # go to directory of file
-cd $(dirname "$0")
+cd "$(dirname "$0")"
 # create venv
 python3 -m venv venv
 # enable venv
