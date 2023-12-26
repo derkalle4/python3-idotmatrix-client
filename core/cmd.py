@@ -1,5 +1,6 @@
 # python imports
 from datetime import datetime
+import os
 from PIL import Image
 import time
 
@@ -140,8 +141,13 @@ class CMD:
         )
 
     async def run(self, args):
+        address = None
         if args.address:
-            if not await self.bluetooth.connect(args.address):
+            address = args.address
+        elif "IDOTMATRIX_ADDRESS" in os.environ:
+            address = os.environ["IDOTMATRIX_ADDRESS"]
+        if address is not None:
+            if not await self.bluetooth.connect(address):
                 raise SystemExit("could not connect to bluetooth")
             self.mtu_size = await self.bluetooth.get_mtu_size()
         else:
