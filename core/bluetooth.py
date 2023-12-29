@@ -68,8 +68,9 @@ class Bluetooth:
         if self.client is None or not self.client.is_connected:
             if not await self.connect():
                 return False
-        self.logging.debug("sending message to device")
+        self.logging.debug("sending message(s) to device")
         for data in self.splitIntoMultipleLists(message):
+            self.logging.debug("trying to send {}".format(data))
             await self.client.write_gatt_char(
                 UUID_WRITE_DATA,
                 data,
