@@ -328,3 +328,4 @@ Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.c
 * [Othneil Drew](https://github.com/othneildrew/Best-README-Template) - *README Template*
 * [LordRippon](https://github.com/LordRippon) - *Reverse Engineering for the Displays*
 * [8none1](https://github.com/8none1) - *Reverse Engineering for the Displays*
+* [schorsch3000](https://github.com/schorsch3000) - *smaller fixes*
