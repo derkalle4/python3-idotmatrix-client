@@ -1,9 +1,12 @@
 import io
+import logging
 from PIL import Image as PilImage
 import struct
 
 
 class Image:
+    logging = logging.getLogger("idotmatrix." + __name__)
+
     def show(self, mode=1):
         """Enter the DIY draw mode of the iDotMatrix device.
 
@@ -24,7 +27,8 @@ class Image:
                 ]
             )
         except BaseException as error:
-            raise SystemExit("could not enter image mode :(")
+            self.logging.error("could not enter image mode :(")
+            quit()
 
     def load_png(self, file_path):
         """Load a PNG file into a byte buffer.
@@ -122,4 +126,5 @@ class Image:
                 # Return the PNG data
                 return self.create_payloads(png_buffer.getvalue())
         except IOError as e:
-            raise SystemExit("could not process image: {}".format(e))
+            self.logging.error("could not process image: {}".format(e))
+            quit()

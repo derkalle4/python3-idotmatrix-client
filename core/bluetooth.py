@@ -1,5 +1,6 @@
 # python3 imports
 from bleak import BleakClient
+import logging
 import time
 
 # idotmatrix imports
@@ -9,17 +10,19 @@ from .idotmatrix.const import UUID_READ_DATA, UUID_WRITE_DATA
 class Bluetooth:
     address = None
     client = None
+    logging = logging.getLogger("idotmatrix." + __name__)
     mtu_size = None
 
     def __init__(self, address):
+        self.logging.debug("initialize bluetooth for {}".format(address))
         self.address = address
 
     async def response_handler(self, sender, data):
         """Simple response handler which prints the data received."""
-        output_numbers = list(data)
-        print(output_numbers)
+        self.logging.debug("device feedback: {}".format(list(data)))
 
     async def connect(self):
+        self.logging.info("connecting to device")
         try:
             # create client
             self.client = BleakClient(self.address)
@@ -33,13 +36,14 @@ class Bluetooth:
             # Initialise Response Message Handler
             await self.client.start_notify(UUID_READ_DATA, self.response_handler)
         except Exception as e:
-            print(e)
+            self.logging.error(e)
             if self.client.is_connected:
                 self.disconnect()
             return False
         return True
 
     async def disconnect(self):
+        self.logging.info("disconnecting from device")
         if self.client is not None:
             await self.client.stop_notify(UUID_READ_DATA)
             await self.client.disconnect()
@@ -64,6 +68,7 @@ class Bluetooth:
         if self.client is None or not self.client.is_connected:
             if not await self.connect():
                 return False
+        self.logging.debug("sending message to device")
         for data in self.splitIntoMultipleLists(message):
             await self.client.write_gatt_char(
                 UUID_WRITE_DATA,

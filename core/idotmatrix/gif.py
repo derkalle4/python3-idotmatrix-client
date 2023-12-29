@@ -1,10 +1,13 @@
 import io
+import logging
 from PIL import Image as PilImage
 import struct
 import zlib
 
 
 class Gif:
+    logging = logging.getLogger("idotmatrix." + __name__)
+
     def load_gif(self, file_path):
         """Load a gif file into a byte buffer.
 
@@ -135,4 +138,5 @@ class Gif:
                 # Return the GIF data
                 return self.create_payloads(gif_buffer.getvalue())
         except IOError as e:
-            raise SystemExit("could not process gif: {}".format(e))
+            self.logging.error("could not process gif: {}".format(e))
+            quit()

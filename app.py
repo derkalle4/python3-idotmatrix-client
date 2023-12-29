@@ -1,12 +1,29 @@
 # python imports
 import argparse
 import asyncio
+import logging
 
 # idotmatrix imports
 from core.cmd import CMD
 
 
+def log():
+    # set basic logging
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s :: %(levelname)s :: %(name)s :: %(message)s",
+        datefmt="%d.%m.%Y %H:%M:%S",
+        handlers=[logging.StreamHandler()],
+    )
+    # set log level of asyncio
+    logging.getLogger("asyncio").setLevel(logging.WARNING)
+    # set log level of bleak
+    logging.getLogger("bleak").setLevel(logging.WARNING)
+
+
 def main():
+    log = logging.getLogger("idotmatrix")
+    log.info("initialize app")
     cmd = CMD()
     parser = argparse.ArgumentParser(
         description="control all your 16x16 or 32x32 pixel displays"
@@ -26,4 +43,5 @@ def main():
 
 
 if __name__ == "__main__":
+    log()
     main()
