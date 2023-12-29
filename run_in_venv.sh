@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 # go to directory of file
-cd "$(dirname "$0")"
+IDO_DIR="$(dirname "$0")"
+
 # activate venv
-source venv/bin/activate
+source "$IDO_DIR/venv/bin/activate"
 # run app
-python3 app.py "$@"
+python3 "$IDO_DIR/app.py" "$@"
