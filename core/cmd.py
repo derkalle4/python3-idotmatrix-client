@@ -319,25 +319,6 @@ class CMD:
             )
         )
 
-    async def clock(self, args):
-        """sets the clock mode"""
-        if int(args.clock) in range(0, 8):
-            color = args.clock_color.split("-")
-            if len(color) < 3:
-                raise SystemExit("wrong argument for --clock-color")
-            await self.bluetooth.send(
-                Clock().setClockMode(
-                    style=int(args.clock),
-                    visibleDate=args.clock_with_date,
-                    hour24=args.clock_24h,
-                    r=int(color[0]),
-                    g=int(color[1]),
-                    b=int(color[2]),
-                )
-            )
-        else:
-            raise SystemExit("wrong argument for --clock")
-
     async def fullscreenColor(self, argument):
         """sets a given fullscreen color"""
         self.logging.info("setting fullscreen color")
