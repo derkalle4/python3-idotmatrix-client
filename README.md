@@ -290,6 +290,7 @@ If you want to contribute please focus on the reverse-engineering part because m
     * [ ] MusicSync
     * [X] Scoreboard
     * [ ] bluetooth pasword protection
+    * [ ] understand the returned byte arrays of the device for better error logs
 * [ ] build configuration file to manage (multiple) devices
 * [ ] Build command line interface with all features to interact with the device
 * [ ] Build RestAPI to interact with the device remotely
