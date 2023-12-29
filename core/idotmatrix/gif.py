@@ -1,7 +1,6 @@
 import io
 import logging
 from PIL import Image as PilImage
-import struct
 import zlib
 
 
