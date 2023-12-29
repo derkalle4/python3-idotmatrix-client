@@ -19,8 +19,7 @@ from .idotmatrix.graffiti import Graffiti
 
 
 class CMD:
-    bluetooth = Bluetooth()
-    mtu_size = None
+    bluetooth = None
 
     def add_arguments(self, parser):
         # test
@@ -147,9 +146,7 @@ class CMD:
         elif "IDOTMATRIX_ADDRESS" in os.environ:
             address = os.environ["IDOTMATRIX_ADDRESS"]
         if address is not None:
-            if not await self.bluetooth.connect(address):
-                raise SystemExit("could not connect to bluetooth")
-            self.mtu_size = await self.bluetooth.get_mtu_size()
+            self.bluetooth = Bluetooth(address)
         else:
             raise SystemExit("no address for device given")
         # arguments which can be run in parallel

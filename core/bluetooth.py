@@ -7,18 +7,22 @@ from .idotmatrix.const import UUID_READ_DATA, UUID_WRITE_DATA
 
 
 class Bluetooth:
+    address = None
     client = None
     mtu_size = None
+
+    def __init__(self, address):
+        self.address = address
 
     async def response_handler(self, sender, data):
         """Simple response handler which prints the data received."""
         output_numbers = list(data)
         print(output_numbers)
 
-    async def connect(self, address):
+    async def connect(self):
         try:
             # create client
-            self.client = BleakClient(address)
+            self.client = BleakClient(self.address)
             # connect client
             await self.client.connect()
             # get mtu size
@@ -56,12 +60,14 @@ class Bluetooth:
         return chunks
 
     async def send(self, message):
+        # check if connected
+        if self.client is None or not self.client.is_connected:
+            if not await self.connect():
+                return False
         for data in self.splitIntoMultipleLists(message):
             await self.client.write_gatt_char(
                 UUID_WRITE_DATA,
                 data,
             )
             time.sleep(0.01)
-
-    async def get_mtu_size(self):
-        return self.mtu_size
+        return True
