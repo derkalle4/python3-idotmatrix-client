@@ -22,8 +22,6 @@ def log():
 
 
 def main():
-    log = logging.getLogger("idotmatrix")
-    log.info("initialize app")
     cmd = CMD()
     parser = argparse.ArgumentParser(
         description="control all your 16x16 or 32x32 pixel displays"
@@ -44,4 +42,9 @@ def main():
 
 if __name__ == "__main__":
     log()
-    main()
+    log = logging.getLogger("idotmatrix")
+    log.info("initialize app")
+    try:
+        main()
+    except KeyboardInterrupt:
+        log.info("Caught keyboard interrupt. Stopping app.")
