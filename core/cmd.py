@@ -56,6 +56,12 @@ class CMD:
         )
         # chronograph
         parser.add_argument(
+            "--brightness",
+            action="store",
+            help="sets the brightness of the screen in percent",
+        )
+        # chronograph
+        parser.add_argument(
             "--chronograph",
             action="store",
             help="sets the chronograph mode: 0 = reset, 1 = (re)start, 2 = pause, 3 = continue after pause",
@@ -162,6 +168,8 @@ class CMD:
             await self.rotate180degrees(args.rotate180degrees)
         if args.togglescreen:
             await self.togglescreen()
+        if args.brightness:
+            await self.set_brightness(args.brightness)
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
@@ -254,6 +262,11 @@ class CMD:
         """toggles the screen on or off"""
         self.logging.info("toggling screen")
         await self.bluetooth.send(Common().toggleScreenFreeze())
+
+    async def set_brightness(self, argument: int) -> None:
+        """sets the brightness of the screen"""
+        self.logging.info(f"setting brightness of the screen ({argument})")
+        await self.bluetooth.send(Common().set_screen_brightness(brightness_percent=argument))
 
     async def chronograph(self, argument):
         """sets the chronograph mode"""

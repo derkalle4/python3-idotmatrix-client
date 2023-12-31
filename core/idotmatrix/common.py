@@ -36,6 +36,28 @@ class Common:
         except BaseException as error:
             logging.error("could not rotate the screen of the device: {}".format(error))
 
+    def set_screen_brightness(self, brightness_percent: int) -> None:
+        """Set screen brightness.
+
+        Args:
+            brightness_percent (int): set the brightness in percent
+
+        Returns:
+            None
+        """
+        try:
+            return bytearray(
+                [
+                    5,
+                    0,
+                    4,
+                    128,
+                    int(brightness_percent) % 256,
+                ]
+            )
+        except BaseException as error:
+            logging.error("could not set the brightness of the screen: {}".format(error))
+        
     def setSpeed(self, speed):
         """Sets the speed of ? - not referenced anyhwere in the iDotrMatrix Android App.
 
