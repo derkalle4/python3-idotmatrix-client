@@ -36,6 +36,28 @@ class Common:
         except BaseException as error:
             logging.error("could not rotate the screen of the device: {}".format(error))
 
+    def set_screen_brightness(self, brightness_percent: int) -> None:
+        """Set screen brightness. Range 5-100 (%)
+
+        Args:
+            brightness_percent (int): set the brightness in percent
+
+        Returns:
+            None
+        """
+        try:
+            return bytearray(
+                [
+                    5,
+                    0,
+                    4,
+                    128,
+                    int(brightness_percent) % 256,
+                ]
+            )
+        except BaseException as error:
+            logging.error("could not set the brightness of the screen: {}".format(error))
+        
     def setSpeed(self, speed):
         """Sets the speed of ? - not referenced anyhwere in the iDotrMatrix Android App.
 
@@ -113,3 +135,33 @@ class Common:
             )
         except BaseException as error:
             logging.error("could not change the device joint: {}".format(error))
+            
+    def set_password(self, password: int) -> None:
+        """Setting password: 6 digits in range 000000..999999. Reset device to clear
+
+        Args:
+            password (int): password
+        Returns:
+            None
+        """
+        
+        pwd_high = password // 10000
+        pwd_mid = password % 10000 // 100
+        pwd_low = password % 100
+        
+        try:
+            return bytearray(
+                [
+                    8,
+                    0,
+                    4,
+                    2,
+                    1,
+                    pwd_high,
+                    pwd_mid,
+                    pwd_low,
+                ]
+            )
+        except BaseException as error:
+            logging.error("could not set the password: {}".format(error))
+

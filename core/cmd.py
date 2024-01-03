@@ -54,6 +54,18 @@ class CMD:
             action="store_true",
             help="toggles the screen on or off",
         )
+        # brightness
+        parser.add_argument(
+            "--set-brightness",
+            action="store",
+            help="sets the brightness of the screen in percent: range 5..100",
+        )
+        # password
+        parser.add_argument(
+            "--set-password",
+            action="store",
+            help="sets password",
+        )
         # chronograph
         parser.add_argument(
             "--chronograph",
@@ -162,6 +174,10 @@ class CMD:
             await self.rotate180degrees(args.rotate180degrees)
         if args.togglescreen:
             await self.togglescreen()
+        if args.set_brightness:
+            await self.set_brightness(args.set_brightness)
+        if args.set_password:
+            await self.set_password(args.set_password)
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
@@ -255,6 +271,30 @@ class CMD:
         self.logging.info("toggling screen")
         await self.bluetooth.send(Common().toggleScreenFreeze())
 
+    async def set_brightness(self, argument: str) -> None:
+        """sets the brightness of the screen"""
+        try:
+            conv_brightness = int(argument)
+            if conv_brightness in range (5, 101):
+                self.logging.info(f"setting brightness of the screen: {argument}%")
+                await self.bluetooth.send(Common().set_screen_brightness(brightness_percent=conv_brightness))
+            else:
+                self.logging.error("brightness out of range")
+        except ValueError:
+            self.logging.error(f"Invalid integer: {argument}")
+                    
+    async def set_password(self, argument: str) -> None:
+        """sets connection password"""
+        try:
+            conv_password = int(argument)
+            if len(argument) == 6 and conv_password in range(0, 1000000):
+                self.logging.info(f"setting password: {argument}")
+                await self.bluetooth.send(Common().set_password(conv_password))
+            else:
+                self.logging.error(f"Password should be 6 digits long and in range 000000...999999")
+        except ValueError:
+            self.logging.error(f"Invalid integer: {argument}")
+            
     async def chronograph(self, argument):
         """sets the chronograph mode"""
         self.logging.info("setting chronograph mode")
