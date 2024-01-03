@@ -123,7 +123,7 @@ class Common:
         Returns:
             _type_: byte array of the command which needs to be sent to the device
         """
-        try:    
+        try:
             return bytearray(
                 [
                     5,
