@@ -141,6 +141,21 @@ class CMD:
             help="processes the gif instead of sending it raw (useful when the size does not match). Format: <AMOUNT_PIXEL>",
         )
 
+         # screen off
+        parser.add_argument(
+            "--off",
+            action="store_true",
+            help="turns the screen off",
+        )
+
+        # screen on
+        parser.add_argument(
+            "--on",
+            action="store_true",
+            help="turns the screen on",
+        )
+
+
     async def run(self, args):
         self.logging.info("initializing command line")
         address = None
@@ -163,6 +178,13 @@ class CMD:
         if args.togglescreen:
             await self.togglescreen()
         # arguments which cannot run in parallel
+        
+        if args.off:
+            await self.screenOff()
+        if args.on:
+            await self.screenOn()
+        
+        
         if args.test:
             await self.test()
         elif args.chronograph:
@@ -435,3 +457,16 @@ class CMD:
                     file_path=args.set_gif,
                 )
             )
+
+
+    async def screenOff(self):
+        """toggles the screen off"""
+        self.logging.info("switch screen off")
+        await self.bluetooth.send(Common().screenOff())
+
+
+
+    async def screenOn(self):
+        """toggles the screen on"""
+        self.logging.info("switch screen on")
+        await self.bluetooth.send(Common().screenOn())
