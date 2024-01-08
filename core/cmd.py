@@ -1,5 +1,6 @@
 # python imports
 from datetime import datetime
+import logging
 import os
 from PIL import Image
 import time
@@ -17,13 +18,13 @@ from .idotmatrix.musicSync import MusicSync
 from .idotmatrix.scoreboard import Scoreboard
 from .idotmatrix.graffiti import Graffiti
 
+
 class CMD:
-    bluetooth = Bluetooth()
-    mtu_size = None
+    bluetooth = None
+    logging = logging.getLogger("idotmatrix." + __name__)
 
     def add_arguments(self, parser):
         # test
-
         parser.add_argument(
             "--test",
             action="store_true",
@@ -53,21 +54,6 @@ class CMD:
             action="store_true",
             help="toggles the screen on or off",
         )
-
-        # screen off
-        parser.add_argument(
-            "--off",
-            action="store_true",
-            help="turns the screen off",
-        )
-
-        # screen on
-        parser.add_argument(
-            "--on",
-            action="store_true",
-            help="turns the screen on",
-        )
-
         # chronograph
         parser.add_argument(
             "--chronograph",
@@ -155,18 +141,35 @@ class CMD:
             help="processes the gif instead of sending it raw (useful when the size does not match). Format: <AMOUNT_PIXEL>",
         )
 
+         # screen off
+        parser.add_argument(
+            "--off",
+            action="store_true",
+            help="turns the screen off",
+        )
+
+        # screen on
+        parser.add_argument(
+            "--on",
+            action="store_true",
+            help="turns the screen on",
+        )
+
+
     async def run(self, args):
+        self.logging.info("initializing command line")
         address = None
         if args.address:
+            self.logging.debug("using --address")
             address = args.address
         elif "IDOTMATRIX_ADDRESS" in os.environ:
+            self.logging.debug("using IDOTMATRIX_ADDRESS")
             address = os.environ["IDOTMATRIX_ADDRESS"]
-        if address is not None:
-            if not await self.bluetooth.connect(address):
-                raise SystemExit("could not connect to bluetooth")
-            self.mtu_size = await self.bluetooth.get_mtu_size()
+        if address is None:
+            self.logging.error("no device address given")
+            quit()
         else:
-            raise SystemExit("no address for device given")
+            self.bluetooth = Bluetooth(address)
         # arguments which can be run in parallel
         if args.sync_time:
             await self.sync_time(args.set_time)
@@ -174,11 +177,14 @@ class CMD:
             await self.rotate180degrees(args.rotate180degrees)
         if args.togglescreen:
             await self.togglescreen()
+        # arguments which cannot run in parallel
+        
         if args.off:
             await self.screenOff()
         if args.on:
             await self.screenOn()
-        # arguments which cannot run in parallel
+        
+        
         if args.test:
             await self.test()
         elif args.chronograph:
@@ -200,6 +206,7 @@ class CMD:
 
     async def test(self):
         """Tests all available options for the device"""
+        self.logging.info("starting test of device")
         ## chronograph
         await self.bluetooth.send(Chronograph().setChronograph(1))
         time.sleep(5)
@@ -238,12 +245,14 @@ class CMD:
 
     async def sync_time(self, argument):
         """Synchronize local time to device"""
+        self.logging.info("starting to synchronize time")
         try:
             date = datetime.strptime(argument, "%d-%m-%Y-%H:%M:%S")
         except ValueError:
-            raise SystemExit(
+            self.logging.error(
                 "wrong format of --set-time: please use dd-mm-YYYY-HH-MM-SS"
             )
+            quit()
         await self.bluetooth.send(
             Common().setTime(
                 date.year,
@@ -257,6 +266,7 @@ class CMD:
 
     async def rotate180degrees(self, argument):
         """rotate device 180 degrees"""
+        self.logging.info("starting to rotate device")
         if argument.lower() == "true":
             await self.bluetooth.send(Common().rotate180degrees(1))
         else:
@@ -264,29 +274,26 @@ class CMD:
 
     async def togglescreen(self):
         """toggles the screen on or off"""
+        self.logging.info("toggling screen")
         await self.bluetooth.send(Common().toggleScreenFreeze())
-
-    async def screenOff(self):
-        """turns the screen off"""
-        await self.bluetooth.send(Common().screenOff())
-
-    async def screenOn(self):
-        """turns the screen on"""
-        await self.bluetooth.send(Common().screenOn())
 
     async def chronograph(self, argument):
         """sets the chronograph mode"""
+        self.logging.info("setting chronograph mode")
         if int(argument) in range(0, 4):
             await self.bluetooth.send(Chronograph().setChronograph(int(argument)))
         else:
-            raise SystemExit("wrong argument for chronograph mode")
+            self.logging.error("wrong argument for chronograph mode")
+            quit()
 
     async def clock(self, args):
         """sets the clock mode"""
+        self.logging.info("setting clock mode")
         if int(args.clock) in range(0, 8):
             color = args.clock_color.split("-")
             if len(color) < 3:
-                raise SystemExit("wrong argument for --clock-color")
+                self.logging.error("wrong argument for --clock-color")
+                quit()
             await self.bluetooth.send(
                 Clock().setClockMode(
                     style=int(args.clock),
@@ -298,27 +305,34 @@ class CMD:
                 )
             )
         else:
-            raise SystemExit("wrong argument for --clock")
+            self.logging.error("wrong argument for --clock")
+            quit()
 
     async def countdown(self, args):
         """sets the countdown mode"""
+        self.logging.info("setting countdown mode")
         if not int(args.countdown) in range(0, 4):
-            raise SystemExit("wrong argument for --countdown")
+            self.logging.error("wrong argument for --countdown")
+            quit()
         times = args.countdown_time.split("-")
         if not len(times) == 2:
-            raise SystemExit("wrong argument for --countdown-time")
+            self.logging.error("wrong argument for --countdown-time")
+            quit()
         if int(times[0]) < 0 or int(times[0]) > 99:
-            raise SystemExit(
+            self.logging.error(
                 "wrong argument for --countdown-time - minutes must be between 0 and 99"
             )
+            quit()
         if int(times[1]) < 0 or int(times[1]) > 59:
-            raise SystemExit(
+            self.logging.error(
                 "wrong argument for --countdown-time - seconds must be between 0 and 59"
             )
+            quit()
         if int(times[0]) == 0 and int(times[1]) == 0:
-            raise SystemExit(
+            self.logging.error(
                 "wrong argument for --countdown-time - time cannot be zero"
             )
+            quit()
         await self.bluetooth.send(
             Countdown().setCountdown(
                 mode=int(args.countdown),
@@ -327,30 +341,13 @@ class CMD:
             )
         )
 
-    async def clock(self, args):
-        """sets the clock mode"""
-        if int(args.clock) in range(0, 8):
-            color = args.clock_color.split("-")
-            if len(color) < 3:
-                raise SystemExit("wrong argument for --clock-color")
-            await self.bluetooth.send(
-                Clock().setClockMode(
-                    style=int(args.clock),
-                    visibleDate=args.clock_with_date,
-                    hour24=args.clock_24h,
-                    r=int(color[0]),
-                    g=int(color[1]),
-                    b=int(color[2]),
-                )
-            )
-        else:
-            raise SystemExit("wrong argument for --clock")
-
     async def fullscreenColor(self, argument):
         """sets a given fullscreen color"""
+        self.logging.info("setting fullscreen color")
         color = argument.split("-")
         if len(color) != 3:
-            raise SystemExit("wrong argument for --fullscreen-color")
+            self.logging.error("wrong argument for --fullscreen-color")
+            quit()
         await self.bluetooth.send(
             FullscreenColor().setColor(
                 int(color[0]),
@@ -361,8 +358,10 @@ class CMD:
 
     async def pixelColor(self, argument):
         """sets the given pixel colors"""
+        self.logging.info("setting pixel color")
         if len(argument) <= 0:
-            raise SystemExit("wrong argument for --pixel-color")
+            self.logging.error("wrong argument for --pixel-color")
+            quit()
         pixels = []
         # get all pixels to set
         for params in argument:
@@ -373,9 +372,10 @@ class CMD:
             split = pixel.split("-")
             # check if we got all data
             if len(split) != 5:
-                raise SystemExit(
+                self.logging.error(
                     "need exactly 5 arguments for a single pixel in --pixel-color"
                 )
+                quit()
             # TODO: proper check if we are within the pixel range of the device
             # TODO: maybe we can use a delimiter to make use of the MTU size (sending chunks instead of separate requests)
             # TODO: when filling 32x32 pixels it seems to have trouble to send all pixels. One pixel will be "forgotten" somehow
@@ -391,13 +391,17 @@ class CMD:
 
     async def scoreboard(self, argument):
         """sets given score on the scoreboard and shows it"""
+        self.logging.info("setting scoreboard mode")
         scores = argument.split("-")
         if len(scores) != 2:
-            raise SystemExit("wrong argument for --scoreboard")
+            self.logging.error("wrong argument for --scoreboard")
+            quit()
         if int(scores[0]) < 0 or int(scores[1]) < 0:
-            raise SystemExit("no negative values allowed for --scoreboard")
+            self.logging.error("no negative values allowed for --scoreboard")
+            quit()
         if int(scores[0]) > 999 or int(scores[1]) > 999:
-            raise SystemExit("exceeded maximum value of 999 for --scoreboard")
+            self.logging.error("exceeded maximum value of 999 for --scoreboard")
+            quit()
         await self.bluetooth.send(
             Scoreboard().setScoreboard(
                 count1=int(scores[0]),
@@ -407,6 +411,7 @@ class CMD:
 
     async def image(self, args):
         """enables or disables the image mode and uploads a given image file"""
+        self.logging.info("setting image")
         image = Image()
         if args.image == "false":
             await self.bluetooth.send(
@@ -437,6 +442,7 @@ class CMD:
 
     async def gif(self, args):
         """enables or disables the gif mode and uploads a given gif file"""
+        self.logging.info("setting (animated) GIF")
         gif = Gif()
         if args.process_gif:
             await self.bluetooth.send(
@@ -451,3 +457,16 @@ class CMD:
                     file_path=args.set_gif,
                 )
             )
+
+
+    async def screenOff(self):
+        """toggles the screen off"""
+        self.logging.info("switch screen off")
+        await self.bluetooth.send(Common().screenOff())
+
+
+
+    async def screenOn(self):
+        """toggles the screen on"""
+        self.logging.info("switch screen on")
+        await self.bluetooth.send(Common().screenOn())

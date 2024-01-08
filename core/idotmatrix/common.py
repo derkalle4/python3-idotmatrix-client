@@ -24,23 +24,6 @@ class Common:
         """
         return bytearray([4, 0, 3, 0])
 
-    def screenOff(self):
-        """Turns screen off.
-
-        Returns:
-            _type_: byte array of the command which needs to be sent to the device
-        """
-        return bytearray([ 5, 0, 7, 1, 0])
-
-    def screenOn(self):
-        """Turns screen on.
-
-        Returns:
-            _type_: byte array of the command which needs to be sent to the device
-        """
-        return bytearray([ 5, 0, 7, 1, 1])
-
-
     def rotate180degrees(self, type=0):
         """rotates the screen 180 dregrees
 
@@ -139,3 +122,20 @@ class Common:
             )
         except BaseException as error:
             logging.error("could not change the device joint: {}".format(error))
+
+
+    def screenOff(self):
+        """Turns screen off.
+
+        Returns:
+            _type_: byte array of the command which needs to be sent to the device
+        """
+        return bytearray([ 5, 0, 7, 1, 0])
+
+    def screenOn(self):
+        """Turns screen on.
+
+        Returns:
+            _type_: byte array of the command which needs to be sent to the device
+        """
+        return bytearray([ 5, 0, 7, 1, 1])
