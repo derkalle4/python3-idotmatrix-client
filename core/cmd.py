@@ -58,7 +58,6 @@ class CMD:
         # brightness
         parser.add_argument(
             "--set-brightness",
-            type=int,
             action="store",
             help="sets the brightness of the screen in percent: range 5..100",
         )
@@ -272,12 +271,16 @@ class CMD:
 
     async def set_brightness(self, argument: int) -> None:
         """sets the brightness of the screen"""
-        if argument in range (5, 101):
-            self.logging.info(f"setting brightness of the screen: {argument}%")
-            await self.bluetooth.send(Common().set_screen_brightness(argument))
-        else:
-            self.logging.error("brightness out of range")
-                 
+        try:
+            conv_brightness = int(argument)
+            if conv_brightness in range (5, 101):
+                self.logging.info(f"setting brightness of the screen: {argument}%")
+                await self.bluetooth.send(Common().set_screen_brightness(brightness_percent=conv_brightness))
+            else:
+                self.logging.error("brightness out of range")
+        except ValueError:
+            self.logging.error(f"Invalid integer: {argument}")
+                    
     async def set_password(self, argument: str) -> None:
         """sets connection password"""
         try:
