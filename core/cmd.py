@@ -58,7 +58,6 @@ class CMD:
         # brightness
         parser.add_argument(
             "--set-brightness",
-            type=int,
             action="store",
             help="sets the brightness of the screen in percent: range 5..100",
         )
@@ -177,7 +176,7 @@ class CMD:
         if args.toggle_screen:
             await self.toggle_screen()
         if args.set_brightness:
-            await self.set_brightness(args.set_brightness)
+            await self.set_brightness(int(args.set_brightness))
         if args.set_password:
             await self.set_password(args.set_password)
         # arguments which cannot run in parallel
@@ -277,7 +276,7 @@ class CMD:
             await self.bluetooth.send(Common().set_screen_brightness(argument))
         else:
             self.logging.error("brightness out of range")
-                 
+                    
     async def set_password(self, argument: str) -> None:
         """sets connection password"""
         try:
