@@ -44,19 +44,22 @@ class CMD:
         )
         # device screen rotation
         parser.add_argument(
-            "--rotate180degrees",
-            action="store",
-            help="enable 180 degree device rotation (true = enable, false = disable)",
+            "--flip-screen",
+            type=str,
+            choices=["on", "off"],
+            help="flips screen (on = flip, off = normal)",
         )
         # screen toggle
         parser.add_argument(
-            "--togglescreen",
+            "--toggle-screen",
             action="store_true",
             help="toggles the screen on or off",
         )
         # brightness
         parser.add_argument(
             "--set-brightness",
+            type=int,
+            choices=range(5, 101),
             action="store",
             help="sets the brightness of the screen in percent: range 5..100",
         )
@@ -170,10 +173,10 @@ class CMD:
         # arguments which can be run in parallel
         if args.sync_time:
             await self.sync_time(args.set_time)
-        if args.rotate180degrees:
-            await self.rotate180degrees(args.rotate180degrees)
-        if args.togglescreen:
-            await self.togglescreen()
+        if args.flip_screen:
+            await self.flip_screen(args.flip_screen)
+        if args.toggle_screen:
+            await self.toggle_screen()
         if args.set_brightness:
             await self.set_brightness(args.set_brightness)
         if args.set_password:
@@ -248,7 +251,7 @@ class CMD:
             )
             quit()
         await self.bluetooth.send(
-            Common().setTime(
+            Common().set_time(
                 date.year,
                 date.month,
                 date.day,
@@ -258,31 +261,21 @@ class CMD:
             )
         )
 
-    async def rotate180degrees(self, argument):
-        """rotate device 180 degrees"""
-        self.logging.info("starting to rotate device")
-        if argument.lower() == "true":
-            await self.bluetooth.send(Common().rotate180degrees(1))
-        else:
-            await self.bluetooth.send(Common().rotate180degrees(0))
-
-    async def togglescreen(self):
+    async def flip_screen(self, argument: str) -> None:
+        """flip device screen 180 degrees"""
+        self.logging.info("flipping screen")
+        await self.bluetooth.send(Common().flip_screen(argument.upper() == "ON"))
+    
+    async def toggle_screen(self) -> None:
         """toggles the screen on or off"""
         self.logging.info("toggling screen")
-        await self.bluetooth.send(Common().toggleScreenFreeze())
+        await self.bluetooth.send(Common().toggle_screen())
 
-    async def set_brightness(self, argument: str) -> None:
+    async def set_brightness(self, argument: int) -> None:
         """sets the brightness of the screen"""
-        try:
-            conv_brightness = int(argument)
-            if conv_brightness in range (5, 101):
-                self.logging.info(f"setting brightness of the screen: {argument}%")
-                await self.bluetooth.send(Common().set_screen_brightness(brightness_percent=conv_brightness))
-            else:
-                self.logging.error("brightness out of range")
-        except ValueError:
-            self.logging.error(f"Invalid integer: {argument}")
-                    
+        self.logging.info(f"setting brightness of the screen: {argument}%")
+        await self.bluetooth.send(Common().set_screen_brightness(argument))
+                 
     async def set_password(self, argument: str) -> None:
         """sets connection password"""
         try:
