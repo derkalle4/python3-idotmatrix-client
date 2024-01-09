@@ -7,21 +7,28 @@ class Common:
     Based on the BleProtocolN.java file of the iDotMatrix Android App.
     """
 
-    def toggleScreenFreeze(self):
-        """Freezes or unfreezes the screen.
+    def toggle_screen(self) -> bytearray:
+        """Toggles the screen on or off.
 
         Returns:
-            _type_: byte array of the command which needs to be sent to the device
+            byte array of the command which needs to be sent to the device
         """
-        return bytearray([4, 0, 3, 0])
+        return bytearray(
+            [
+                4, 
+                0, 
+                3, 
+                0
+            ]
+        )
 
-    def rotate180degrees(self, type=0):
+    def flip_screen(self, flip: bool = False) -> bytearray | None:
         """rotates the screen 180 dregrees
 
         Args:
-            type (int): 0 = normal, 1 = rotated. Defaults to 0.
+            flip (bool): False = normal, True = rotated. Defaults to False.
         Returns:
-            _type_: byte array of the command which needs to be sent to the device
+            byte array of the command which needs to be sent to the device
         """
         try:
             return bytearray(
@@ -30,20 +37,20 @@ class Common:
                     0,
                     6,
                     128,
-                    int(type) % 256,
+                    flip % 256,
                 ]
             )
         except BaseException as error:
-            logging.error("could not rotate the screen of the device: {}".format(error))
+            logging.error(f"could not rotate the screen of the device: {error}")
 
-    def set_screen_brightness(self, brightness_percent: int) -> None:
+    def set_screen_brightness(self, brightness_percent: int) -> bytearray | None:
         """Set screen brightness. Range 5-100 (%)
 
         Args:
             brightness_percent (int): set the brightness in percent
 
         Returns:
-            None
+            byte array of the command which needs to be sent to the device
         """
         try:
             return bytearray(
@@ -52,20 +59,20 @@ class Common:
                     0,
                     4,
                     128,
-                    int(brightness_percent) % 256,
+                    brightness_percent % 256,
                 ]
             )
         except BaseException as error:
-            logging.error("could not set the brightness of the screen: {}".format(error))
+            logging.error(f"could not set the brightness of the screen: {error}")
         
-    def setSpeed(self, speed):
-        """Sets the speed of ? - not referenced anyhwere in the iDotrMatrix Android App.
+    def set_speed(self, speed: int) -> bytearray | None:
+        """Sets the speed of ? - not referenced anywhere in the iDotMatrix Android App.
 
         Args:
             speed (int): set the speed
 
         Returns:
-            _type_: byte array of the command which needs to be sent to the device
+            byte array of the command which needs to be sent to the device
         """
         try:
             return bytearray(
@@ -74,13 +81,13 @@ class Common:
                     0,
                     3,
                     1,
-                    int(speed) % 256,
+                    speed % 256,
                 ]
             )
         except BaseException as error:
-            logging.error("could not change the speed of the device: {}".format(error))
+            logging.error(f"could not change the speed of the device: {error}")
 
-    def setTime(self, year, month, day, hour, minute, second):
+    def set_time(self, year: int, month: int, day: int, hour: int, minute: int, second: int) -> bytearray | None:
         """Sets the date and time of the device.
 
         Args:
@@ -92,7 +99,7 @@ class Common:
             second (int): second
 
         Returns:
-            _type_: byte array of the command which needs to be sent to the device
+            byte array of the command which needs to be sent to the device
         """
         try:
             date = datetime(year, month, day, hour, minute, second)
@@ -102,26 +109,26 @@ class Common:
                     0,
                     1,
                     128,
-                    int(year) % 256,
-                    int(month) % 256,
-                    int(day) % 256,
-                    int(int(date.weekday()) + 1) % 256,
-                    int(hour) % 256,
-                    int(minute) % 256,
-                    int(second) % 256,
+                    year % 256,
+                    month % 256,
+                    day % 256,
+                    (date.weekday() + 1) % 256,
+                    hour % 256,
+                    minute % 256,
+                    second % 256,
                 ]
             )
         except BaseException as error:
-            logging.error("could not set the time of the device: {}".format(error))
+            logging.error(f"could not set the time of the device: {error}")
 
-    def setJoint(self, mode):
-        """Currently no Idea what this is doing.
+    def set_joint(self, mode: int) -> bytearray | None:
+        """Currently no idea what this is doing.
 
         Args:
             mode (int): set the joint mode
 
         Returns:
-            _type_: byte array of the command which needs to be sent to the device
+            byte array of the command which needs to be sent to the device
         """
         try:
             return bytearray(
@@ -130,19 +137,19 @@ class Common:
                     0,
                     12,
                     128,
-                    int(mode) % 256,
+                    mode % 256,
                 ]
             )
         except BaseException as error:
-            logging.error("could not change the device joint: {}".format(error))
+            logging.error(f"could not change the device joint: {error}")
             
-    def set_password(self, password: int) -> None:
+    def set_password(self, password: int) -> bytearray | None:
         """Setting password: 6 digits in range 000000..999999. Reset device to clear
 
         Args:
             password (int): password
         Returns:
-            None
+            byte array of the command which needs to be sent to the device
         """
         
         pwd_high = password // 10000
@@ -163,5 +170,5 @@ class Common:
                 ]
             )
         except BaseException as error:
-            logging.error("could not set the password: {}".format(error))
+            logging.error(f"could not set the password: {error}")
 
