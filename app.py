@@ -5,6 +5,7 @@ import logging
 
 # idotmatrix imports
 from core.cmd import CMD
+from core.utils import Utils
 
 
 def log():
@@ -23,6 +24,7 @@ def log():
 
 def main():
     cmd = CMD()
+    utils = Utils()
     parser = argparse.ArgumentParser(
         description="control all your 16x16 or 32x32 pixel displays"
     )
@@ -32,6 +34,14 @@ def main():
         action="store",
         help="the bluetooth address of the device",
     )
+    # Set Address
+    parser.add_argument(
+        "--device-address",
+        action="store",
+        help="Automatic Discover addresses and set Environment variable IDOTMATRIX_ADDRESS",
+    )
+    # check if there's a pre-defined address
+    utils.check_address('.address')
     # add cmd arguments
     cmd.add_arguments(parser)
     # parse arguments

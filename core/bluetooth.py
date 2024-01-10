@@ -1,7 +1,8 @@
 # python3 imports
-from bleak import BleakClient
+from bleak import BleakClient, BleakScanner
 import logging
 import time
+import re
 
 # idotmatrix imports
 from .idotmatrix.const import UUID_READ_DATA, UUID_WRITE_DATA
@@ -77,3 +78,15 @@ class Bluetooth:
             )
             time.sleep(0.01)
         return True
+
+    async def device_address(self, flag):
+        scanner = BleakScanner()
+        devices = await scanner.discover()
+        for d in devices:
+            if re.match(r'IDM', str(d.name)):
+                device_address = d.address
+                device_name = d.name
+        if flag == 'show':
+            return f"Device name: {device_name} address: {device_address}"
+        else:
+            return device_address

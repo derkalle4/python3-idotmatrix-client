@@ -19,21 +19,21 @@
   </p>
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/derkalle4/python3-idotmatrix-client/total) ![Contributors](https://img.shields.io/github/contributors/derkalle4/python3-idotmatrix-client?color=dark-green) ![Forks](https://img.shields.io/github/forks/derkalle4/python3-idotmatrix-client?style=social) ![Stargazers](https://img.shields.io/github/stars/derkalle4/python3-idotmatrix-client?style=social) ![Issues](https://img.shields.io/github/issues/derkalle4/python3-idotmatrix-client) ![License](https://img.shields.io/github/license/derkalle4/python3-idotmatrix-client) 
+![Downloads](https://img.shields.io/github/downloads/derkalle4/python3-idotmatrix-client/total) ![Contributors](https://img.shields.io/github/contributors/derkalle4/python3-idotmatrix-client?color=dark-green) ![Forks](https://img.shields.io/github/forks/derkalle4/python3-idotmatrix-client?style=social) ![Stargazers](https://img.shields.io/github/stars/derkalle4/python3-idotmatrix-client?style=social) ![Issues](https://img.shields.io/github/issues/derkalle4/python3-idotmatrix-client) ![License](https://img.shields.io/github/license/derkalle4/python3-idotmatrix-client)
 
 ## Table Of Contents
 
-* [About the Project](#about-the-project)
-* [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
-* [Authors](#authors)
-* [Acknowledgements](#acknowledgements)
+- [About the Project](#about-the-project)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Authors](#authors)
+- [Acknowledgements](#acknowledgements)
 
 ## About The Project
 
@@ -43,11 +43,11 @@ The initial reason for this project was to have a foundation to update one or mu
 
 ## Built With
 
-* [Python 3](https://www.python.org/downloads/)
-* [argparse](https://docs.python.org/3/library/argparse.html)
-* [asyncio](https://docs.python.org/3/library/asyncio.html)
-* [bleak](https://github.com/hbldh/bleak)
-* [pillow](https://python-pillow.org)
+- [Python 3](https://www.python.org/downloads/)
+- [argparse](https://docs.python.org/3/library/argparse.html)
+- [asyncio](https://docs.python.org/3/library/asyncio.html)
+- [bleak](https://github.com/hbldh/bleak)
+- [pillow](https://python-pillow.org)
 
 ## Getting Started
 
@@ -57,8 +57,8 @@ To get a local copy up and running follow these simple example steps:
 
 Please install the following for your distribution (Windows may work but it is untested):
 
-* latest Python3
-* Python3 Virtual Env
+- latest Python3
+- Python3 Virtual Env
 
 ### Installation
 
@@ -81,6 +81,7 @@ If you used the ./create_venv.sh you should use this command to run the app:
 ```sh
 ./run_in_venv.sh <YOUR_COMMAND_LINE_ARGUMENTS>
 ```
+
 If you do not use a virtual environment the command will look like this:
 
 ```sh
@@ -95,6 +96,22 @@ Specifies the address of the pixel display device.
 
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff
+```
+
+##### --device-address
+
+Shows and set address for the Display.
+
+To show the Device name and address
+
+```sh
+./run_in_venv.sh --device-address show
+```
+
+To set the default address, this command will create a .address file in project root, upon running this there's no need to pass --address flag anymore.
+
+```sh
+./run_in_venv.sh --device-address set
 ```
 
 ##### --sync-time
@@ -274,38 +291,39 @@ If specified it will process the given image. If used, the Python3 library Pillo
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
 
-* [ ] Reverse Engineering
-    * [X] Chronograph
-    * [X] Clock
-    * [X] Countdown
-    * [x] Graffiti Board
-    * [X] DIY-Mode
-    * [X] Animated Images
-    * [ ] Display Text
-    * [ ] Cloud-API to download images
-    * [ ] Cloud-API to upload images to device
-    * [ ] Cloud-Firmware Update possible?
-    * [X] Eco-Mode
-    * [X] Fullscreen Color
-    * [ ] MusicSync
-    * [X] Scoreboard
-    * [ ] bluetooth pasword protection
-    * [ ] understand the returned byte arrays of the device for better error logs
-* [ ] build configuration file to manage (multiple) devices
-* [ ] Build command line interface with all features to interact with the device
-* [ ] Build RestAPI to interact with the device remotely
-* [ ] Build GUI to allow non-technical people to use this software
-* [ ] build search tool to find displays nearby
-* [ ] make this software compatible with Windows and Linux
-* [ ] provide executables for Windows
+- [ ] Reverse Engineering
+  - [x] Chronograph
+  - [x] Clock
+  - [x] Countdown
+  - [x] Graffiti Board
+  - [x] DIY-Mode
+  - [x] Animated Images
+  - [ ] Display Text
+  - [ ] Cloud-API to download images
+  - [ ] Cloud-API to upload images to device
+  - [ ] Cloud-Firmware Update possible?
+  - [x] Eco-Mode
+  - [x] Fullscreen Color
+  - [ ] MusicSync
+  - [x] Scoreboard
+  - [ ] bluetooth pasword protection
+  - [ ] understand the returned byte arrays of the device for better error logs
+- [ ] build configuration file to manage (multiple) devices
+- [ ] Build command line interface with all features to interact with the device
+- [ ] Build RestAPI to interact with the device remotely
+- [ ] Build GUI to allow non-technical people to use this software
+- [ ] build search tool to find displays nearby
+- [ ] make this software compatible with Windows and Linux
+- [ ] provide executables for Windows
 
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-* If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/derkalle4/python3-idotmatrix-client/issues/new) to discuss it, or directly create a pull request after you edit the *README.md* file with necessary changes.
-* Please make sure you check your spelling and grammar.
-* Create individual PR for each suggestion.
-* Please also read through the [Code Of Conduct](https://github.com/derkalle4/python3-idotmatrix-client/blob/main/CODE_OF_CONDUCT.md) before posting your first idea as well.
+
+- If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/derkalle4/python3-idotmatrix-client/issues/new) to discuss it, or directly create a pull request after you edit the _README.md_ file with necessary changes.
+- Please make sure you check your spelling and grammar.
+- Create individual PR for each suggestion.
+- Please also read through the [Code Of Conduct](https://github.com/derkalle4/python3-idotmatrix-client/blob/main/CODE_OF_CONDUCT.md) before posting your first idea as well.
 
 ### Creating A Pull Request
 
@@ -321,12 +339,12 @@ Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.c
 
 ## Authors
 
-* [Kalle Minkner](https://github.com/derkalle4) - *Project Founder*
-* [Jon-Mailes Graeffe](https://github.com/jmgraeffe) - *Co-Founder*
+- [Kalle Minkner](https://github.com/derkalle4) - _Project Founder_
+- [Jon-Mailes Graeffe](https://github.com/jmgraeffe) - _Co-Founder_
 
 ## Acknowledgements
 
-* [Othneil Drew](https://github.com/othneildrew/Best-README-Template) - *README Template*
-* [LordRippon](https://github.com/LordRippon) - *Reverse Engineering for the Displays*
-* [8none1](https://github.com/8none1) - *Reverse Engineering for the Displays*
-* [schorsch3000](https://github.com/schorsch3000) - *smaller fixes*
+- [Othneil Drew](https://github.com/othneildrew/Best-README-Template) - _README Template_
+- [LordRippon](https://github.com/LordRippon) - _Reverse Engineering for the Displays_
+- [8none1](https://github.com/8none1) - _Reverse Engineering for the Displays_
+- [schorsch3000](https://github.com/schorsch3000) - _smaller fixes_
