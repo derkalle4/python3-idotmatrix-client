@@ -18,6 +18,9 @@ from .idotmatrix.musicSync import MusicSync
 from .idotmatrix.scoreboard import Scoreboard
 from .idotmatrix.graffiti import Graffiti
 
+# utils imports
+from core.utils import Utils
+
 
 class CMD:
     bluetooth = None
@@ -162,7 +165,7 @@ class CMD:
         elif "IDOTMATRIX_ADDRESS" in os.environ:
             self.logging.debug("using IDOTMATRIX_ADDRESS")
             address = os.environ["IDOTMATRIX_ADDRESS"]
-        if address is None:
+        if address is None and args.device_address is None:
             self.logging.error("no device address given")
             quit()
         else:
@@ -178,6 +181,8 @@ class CMD:
             await self.set_brightness(args.set_brightness)
         if args.set_password:
             await self.set_password(args.set_password)
+        elif args.device_address:
+            await self.device_address(args.device_address)
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
@@ -201,23 +206,23 @@ class CMD:
     async def test(self):
         """Tests all available options for the device"""
         self.logging.info("starting test of device")
-        ## chronograph
+        # chronograph
         await self.bluetooth.send(Chronograph().setChronograph(1))
         time.sleep(5)
         await self.bluetooth.send(Chronograph().setChronograph(0))
         time.sleep(1)
-        ## clock
+        # clock
         await self.bluetooth.send(Clock().setTimeIndicator(True))
         await self.bluetooth.send(Clock().setClockMode(0, True, True))
         time.sleep(5)
-        ## countdown
+        # countdown
         await self.bluetooth.send(Countdown().setCountdown(1, 0, 5))
         await self.bluetooth.send(Countdown().setCountdown(0, 0, 5))
         time.sleep(5)
-        ## fullscreen color
+        # fullscreen color
         await self.bluetooth.send(FullscreenColor().setColor(255, 0, 0))
         time.sleep(5)
-        ## scoreboard
+        # scoreboard
         await self.bluetooth.send(Scoreboard().setScoreboard(1, 0))
         time.sleep(1)
         await self.bluetooth.send(Scoreboard().setScoreboard(1, 1))
@@ -225,7 +230,7 @@ class CMD:
         await self.bluetooth.send(Scoreboard().setScoreboard(1, 2))
         time.sleep(1)
         await self.bluetooth.send(Scoreboard().setScoreboard(2, 2))
-        ## graffiti
+        # graffiti
         # load graffiti board and color pixel 0,0 red
         await self.bluetooth.send(Graffiti().setPixelColor(255, 0, 0, 0, 0))
         # load graffitti board and color pixel 1,1 green
@@ -233,7 +238,7 @@ class CMD:
         # load graffitti board and color pixel 2,2 blue
         await self.bluetooth.send(Graffiti().setPixelColor(0, 0, 255, 2, 2))
         time.sleep(5)
-        ## diy image (png)
+        # diy image (png)
         await self.bluetooth.send(Image().show(1))
         await self.bluetooth.send(Image().upload_unprocessed("./demo.png"))
 
@@ -275,14 +280,15 @@ class CMD:
         """sets the brightness of the screen"""
         try:
             conv_brightness = int(argument)
-            if conv_brightness in range (5, 101):
-                self.logging.info(f"setting brightness of the screen: {argument}%")
+            if conv_brightness in range(5, 101):
+                self.logging.info(
+                    f"setting brightness of the screen: {argument}%")
                 await self.bluetooth.send(Common().set_screen_brightness(brightness_percent=conv_brightness))
             else:
                 self.logging.error("brightness out of range")
         except ValueError:
             self.logging.error(f"Invalid integer: {argument}")
-                    
+
     async def set_password(self, argument: str) -> None:
         """sets connection password"""
         try:
@@ -291,10 +297,11 @@ class CMD:
                 self.logging.info(f"setting password: {argument}")
                 await self.bluetooth.send(Common().set_password(conv_password))
             else:
-                self.logging.error(f"Password should be 6 digits long and in range 000000...999999")
+                self.logging.error(
+                    f"Password should be 6 digits long and in range 000000...999999")
         except ValueError:
             self.logging.error(f"Invalid integer: {argument}")
-            
+
     async def chronograph(self, argument):
         """sets the chronograph mode"""
         self.logging.info("setting chronograph mode")
@@ -418,7 +425,8 @@ class CMD:
             self.logging.error("no negative values allowed for --scoreboard")
             quit()
         if int(scores[0]) > 999 or int(scores[1]) > 999:
-            self.logging.error("exceeded maximum value of 999 for --scoreboard")
+            self.logging.error(
+                "exceeded maximum value of 999 for --scoreboard")
             quit()
         await self.bluetooth.send(
             Scoreboard().setScoreboard(
@@ -475,3 +483,14 @@ class CMD:
                     file_path=args.set_gif,
                 )
             )
+
+    async def device_address(self, args):
+        """Get Address automatically"""
+        self.logging.info("Start scanning")
+        if args.lower() == "show":
+            device_name = await self.bluetooth.device_address("show")
+            self.logging.info(device_name)
+        else:
+            device_address = await self.bluetooth.device_address("set")
+            Utils.write_address("./.address", device_address)
+            self.logging.info(f'Setting device address to: {device_address}')
