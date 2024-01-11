@@ -275,7 +275,7 @@ class CMD:
             self.logging.info(f"setting brightness of the screen: {argument}%")
             await self.bluetooth.send(Common().set_screen_brightness(argument))
         else:
-            self.logging.error("brightness out of range")
+            self.logging.error("brightness out of range (should be between 5 and 100)")
                  
     async def set_password(self, argument: str) -> None:
         """sets connection password"""
