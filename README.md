@@ -238,20 +238,24 @@ Wether to enable the image display mode or not. Set to true show an image or fal
 
 ###### --set-image
 
-Path to an image to display on the device. See --process-image for more information!
+Path to an image to display on the device without further processing. This must match your display pixel size (e.g. demo_16.png for the 16x16 variant). See --process-image for more information on how to process a larger (or smaller) image!
+
+If you do not want to process the image: when using Gimp I had to export the file to a 32x32 pixel PNG (for my 32x32 Pixel Display) and disable all features except the "save resolution" feature to save time when sending the image to the device. Every kind of metadata makes the image bigger and because we only can send around 20bytes at once this can certainly increase the transfer time!
+
+The [Demo PNG](https://opengameart.org/content/pixel-art-practice) was downloaded from OpenGameArt.org.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_16.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_32.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_64.png
 ```
 
 ###### --process-image
 
 If specified it will process the given image. If used, the Python3 library Pillow will be utilized to convert the given image to a PNG with the given amount of pixels (e.g. 32 for 32x32 or 16 for 16x16 pixels). Technically you could use all kind of sizes and variations of images. Keep in mind: processing could take some time depending on your computer. In my tests the given demo.png file takes around 1 second without processing and three seconds with processing.
 
-If you do not want to process the image: when using Gimp I had to export the file to a 32x32 pixel PNG (for my 32x32 Pixel Display) and disable all features except the "save resolution" feature.
-
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo.png --process-image 32
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_512.png --process-image 32
 ```
 
 ##### --set-gif
