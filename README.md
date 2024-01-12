@@ -113,12 +113,12 @@ Sets the time of the device to any time you want.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --set-time 18-12-2023-19:10:10
 ```
 
-##### --rotate180degrees
+##### --flip-screen
 
-Rotates the device display 180 degrees. True to rotate. False to disable rotation.
+Rotates the device display by 180 degrees. True to rotate. False to disable rotation.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --rotate180degrees true
+./run_in_venv.sh --address 00:11:22:33:44:ff --flip-screen true
 ```
 
 ##### --togglescreen
