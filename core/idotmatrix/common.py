@@ -54,7 +54,7 @@ class Common:
             ]
         )
 
-    def flip_screen(self, flip: bool = False) -> bytearray | None:
+    def flip_screen(self, flip: bool = True) -> bytearray | None:
         """rotates the screen 180 dregrees
 
         Args:
