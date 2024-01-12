@@ -286,6 +286,7 @@ If you want to contribute please focus on the reverse-engineering part because m
     * [X] DIY-Mode
     * [X] Animated Images
     * [ ] Display Text
+    * [ ] Alarm & Buzzer (available according to issue #18)
     * [ ] Cloud-API to download images
     * [ ] Cloud-API to upload images to device
     * [ ] Cloud-Firmware Update possible?
@@ -295,9 +296,11 @@ If you want to contribute please focus on the reverse-engineering part because m
     * [X] Scoreboard
     * [ ] bluetooth pasword protection
     * [ ] understand the returned byte arrays of the device for better error logs
+* [ ] outsource the reverse-engineered part to a library (suggestion from issue #17)
 * [ ] build configuration file to manage (multiple) devices
 * [ ] Build command line interface with all features to interact with the device
 * [ ] Build RestAPI to interact with the device remotely
+    * [ ] Homeassistant Integration
 * [ ] Build GUI to allow non-technical people to use this software
 * [ ] build search tool to find displays nearby
 * [ ] make this software compatible with Windows and Linux
