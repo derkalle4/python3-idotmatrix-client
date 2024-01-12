@@ -337,3 +337,4 @@ Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.c
 * [LordRippon](https://github.com/LordRippon) - *Reverse Engineering for the Displays*
 * [8none1](https://github.com/8none1) - *Reverse Engineering for the Displays*
 * [schorsch3000](https://github.com/schorsch3000) - *smaller fixes*
+* [tekka007](https://github.com/tekka007) - *code refactoring and reverse engineering*
