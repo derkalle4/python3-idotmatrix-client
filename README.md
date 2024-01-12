@@ -121,12 +121,12 @@ Rotates the device display by 180 degrees. True to rotate. False to disable rota
 ./run_in_venv.sh --address 00:11:22:33:44:ff --flip-screen true
 ```
 
-##### --togglescreen
+##### --toggle-screen
 
 Disables or enables the screen. Does not seem to work currently.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --togglescreen
+./run_in_venv.sh --address 00:11:22:33:44:ff --toggle-screen
 ```
 
 ##### --chronograph
