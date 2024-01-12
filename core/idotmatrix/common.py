@@ -7,8 +7,8 @@ class Common:
     Based on the BleProtocolN.java file of the iDotMatrix Android App.
     """
 
-    def toggle_screen(self) -> bytearray:
-        """Toggles the screen on or off.
+    def toggle_screen_freeze(self) -> bytearray:
+        """Freezes or unfreezes the screen.
 
         Returns:
             byte array of the command which needs to be sent to the device
@@ -19,6 +19,38 @@ class Common:
                 0, 
                 3, 
                 0
+            ]
+        )
+
+    def turn_screen_off(self) -> bytearray:
+        """Turns the screen off.
+
+        Returns:
+            byte array of the command which needs to be sent to the device
+        """
+        return bytearray(
+            [
+                5, 
+                0, 
+                7, 
+                1,
+                0,
+            ]
+        )
+
+    def turn_screen_on(self) -> bytearray:
+        """Turns the screen on.
+
+        Returns:
+            byte array of the command which needs to be sent to the device
+        """
+        return bytearray(
+            [
+                5, 
+                0, 
+                7, 
+                1,
+                1,
             ]
         )
 

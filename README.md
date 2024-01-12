@@ -113,6 +113,15 @@ Sets the time of the device to any time you want.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --sync-time --set-time 18-12-2023-19:10:10
 ```
 
+##### --screen
+
+Turns the screen either on or off.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --screen on
+./run_in_venv.sh --address 00:11:22:33:44:ff --screen off
+```
+
 ##### --flip-screen
 
 Rotates the device display by 180 degrees. True to rotate. False to disable rotation.
@@ -121,12 +130,12 @@ Rotates the device display by 180 degrees. True to rotate. False to disable rota
 ./run_in_venv.sh --address 00:11:22:33:44:ff --flip-screen true
 ```
 
-##### --toggle-screen
+##### --toggle-screen-freeze
 
-Disables or enables the screen. Does not seem to work currently.
+Freezes or unfreezes the screen. Does not seem to work currently.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --toggle-screen
+./run_in_venv.sh --address 00:11:22:33:44:ff --toggle-screen-freeze
 ```
 
 ##### --chronograph

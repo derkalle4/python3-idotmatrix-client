@@ -51,9 +51,16 @@ class CMD:
         )
         # screen toggle
         parser.add_argument(
-            "--toggle-screen",
+            "--toggle-screen-freeze",
             action="store_true",
-            help="toggles the screen on or off",
+            help="freezes or unfreezes the screen",
+        )
+        # enable or disable device screen
+        parser.add_argument(
+            "--screen",
+            type=str,
+            choices=["on", "off"],
+            help="turns screen on or off",
         )
         # brightness
         parser.add_argument(
@@ -173,8 +180,10 @@ class CMD:
             await self.sync_time(args.set_time)
         if args.flip_screen:
             await self.flip_screen(args.flip_screen)
-        if args.toggle_screen:
-            await self.toggle_screen()
+        if args.toggle_screen_freeze:
+            await self.toggle_screen_freeze()
+        if args.screen:
+            await self.screen(args.screen)
         if args.set_brightness:
             await self.set_brightness(int(args.set_brightness))
         if args.set_password:
@@ -264,10 +273,19 @@ class CMD:
         self.logging.info("flipping screen")
         await self.bluetooth.send(Common().flip_screen(argument.upper() == "ON"))
     
-    async def toggle_screen(self) -> None:
-        """toggles the screen on or off"""
-        self.logging.info("toggling screen")
-        await self.bluetooth.send(Common().toggle_screen())
+    async def toggle_screen_freeze(self) -> None:
+        """toggles the screen freeze"""
+        self.logging.info("toggling screen freeze")
+        await self.bluetooth.send(Common().toggle_screen_freeze())
+
+    async def screen(self, argument: str) -> None:
+        """turns the screen on or off"""
+        if argument.upper() == "ON":
+            self.logging.info("turning screen on")
+            await self.bluetooth.send(Common().turn_screen_on())
+        else:
+            self.logging.info("turning screen off")
+            await self.bluetooth.send(Common().turn_screen_off())
 
     async def set_brightness(self, argument: int) -> None:
         """sets the brightness of the screen"""
