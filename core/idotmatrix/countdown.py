@@ -4,7 +4,7 @@ import logging
 class Countdown:
     """This class contains the management of the Countdown of the iDotMatrix device."""
 
-    def setCountdown(self, mode, minutes, seconds):
+    def setCountdown(self, mode: int, minutes: int, seconds: int) -> bytearray | None:
         """Sets the countdown (and activates or disables it)
 
         Args:
@@ -13,7 +13,7 @@ class Countdown:
             seconds (int): seconds to count down from
 
         Returns:
-            _type_: byte array of the command which needs to be sent to the device
+            byte array of the command which needs to be sent to the device
         """
         try:
             return bytearray(
@@ -22,10 +22,10 @@ class Countdown:
                     0,
                     8,
                     128,
-                    int(mode) % 256,
-                    int(minutes) % 256,
-                    int(seconds) % 256,
+                    mode % 256,
+                    minutes % 256,
+                    seconds % 256,
                 ]
             )
         except BaseException as error:
-            logging.error("could not set the countdown: {}".format(error))
+            logging.error(f"could not set the countdown: {error}")
