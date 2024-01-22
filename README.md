@@ -2,9 +2,12 @@
 
 ## About The Project
 
-Fork based on https://github.com/derkalle4/python3-idotmatrix-client
-Just slimmer using gif function for everything, on my 16x16 image is not working reliable
-Used on a debian based system mtu size is handled by btstack for faster transmission
+Fork based on https://github.com/derkalle4/python3-idotmatrix-client, just slimmer using gif function for everything, because on my 16x16 image function is not working reliable. Used on a debian based system, therefore mtu size is handled by btstack for faster transmission
+
+## Goals
+* build a webserver accepting json formatted instructions
+* accept png/gif data (serialized) which is then sent to the display
+* accept on off commands (just set a black 1 frame gif, save png/gif before so state is restored keep it simple)
 
 ## Built With
 
@@ -14,13 +17,13 @@ Used on a debian based system mtu size is handled by btstack for faster transmis
 * [bleak](https://github.com/hbldh/bleak)
 * [pillow](https://python-pillow.org)
 
-##### --set-gif
+## TODOs
 
-Path to an GIF to display on the device. See --process-gif for more information! The [Demo GIF](https://opengameart.org/content/animated-pixel-torch) was downloaded from OpenGameArt.org.
+Strip project form everything which is not needed
 
-###### --process-gif
+Measure standby power ("real of" and black frame gif)
 
-If specified it will process the given image. If used, the Python3 library Pillow will be utilized to convert the given image to a GIF with the given amount of pixels (e.g. 32 for 32x32 or 16 for 16x16 pixels). Technically you could use all kind of sizes for the GIF. Keep in mind: processing could take some time depending on your computer and using larger GIFs may result in a bad image quality. You should hand-craft your GIFs in the correct format for best results!
+Keep connection persistent with specified address (no autodiscovery planned, just use ``` sudo hcitool -i hci0 lescan ``` to scan for ble devices)
 
 ## License
 
