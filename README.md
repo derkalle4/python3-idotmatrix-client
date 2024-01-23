@@ -2,28 +2,55 @@
 
 ## About The Project
 
-Fork based on https://github.com/derkalle4/python3-idotmatrix-client, just slimmer using gif function for everything, because on my 16x16 image function is not working reliable. Used on a debian based system, therefore mtu size is handled by btstack for faster transmission
+Fork based on https://github.com/derkalle4/python3-idotmatrix-client, just slimmer using gif function for image and gifs, because on my 16x16 tge image function was not working reliable. Used on a debian based system, therefore mtu size is handled by btstack for faster transmission. I dont know about win or other OSs.
+
+## How to
+  * change port number to whatever you want inside app.py
+  * find out the bluetooth address of your display eg `sudo hcitool -i hci0 lescan` for debain based os
+  * run `python3 app.py` (you maybe need to install dependencies)
+  * connect with your browser to `http://HOSTIP:PORT/docs`
+  * first you can connect to your display with `http://HOSTIP:PORT/BLEconnect/ADDRESS/PIXELS` with ADDRESS being the bluetooth address without the ':' (non case sensitive) and pixels being the size of your display (most times 16 or 32)
+  * you can check the ble status with `http://HOSTIP:PORT/BLEstatus`
+  * you can upload .gif or .png with POST to `http://HOSTIP:PORT/upload`, this immediatly sends it to the display if connected and the file is saved inside the upload directory (doubles will overwrite without error)
+  * you can set already uploaded files with `http://HOSTIP:PORT/uselocal/FILENAME` and can retrive a list of available files with `http://HOSTIP:PORT/getFileNames`
+  * you can use `/shutdown` to stop the server or CTRL+C on the host
+  * other basic commands are:
+   `/brightness/{brightness}` 
+   `/BLEdisconnect`
+   `/turnon`
+   `/turnoff` (this does not disconnect the display, only turns of LEDs)
+
 
 ## Goals
-* build a webserver accepting json formatted instructions
-* accept png/gif data (serialized) which is then sent to the display
-* accept on off commands (just set a black 1 frame gif, save png/gif before so state is restored keep it simple)
+- [x] build a webserver accepting rest commands 
+- [x] accept png/gif data which is then sent to the display
+- [x] accept on off commands 
+- [x] accept brightness commands
+- [x] accept shutdown command
+- [x] save files and set via filename
+- [x] retrieve local file list
+- [ ] option to save files processed
 
 ## Built With
 
 * [Python 3](https://www.python.org/downloads/)
-* [argparse](https://docs.python.org/3/library/argparse.html)
 * [asyncio](https://docs.python.org/3/library/asyncio.html)
 * [bleak](https://github.com/hbldh/bleak)
 * [pillow](https://python-pillow.org)
+* [fastapi](https://fastapi.tiangolo.com/)
+* [uvicorn](https://www.uvicorn.org/)
 
 ## TODOs
 
-Strip project form everything which is not needed
+Strip project form everything unneeded
 
-Measure standby power ("real of" and black frame gif)
+Move everything into a docker
 
-Keep connection persistent with specified address (no autodiscovery planned, just use ``` sudo hcitool -i hci0 lescan ``` to scan for ble devices)
+## Notes 
+
+I probably wont change alot in the future as the state of this project fulfills all my requirements, I may add a home assistant config example
+
+If you really need other functions via REST, feel free to implement them yourself, the "old" code is still in the project and it can easily be integrated. Or if you really struggle you can open a issue and I will implement it. (I wont do any further reverse engineering)
 
 ## License
 
