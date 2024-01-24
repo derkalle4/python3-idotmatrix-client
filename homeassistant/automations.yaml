@@ -1,0 +1,106 @@
+- id: '1706059218817'
+  alias: idotmatrix -  change brightness
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_number.idotmatrix_brightness_slider
+  condition: []
+  action:
+  - service: rest_command.idotmatrix_change_brightness
+    data: {}
+  mode: single
+- id: '1706059648899'
+  alias: idotmatrix - turn on
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.idotmatrix_turn_on_button
+  condition: []
+  action:
+  - service: rest_command.idotmatrix_turn_on
+    data: {}
+  mode: single
+- id: '1706059668302'
+  alias: idotmatrix - turn off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.idotmatrix_turn_off_button
+  condition: []
+  action:
+  - service: rest_command.idotmatrix_turn_off
+    data: {}
+  mode: single
+- id: '1706060617098'
+  alias: idotmatrix - connect
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.idotmatrix_connect_button
+  condition: []
+  action:
+  - service: rest_command.idotmatrix_connect
+    data: {}
+  mode: single
+- id: '1706061873184'
+  alias: idotmatrix - change out
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_select.idotmatrix_out
+  condition: []
+  action:
+  - service: rest_command.idotmatrix_change_out
+    data: {}
+  mode: single
+- id: '1706062665580'
+  alias: idotmatrix - fill list
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.idotmatrix_filenames
+  condition: []
+  action:
+  - service: input_select.set_options
+    data_template:
+      options: '{{ states.sensor.idotmatrix_filenames.attributes.filenames }}
+
+        '
+    target:
+      entity_id: input_select.idotmatrix_out
+  mode: single
+- id: '1706090706409'
+  alias: idotmatrix - autoconnect at startup
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - repeat:
+      sequence:
+      - service: rest_command.idotmatrix_connect
+        data: {}
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 10
+          milliseconds: 0
+      while:
+      - condition: state
+        entity_id: binary_sensor.idotmatrix_connected
+        state: 'off'
+  - service: input_select.set_options
+    data_template:
+      options: '{{ states.sensor.idotmatrix_filenames.attributes.filenames }}
+
+        '
+    target:
+      entity_id: input_select.idotmatrix_out
+  mode: single

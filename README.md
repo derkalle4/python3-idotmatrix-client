@@ -19,6 +19,7 @@ Fork based on https://github.com/derkalle4/python3-idotmatrix-client, just slimm
    `/BLEdisconnect`
    `/turnon`
    `/turnoff` (this does not disconnect the display, only turns of LEDs)
+  * you can integrate it into hone assistant with the contents of automations.yaml and configuration.yaml (host, port, macaddress and pixels need to be adjusted)
 
 
 ## Goals
@@ -29,6 +30,7 @@ Fork based on https://github.com/derkalle4/python3-idotmatrix-client, just slimm
 - [x] accept shutdown command
 - [x] save files and set via filename
 - [x] retrieve local file list
+- [x] homeassistant example configuration.yaml and automations.yaml
 - [ ] option to save files processed
 
 ## Built With
