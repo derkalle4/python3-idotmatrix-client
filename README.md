@@ -50,8 +50,6 @@ Move everything into a docker
 
 ## Notes 
 
-I probably wont change alot in the future as the state of this project fulfills all my requirements, I may add a home assistant config example
-
 If you really need other functions via REST, feel free to implement them yourself, the "old" code is still in the project and it can easily be integrated. Or if you really struggle you can open a issue and I will implement it. (I wont do any further reverse engineering)
 
 ## License
