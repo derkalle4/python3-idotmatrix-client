@@ -101,8 +101,8 @@ async def BLEdisconnect(BackgroundTasks: BackgroundTasks):
 @app.get("/BLEstatus")
 def BLEstatus():
     if not checkBLEconnected():
-        return "Disconnected"
-    return "Connected"
+        return {"connected": False }
+    return {"connected": True }
 
 @app.get("/brightness/{brightness}")
 async def set_brightness(brightness: int, BackgroundTasks: BackgroundTasks):
@@ -124,7 +124,7 @@ async def turn_on(BackgroundTasks: BackgroundTasks):
 @app.get("/getFileNames")
 def get_file_names():
     mylist = os.listdir(UPLOAD_DIR)
-    return mylist
+    return {"count": len(mylist),"filenames": mylist}
 
 @app.get("/shutdown")
 async def shutdown_server(BackgroundTasks: BackgroundTasks):
@@ -153,7 +153,7 @@ async def upload_file(request: Request, BackgroundTasks: BackgroundTasks, file: 
     
     return "Success"
 
-@app.post('/uselocal/{filename}')
+@app.get('/uselocal/{filename}')
 async def use_local_file(BackgroundTasks: BackgroundTasks, filename: str):
     SAVE_F = os.path.join(UPLOAD_DIR, filename)
     if os.path.isfile(SAVE_F):
