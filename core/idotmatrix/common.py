@@ -53,29 +53,40 @@ class Common:
                 1,
             ]
         )
+        
+    def flip_screen_off(self) -> bytearray:
+        """Turns the screen off.
 
-    def flip_screen(self, flip: bool = False) -> bytearray | None:
-        """rotates the screen 180 dregrees
-
-        Args:
-            flip (bool): False = normal, True = rotated. Defaults to False.
         Returns:
             byte array of the command which needs to be sent to the device
         """
-        try:
-            return bytearray(
-                [
-                    5,
-                    0,
-                    6,
-                    128,
-                    flip % 256,
-                ]
-            )
-        except BaseException as error:
-            logging.error(f"could not rotate the screen of the device: {error}")
+        return bytearray(
+            [
+                5,
+                0,
+                6,
+                128,
+                0,
+            ]
+        )
 
-    def set_screen_brightness(self, brightness_percent: int) -> bytearray | None:
+    def flip_screen_on(self) -> bytearray:
+        """Turns the screen on.
+
+        Returns:
+            byte array of the command which needs to be sent to the device
+        """
+        return bytearray(
+            [
+                5,
+                0,
+                6,
+                128,
+                1,
+            ]
+        )
+
+    def set_screen_brightness(self, brightness_percent: int) -> bytearray:
         """Set screen brightness. Range 5-100 (%)
 
         Args:
@@ -97,7 +108,7 @@ class Common:
         except BaseException as error:
             logging.error(f"could not set the brightness of the screen: {error}")
         
-    def set_speed(self, speed: int) -> bytearray | None:
+    def set_speed(self, speed: int) -> bytearray:
         """Sets the speed of ? - not referenced anywhere in the iDotMatrix Android App.
 
         Args:
@@ -119,7 +130,7 @@ class Common:
         except BaseException as error:
             logging.error(f"could not change the speed of the device: {error}")
 
-    def set_time(self, year: int, month: int, day: int, hour: int, minute: int, second: int) -> bytearray | None:
+    def set_time(self, year: int, month: int, day: int, hour: int, minute: int, second: int) -> bytearray:
         """Sets the date and time of the device.
 
         Args:
@@ -153,7 +164,7 @@ class Common:
         except BaseException as error:
             logging.error(f"could not set the time of the device: {error}")
 
-    def set_joint(self, mode: int) -> bytearray | None:
+    def set_joint(self, mode: int) -> bytearray:
         """Currently no idea what this is doing.
 
         Args:
@@ -175,7 +186,7 @@ class Common:
         except BaseException as error:
             logging.error(f"could not change the device joint: {error}")
             
-    def set_password(self, password: int) -> bytearray | None:
+    def set_password(self, password: int) -> bytearray:
         """Setting password: 6 digits in range 000000..999999. Reset device to clear
 
         Args:

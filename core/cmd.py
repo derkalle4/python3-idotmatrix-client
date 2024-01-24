@@ -270,9 +270,13 @@ class CMD:
 
     async def flip_screen(self, argument: str) -> None:
         """flip device screen 180 degrees"""
-        self.logging.info("flipping screen")
-        await self.bluetooth.send(Common().flip_screen(argument.upper() == "ON"))
-    
+        if argument.upper() == "ON":
+            self.logging.info("flipping screen")
+            await self.bluetooth.send(Common().flip_screen_on())
+        else:
+            self.logging.info("unflipping screen")
+            await self.bluetooth.send(Common().flip_screen_off())
+
     async def toggle_screen_freeze(self) -> None:
         """toggles the screen freeze"""
         self.logging.info("toggling screen freeze")

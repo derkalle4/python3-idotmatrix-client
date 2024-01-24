@@ -1,0 +1,80 @@
+
+#change port, host, MACADDRESS, PIXELS accordingly
+rest_command:
+  #change brightness command
+  idotmatrix_change_brightness:
+    url: "http://localhost:9191/brightness/{{ states('input_number.idotmatrix_brightness_slider') | int }}"
+    method: GET
+  #send turn on leds
+  idotmatrix_turn_on:
+    url: "http://localhost:9191/turnon"
+    method: GET
+  #send turn off leds
+  idotmatrix_turn_off:
+    url: "http://localhost:9191/turnoff"
+    method: GET
+  #initail connect change MACADDRESS to your bluetooth address (no ':'; caseinsensitive) and PIXELS to your size (eg 16 or 32)
+  idotmatrix_connect:
+    url: "http://localhost:9191/BLEconnect/MACADDRESS/PIXELS"
+    method: GET
+  #change the image/gif shown based on the input_select
+  idotmatrix_change_out:
+    url: "http://localhost:9191/uselocal/{{ states('input_select.idotmatrix_out') }}"
+    method: GET
+  #add "static" commands for fixed gifs/images to use in automations eg
+  idotmatrix_change_out:
+    url: "http://localhost:9191/uselocal/mystaticgif.gif"
+    method: GET
+
+#connected status
+binary_sensor:
+  - platform: rest
+    name: idotmatrix_connected
+    resource: http://localhost:9191/BLEstatus
+    scan_interval: 5
+    timeout: 30
+    value_template: "{{ value_json.connected }}"
+
+#get available files, count is needed to update the list automatically
+sensor:
+  - platform: rest
+    name: idotmatrix_filenames
+    resource: http://localhost:9191/getFileNames
+    scan_interval: 20
+    timeout: 30
+    json_attributes:
+      - count
+      - filenames
+    value_template: "{{ value_json.count }}"
+
+input_number:
+    #brightness slider
+    idotmatrix_brightness_slider:
+      name: Adjust idotmatrix brightness
+      initial: 80
+      min: 5
+      max: 100
+      step: 1
+      unit_of_measurement: "%"
+
+input_button:
+    # Turn on button
+    idotmatrix_turn_on_button:
+      name: Turn idotmatrix on
+      icon: mdi:led-on  
+    # Turn off button
+    idotmatrix_turn_off_button:
+      name: Turn idotmatrix off
+      icon: mdi:led-off
+    # Connect Button
+    idotmatrix_connect_button:
+      name: Connect idotmatrix
+      icon: mdi:bluetooth-connect
+
+input_select:
+    # add list to select possible images/gifs, not updated if static comands used
+    idotmatrix_out:
+      name: Select Idotmatrix image/gif
+      icon: mdi:google-downasaur
+      options:
+        - demo.gif

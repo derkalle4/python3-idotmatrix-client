@@ -91,7 +91,7 @@ class Gif:
         gif_data = self.load_gif(file_path)
         return self.create_payloads(gif_data)
 
-    def upload_processed(self, file_path, pixel_size=32):
+    def upload_processed(self, file, pixel_size=32):
         """uploads a file processed to make sure everything is correct before uploading to the device.
 
         Args:
@@ -103,7 +103,7 @@ class Gif:
         """
         try:
             # Open the gif file
-            with PilImage.open(file_path) as img:
+            with PilImage.open(file) as img:
                 # resize each frame of the gif
                 frames = []
                 try:
@@ -129,7 +129,7 @@ class Gif:
                     save_all=True,
                     append_images=frames[1:],
                     loop=1,
-                    duration=img.info["duration"],
+                    #duration=img.info["duration"],
                     disposal=2,
                 )
                 # Seek to the start of the GIF buffer
