@@ -111,6 +111,7 @@ class CMD:
         parser.add_argument(
             "--countdown-time",
             action="store",
+            type=str,
             help="sets the countdown mode: <MINUTES>-<SECONDS> (example: 10-30)",
             default="5-0",
         )
@@ -338,36 +339,38 @@ class CMD:
             self.logging.error("wrong argument for --clock")
             quit()
 
-    async def countdown(self, args):
+    async def countdown(self, args: str) -> None:
         """sets the countdown mode"""
         self.logging.info("setting countdown mode")
-        if not int(args.countdown) in range(0, 4):
+        mode = int(args.countdown)
+        if mode not in range(0, 4):
             self.logging.error("wrong argument for --countdown")
             quit()
         times = args.countdown_time.split("-")
         if not len(times) == 2:
             self.logging.error("wrong argument for --countdown-time")
             quit()
-        if int(times[0]) < 0 or int(times[0]) > 99:
+        minutes, seconds = [int(x) for x in times]
+        if minutes not in range(0, 100):
             self.logging.error(
                 "wrong argument for --countdown-time - minutes must be between 0 and 99"
             )
             quit()
-        if int(times[1]) < 0 or int(times[1]) > 59:
+        if seconds not in range(0, 60):
             self.logging.error(
                 "wrong argument for --countdown-time - seconds must be between 0 and 59"
             )
             quit()
-        if int(times[0]) == 0 and int(times[1]) == 0:
+        if minutes == 0 and seconds == 0:
             self.logging.error(
                 "wrong argument for --countdown-time - time cannot be zero"
             )
             quit()
         await self.bluetooth.send(
             Countdown().setCountdown(
-                mode=int(args.countdown),
-                minutes=int(times[0]),
-                seconds=int(times[1]),
+                mode=mode,
+                minutes=minutes,
+                seconds=seconds,
             )
         )
 
