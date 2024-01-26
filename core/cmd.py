@@ -46,8 +46,8 @@ class CMD:
         parser.add_argument(
             "--flip-screen",
             type=str,
-            choices=["on", "off"],
-            help="flips screen (on = flip, off = normal)",
+            choices=["true", "false"],
+            help="flips screen (true = flip, false = normal)",
         )
         # screen toggle
         parser.add_argument(
@@ -271,7 +271,7 @@ class CMD:
     async def flip_screen(self, argument: str) -> None:
         """flip device screen 180 degrees"""
         self.logging.info("flipping screen")
-        await self.bluetooth.send(Common().flip_screen(argument.upper() == "ON"))
+        await self.bluetooth.send(Common().flip_screen(argument.upper() == "TRUE"))
     
     async def toggle_screen_freeze(self) -> None:
         """toggles the screen freeze"""
