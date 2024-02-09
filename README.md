@@ -283,6 +283,70 @@ If specified it will process the given image. If used, the Python3 library Pillo
 ./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./demo.gif --process-gif 32
 ```
 
+##### --set-text
+
+Sets a given text to the display. The [Demo Font](https://www.fontspace.com/rain-font-f22577) was downloaded from fontspace.com and is licensed open source (see font folder or link for details).
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World"
+```
+
+###### --text-size
+
+Sets the size of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-size 10
+```
+
+###### --text-mode
+
+Sets the mode of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-mode 1
+```
+
+###### --text-speed
+
+Sets the speed of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-speed 50
+```
+
+###### --text-color-mode
+
+Sets the color mode of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-color-mode 1
+```
+
+###### --text-color
+
+Sets the color of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-color 255-255-255
+```
+
+###### --text-bg-mode
+
+Sets the background mode of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-mode 1
+```
+
+###### --text-bg-color
+
+Sets the background color of the text.
+
+```sh
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-color 0-0-255
+```
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
@@ -294,7 +358,7 @@ If you want to contribute please focus on the reverse-engineering part because m
     * [x] Graffiti Board
     * [X] DIY-Mode
     * [X] Animated Images
-    * [ ] Display Text
+    * [X] Display Text
     * [ ] Alarm & Buzzer (available according to issue #18)
     * [ ] Cloud-API to download images
     * [ ] Cloud-API to upload images to device

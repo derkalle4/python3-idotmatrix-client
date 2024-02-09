@@ -17,6 +17,7 @@ from .idotmatrix.fullscreenColor import FullscreenColor
 from .idotmatrix.musicSync import MusicSync
 from .idotmatrix.scoreboard import Scoreboard
 from .idotmatrix.graffiti import Graffiti
+from .idotmatrix.text import Text
 
 
 class CMD:
@@ -161,6 +162,68 @@ class CMD:
             action="store",
             help="processes the gif instead of sending it raw (useful when the size does not match). Format: <AMOUNT_PIXEL>",
         )
+        # text upload
+        parser.add_argument(
+            "--set-text",
+            action="store",
+            type=str,
+            help="sets the given text on your display.",
+        )
+        parser.add_argument(
+            "--text-font-path",
+            action="store",
+            type=str,
+            help="sets the given font for the text.",
+        )
+        parser.add_argument(
+            "--text-size",
+            action="store",
+            type=int,
+            help="Text size. Defaults to 16.",
+            default=16
+        )
+        parser.add_argument(
+            "--text-mode",
+            action="store",
+            type=int,
+            help="Text mode. Defaults to 0. 0 = replace text, 1 = marquee, 2 = reversed marquee, 3 = vertical rising marquee, 4 = vertical lowering marquee, 5 = blinking, 6 = fading, 7 = tetris, 8 = filling",
+            default=0
+        )
+        parser.add_argument(
+            "--text-speed",
+            action="store",
+            type=int,
+            help="speed (int, optional): Speed of Text. Defaults to 95.",
+            default=95
+        )
+        parser.add_argument(
+            "--text-color-mode",
+            action="store",
+            type=int,
+            help="Text Color Mode. Defaults to 1. 0 = white, 1 = use given RGB color, 2,3,4,5 = rainbow modes",
+            default=1
+        )
+        parser.add_argument(
+            "--text-color",
+            action="store",
+            type=str,
+            help="sets the text color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
+            default="255-0-0"
+        )
+        parser.add_argument(
+            "--text-bg-mode",
+            action="store",
+            type=int,
+            help="Text Background Mode. Defaults to 0. 0 = black, 1 = use given RGB color",
+            default=0
+        )
+        parser.add_argument(
+            "--text-bg-color",
+            action="store",
+            type=str,
+            help="sets the text background color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
+            default="255-255-255"
+        )
 
     async def run(self, args):
         self.logging.info("initializing command line")
@@ -208,6 +271,8 @@ class CMD:
             await self.image(args)
         elif args.set_gif:
             await self.gif(args)
+        elif args.set_text:
+            await self.text(args)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -490,3 +555,29 @@ class CMD:
                     file_path=args.set_gif,
                 )
             )
+
+    async def text(self, args):
+        """sets the given text on the device"""
+        self.logging.info("setting text")
+        text = Text()
+        text_color = args.text_color.split("-")
+        if len(text_color) != 3:
+            self.logging.error("wrong argument for --text-color")
+            quit()
+        bg_color = args.text_bg_color.split("-")
+        if len(bg_color) != 3:
+            self.logging.error("wrong argument for --text-bg-color")
+            quit()
+        await self.bluetooth.send(
+            text.show(
+                text=args.set_text,
+                font_size=args.text_size,
+                font_path=args.text_font_path,
+                text_mode=args.text_mode,
+                speed=args.text_speed,
+                text_color_mode=args.text_color_mode,
+                text_color=(int(text_color[0]),int(text_color[1]),int(text_color[2])),
+                text_bg_mode=args.text_bg_mode,
+                text_bg_color=(int(bg_color[0]),int(bg_color[1]),int(bg_color[2]))
+            )
+        )
