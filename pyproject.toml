@@ -15,6 +15,7 @@ maintainers = [
 ]
 dependencies = [
   "asyncio",
+  "idotmatrix==0.0.4",
   "bleak",
   "pillow",
   "argparse"

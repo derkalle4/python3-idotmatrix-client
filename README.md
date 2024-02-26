@@ -44,6 +44,7 @@ The initial reason for this project was to have a foundation to update one or mu
 ## Built With
 
 * [Python 3](https://www.python.org/downloads/)
+* [iDotMatrix Library](https://github.com/derkalle4/python3-idotmatrix-library)
 * [argparse](https://docs.python.org/3/library/argparse.html)
 * [asyncio](https://docs.python.org/3/library/asyncio.html)
 * [bleak](https://github.com/hbldh/bleak)
@@ -349,27 +350,9 @@ Sets the background color of the text.
 
 ## Roadmap
 
-If you want to contribute please focus on the reverse-engineering part because my personal skills are not that good. Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
+If you want to contribute please focus on the reverse-engineering part (find more information in the [iDotMatrix Library](https://github.com/derkalle4/python3-idotmatrix-library)). Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
 
-* [ ] Reverse Engineering
-    * [X] Chronograph
-    * [X] Clock
-    * [X] Countdown
-    * [x] Graffiti Board
-    * [X] DIY-Mode
-    * [X] Animated Images
-    * [X] Display Text
-    * [ ] Alarm & Buzzer (available according to issue #18)
-    * [ ] Cloud-API to download images
-    * [ ] Cloud-API to upload images to device
-    * [ ] Cloud-Firmware Update possible?
-    * [X] Eco-Mode
-    * [X] Fullscreen Color
-    * [ ] MusicSync
-    * [X] Scoreboard
-    * [ ] bluetooth pasword protection
-    * [ ] understand the returned byte arrays of the device for better error logs
-* [ ] outsource the reverse-engineered part to a library (suggestion from issue #17)
+* [X] outsource the reverse-engineered part to a library (suggestion from issue #17)
 * [ ] build configuration file to manage (multiple) devices
 * [ ] Build command line interface with all features to interact with the device
 * [ ] Build RestAPI to interact with the device remotely

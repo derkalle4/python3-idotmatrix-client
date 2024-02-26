@@ -6,22 +6,22 @@ from PIL import Image
 import time
 
 # idotmatrix imports
-from .bluetooth import Bluetooth
-from .idotmatrix.chronograph import Chronograph
-from .idotmatrix.clock import Clock
-from .idotmatrix.common import Common
-from .idotmatrix.countdown import Countdown
-from .idotmatrix.gif import Gif
-from .idotmatrix.image import Image
-from .idotmatrix.fullscreenColor import FullscreenColor
-from .idotmatrix.musicSync import MusicSync
-from .idotmatrix.scoreboard import Scoreboard
-from .idotmatrix.graffiti import Graffiti
-from .idotmatrix.text import Text
+from idotmatrix import ConnectionManager
+from idotmatrix import Chronograph
+from idotmatrix import Clock
+from idotmatrix import Common
+from idotmatrix import Countdown
+from idotmatrix import Gif
+from idotmatrix import Image
+from idotmatrix import FullscreenColor
+from idotmatrix import MusicSync
+from idotmatrix import Scoreboard
+from idotmatrix import Graffiti
+from idotmatrix import Text
 
 
 class CMD:
-    bluetooth = None
+    conn = ConnectionManager()
     logging = logging.getLogger("idotmatrix." + __name__)
 
     def add_arguments(self, parser):
@@ -180,49 +180,49 @@ class CMD:
             action="store",
             type=int,
             help="Text size. Defaults to 16.",
-            default=16
+            default=16,
         )
         parser.add_argument(
             "--text-mode",
             action="store",
             type=int,
             help="Text mode. Defaults to 0. 0 = replace text, 1 = marquee, 2 = reversed marquee, 3 = vertical rising marquee, 4 = vertical lowering marquee, 5 = blinking, 6 = fading, 7 = tetris, 8 = filling",
-            default=0
+            default=0,
         )
         parser.add_argument(
             "--text-speed",
             action="store",
             type=int,
             help="speed (int, optional): Speed of Text. Defaults to 95.",
-            default=95
+            default=95,
         )
         parser.add_argument(
             "--text-color-mode",
             action="store",
             type=int,
             help="Text Color Mode. Defaults to 1. 0 = white, 1 = use given RGB color, 2,3,4,5 = rainbow modes",
-            default=1
+            default=1,
         )
         parser.add_argument(
             "--text-color",
             action="store",
             type=str,
             help="sets the text color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
-            default="255-0-0"
+            default="255-0-0",
         )
         parser.add_argument(
             "--text-bg-mode",
             action="store",
             type=int,
             help="Text Background Mode. Defaults to 0. 0 = black, 1 = use given RGB color",
-            default=0
+            default=0,
         )
         parser.add_argument(
             "--text-bg-color",
             action="store",
             type=str,
             help="sets the text background color. Format: <R0-255>-<G0-255>-<B0-255> (example: 255-255-255)",
-            default="255-255-255"
+            default="255-255-255",
         )
 
     async def run(self, args):
@@ -238,7 +238,7 @@ class CMD:
             self.logging.error("no device address given")
             quit()
         else:
-            self.bluetooth = Bluetooth(address)
+            await self.conn.connectByAddress(address)
         # arguments which can be run in parallel
         if args.sync_time:
             await self.sync_time(args.set_time)
@@ -278,40 +278,40 @@ class CMD:
         """Tests all available options for the device"""
         self.logging.info("starting test of device")
         ## chronograph
-        await self.bluetooth.send(Chronograph().setChronograph(1))
+        await Chronograph().setMode(1)
         time.sleep(5)
-        await self.bluetooth.send(Chronograph().setChronograph(0))
+        await Chronograph().setMode(0)
         time.sleep(1)
         ## clock
-        await self.bluetooth.send(Clock().setTimeIndicator(True))
-        await self.bluetooth.send(Clock().setClockMode(0, True, True))
+        await Clock().setTimeIndicator(True)
+        await Clock().setMode(0, True, True)
         time.sleep(5)
         ## countdown
-        await self.bluetooth.send(Countdown().setCountdown(1, 0, 5))
-        await self.bluetooth.send(Countdown().setCountdown(0, 0, 5))
+        await Countdown().setMode(1, 0, 5)
         time.sleep(5)
+        await Countdown().setMode(0, 0, 5)
         ## fullscreen color
-        await self.bluetooth.send(FullscreenColor().setColor(255, 0, 0))
+        await FullscreenColor().setMode(255, 0, 0)
         time.sleep(5)
         ## scoreboard
-        await self.bluetooth.send(Scoreboard().setScoreboard(1, 0))
+        await Scoreboard().setMode(1, 0)
         time.sleep(1)
-        await self.bluetooth.send(Scoreboard().setScoreboard(1, 1))
+        await Scoreboard().setMode(1, 1)
         time.sleep(1)
-        await self.bluetooth.send(Scoreboard().setScoreboard(1, 2))
+        await Scoreboard().setMode(1, 2)
         time.sleep(1)
-        await self.bluetooth.send(Scoreboard().setScoreboard(2, 2))
+        await Scoreboard().setMode(2, 2)
         ## graffiti
         # load graffiti board and color pixel 0,0 red
-        await self.bluetooth.send(Graffiti().setPixelColor(255, 0, 0, 0, 0))
+        await Graffiti().setPixel(255, 0, 0, 0, 0)
         # load graffitti board and color pixel 1,1 green
-        await self.bluetooth.send(Graffiti().setPixelColor(0, 255, 0, 1, 1))
+        await Graffiti().setPixel(0, 255, 0, 1, 1)
         # load graffitti board and color pixel 2,2 blue
-        await self.bluetooth.send(Graffiti().setPixelColor(0, 0, 255, 2, 2))
+        await Graffiti().setPixel(0, 0, 255, 2, 2)
         time.sleep(5)
         ## diy image (png)
-        await self.bluetooth.send(Image().show(1))
-        await self.bluetooth.send(Image().upload_unprocessed("./demo.png"))
+        await Image().setMode(1)
+        await Image().uploadUnprocessed("./images/demo_32.png")
 
     async def sync_time(self, argument):
         """Synchronize local time to device"""
@@ -323,61 +323,61 @@ class CMD:
                 "wrong format of --set-time: please use dd-mm-YYYY-HH-MM-SS"
             )
             quit()
-        await self.bluetooth.send(
-            Common().set_time(
-                date.year,
-                date.month,
-                date.day,
-                date.hour,
-                date.minute,
-                date.second,
-            )
+        await Common().setTime(
+            date.year,
+            date.month,
+            date.day,
+            date.hour,
+            date.minute,
+            date.second,
         )
 
     async def flip_screen(self, argument: str) -> None:
         """flip device screen 180 degrees"""
         self.logging.info("flipping screen")
-        await self.bluetooth.send(Common().flip_screen(argument.upper() == "TRUE"))
-    
+        await Common().flipScreen(argument.upper() == "TRUE")
+
     async def toggle_screen_freeze(self) -> None:
         """toggles the screen freeze"""
         self.logging.info("toggling screen freeze")
-        await self.bluetooth.send(Common().toggle_screen_freeze())
+        await Common().freezeScreen()
 
     async def screen(self, argument: str) -> None:
         """turns the screen on or off"""
         if argument.upper() == "ON":
             self.logging.info("turning screen on")
-            await self.bluetooth.send(Common().turn_screen_on())
+            await Common().screenOn()
         else:
             self.logging.info("turning screen off")
-            await self.bluetooth.send(Common().turn_screen_off())
+            await Common().screenOff()
 
     async def set_brightness(self, argument: int) -> None:
         """sets the brightness of the screen"""
-        if argument in range (5, 101):
+        if argument in range(5, 101):
             self.logging.info(f"setting brightness of the screen: {argument}%")
-            await self.bluetooth.send(Common().set_screen_brightness(argument))
+            await Common().setBrightness(argument)
         else:
             self.logging.error("brightness out of range (should be between 5 and 100)")
-                 
+
     async def set_password(self, argument: str) -> None:
         """sets connection password"""
         try:
             conv_password = int(argument)
             if len(argument) == 6 and conv_password in range(0, 1000000):
                 self.logging.info(f"setting password: {argument}")
-                await self.bluetooth.send(Common().set_password(conv_password))
+                await Common().setPassword(conv_password)
             else:
-                self.logging.error(f"Password should be 6 digits long and in range 000000...999999")
+                self.logging.error(
+                    f"Password should be 6 digits long and in range 000000...999999"
+                )
         except ValueError:
             self.logging.error(f"Invalid integer: {argument}")
-            
+
     async def chronograph(self, argument):
         """sets the chronograph mode"""
         self.logging.info("setting chronograph mode")
         if int(argument) in range(0, 4):
-            await self.bluetooth.send(Chronograph().setChronograph(int(argument)))
+            await Chronograph().setMode(int(argument))
         else:
             self.logging.error("wrong argument for chronograph mode")
             quit()
@@ -390,15 +390,13 @@ class CMD:
             if len(color) < 3:
                 self.logging.error("wrong argument for --clock-color")
                 quit()
-            await self.bluetooth.send(
-                Clock().setClockMode(
-                    style=int(args.clock),
-                    visibleDate=args.clock_with_date,
-                    hour24=args.clock_24h,
-                    r=int(color[0]),
-                    g=int(color[1]),
-                    b=int(color[2]),
-                )
+            await Clock().setMode(
+                style=int(args.clock),
+                visibleDate=args.clock_with_date,
+                hour24=args.clock_24h,
+                r=int(color[0]),
+                g=int(color[1]),
+                b=int(color[2]),
             )
         else:
             self.logging.error("wrong argument for --clock")
@@ -431,12 +429,10 @@ class CMD:
                 "wrong argument for --countdown-time - time cannot be zero"
             )
             quit()
-        await self.bluetooth.send(
-            Countdown().setCountdown(
-                mode=mode,
-                minutes=minutes,
-                seconds=seconds,
-            )
+        await Countdown().setMode(
+            mode=mode,
+            minutes=minutes,
+            seconds=seconds,
         )
 
     async def fullscreenColor(self, argument):
@@ -446,12 +442,10 @@ class CMD:
         if len(color) != 3:
             self.logging.error("wrong argument for --fullscreen-color")
             quit()
-        await self.bluetooth.send(
-            FullscreenColor().setColor(
-                int(color[0]),
-                int(color[1]),
-                color[2],
-            )
+        await FullscreenColor().setMode(
+            int(color[0]),
+            int(color[1]),
+            color[2],
         )
 
     async def pixelColor(self, argument):
@@ -477,14 +471,12 @@ class CMD:
             # TODO: proper check if we are within the pixel range of the device
             # TODO: maybe we can use a delimiter to make use of the MTU size (sending chunks instead of separate requests)
             # TODO: when filling 32x32 pixels it seems to have trouble to send all pixels. One pixel will be "forgotten" somehow
-            await self.bluetooth.send(
-                Graffiti().setPixelColor(
-                    x=int(split[0]),
-                    y=int(split[1]),
-                    r=int(split[2]),
-                    g=int(split[3]),
-                    b=int(split[4]),
-                )
+            await Graffiti().setPixel(
+                x=int(split[0]),
+                y=int(split[1]),
+                r=int(split[2]),
+                g=int(split[3]),
+                b=int(split[4]),
             )
 
     async def scoreboard(self, argument):
@@ -500,11 +492,9 @@ class CMD:
         if int(scores[0]) > 999 or int(scores[1]) > 999:
             self.logging.error("exceeded maximum value of 999 for --scoreboard")
             quit()
-        await self.bluetooth.send(
-            Scoreboard().setScoreboard(
-                count1=int(scores[0]),
-                count2=int(scores[1]),
-            )
+        await Scoreboard().setMode(
+            count1=int(scores[0]),
+            count2=int(scores[1]),
         )
 
     async def image(self, args):
@@ -512,30 +502,22 @@ class CMD:
         self.logging.info("setting image")
         image = Image()
         if args.image == "false":
-            await self.bluetooth.send(
-                image.show(
-                    mode=0,
-                )
+            await image.setMode(
+                mode=0,
             )
         else:
-            await self.bluetooth.send(
-                image.show(
-                    mode=1,
-                )
+            await image.setMode(
+                mode=1,
             )
             if args.set_image:
                 if args.process_image:
-                    await self.bluetooth.send(
-                        image.upload_processed(
-                            file_path=args.set_image,
-                            pixel_size=int(args.process_image),
-                        )
+                    await image.uploadProcessed(
+                        file_path=args.set_image,
+                        pixel_size=int(args.process_image),
                     )
                 else:
-                    await self.bluetooth.send(
-                        image.upload_unprocessed(
-                            file_path=args.set_image,
-                        )
+                    await image.uploadUnprocessed(
+                        file_path=args.set_image,
                     )
 
     async def gif(self, args):
@@ -543,17 +525,13 @@ class CMD:
         self.logging.info("setting (animated) GIF")
         gif = Gif()
         if args.process_gif:
-            await self.bluetooth.send(
-                gif.upload_processed(
-                    file_path=args.set_gif,
-                    pixel_size=int(args.process_gif),
-                )
+            await gif.uploadProcessed(
+                file_path=args.set_gif,
+                pixel_size=int(args.process_gif),
             )
         else:
-            await self.bluetooth.send(
-                gif.upload_unprocessed(
-                    file_path=args.set_gif,
-                )
+            await gif.uploadUnprocessed(
+                file_path=args.set_gif,
             )
 
     async def text(self, args):
@@ -568,16 +546,14 @@ class CMD:
         if len(bg_color) != 3:
             self.logging.error("wrong argument for --text-bg-color")
             quit()
-        await self.bluetooth.send(
-            text.show(
-                text=args.set_text,
-                font_size=args.text_size,
-                font_path=args.text_font_path,
-                text_mode=args.text_mode,
-                speed=args.text_speed,
-                text_color_mode=args.text_color_mode,
-                text_color=(int(text_color[0]),int(text_color[1]),int(text_color[2])),
-                text_bg_mode=args.text_bg_mode,
-                text_bg_color=(int(bg_color[0]),int(bg_color[1]),int(bg_color[2]))
-            )
+        await text.setMode(
+            text=args.set_text,
+            font_size=args.text_size,
+            font_path=args.text_font_path,
+            text_mode=args.text_mode,
+            speed=args.text_speed,
+            text_color_mode=args.text_color_mode,
+            text_color=(int(text_color[0]), int(text_color[1]), int(text_color[2])),
+            text_bg_mode=args.text_bg_mode,
+            text_bg_color=(int(bg_color[0]), int(bg_color[1]), int(bg_color[2])),
         )
