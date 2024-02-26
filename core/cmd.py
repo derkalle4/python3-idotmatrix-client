@@ -25,6 +25,12 @@ class CMD:
     logging = logging.getLogger("idotmatrix." + __name__)
 
     def add_arguments(self, parser):
+        # scan
+        parser.add_argument(
+            "--scan",
+            action="store_true",
+            help="scans all bluetooth devices in range for iDotMatrix displays",
+        )
         # test
         parser.add_argument(
             "--test",
@@ -228,6 +234,9 @@ class CMD:
     async def run(self, args):
         self.logging.info("initializing command line")
         address = None
+        if args.scan:
+            await self.conn.scan()
+            quit()
         if args.address:
             self.logging.debug("using --address")
             address = args.address
