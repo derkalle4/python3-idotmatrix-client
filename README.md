@@ -90,12 +90,20 @@ python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
 
 #### command line arguments
 
-##### --address (required)
+##### --address (required for all commands except "scan")
 
 Specifies the address of the pixel display device. Use "auto" to use the first available device (automatically looking for IDM-* devices in range).
 
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff
+```
+
+##### --scan
+
+Scans all bluetooth devices in range for iDotMatrix devices. Quits afterwards. Cannot be combined with other commands (use --address auto instead).
+
+```sh
+./run_in_venv.sh --scan
 ```
 
 ##### --sync-time
