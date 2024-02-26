@@ -237,6 +237,8 @@ class CMD:
         if address is None:
             self.logging.error("no device address given")
             quit()
+        elif str(address).lower() == "auto":
+            await self.conn.connectBySearch()
         else:
             await self.conn.connectByAddress(address)
         # arguments which can be run in parallel

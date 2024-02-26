@@ -92,7 +92,7 @@ python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
 
 ##### --address (required)
 
-Specifies the address of the pixel display device.
+Specifies the address of the pixel display device. Use "auto" to use the first available device (automatically looking for IDM-* devices in range).
 
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff
