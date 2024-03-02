@@ -56,10 +56,12 @@ To get a local copy up and running follow these simple example steps:
 
 ### Prerequisites
 
-Please install the following for your distribution (Windows may work but it is untested):
+Please install the following for your OS:
 
 * latest Python3
 * Python3 Virtual Env
+
+windows users, to use the `.sh` scripts below you will need to use msys/gitbash, or roll your own
 
 ### Installation
 
