@@ -7,8 +7,10 @@ IDO_DIR="$(dirname "$0")"
 if command -v python3 &> /dev/null
 then
     PYTHON_CMD=python3
+    PIP_CMD=pip3
 else
     PYTHON_CMD=python
+    PIP_CMD=pip
 fi
 
 # create venv
@@ -25,4 +27,4 @@ else
 fi
 
 # install dependencies from pyproject.toml
-$PYTHON_CMD -m pip install "$IDO_DIR/"
+$PYTHON_CMD -m $PIP_CMD install "$IDO_DIR/"
