@@ -3,15 +3,7 @@ set -e
 # get the directory of the file
 IDO_DIR="$(dirname "$0")"
 
-# Check if Python is available as 'python3' or 'python'
-if command -v python3 &> /dev/null
-then
-    PYTHON_CMD=python3
-    PIP_CMD=pip3
-else
-    PYTHON_CMD=python
-    PIP_CMD=pip
-fi
+. "$IDO_DIR"/find_cmds.sh
 
 # create venv
 $PYTHON_CMD -m venv "$IDO_DIR/venv"
