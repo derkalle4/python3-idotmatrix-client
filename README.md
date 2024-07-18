@@ -265,9 +265,9 @@ If you do not want to process the image: when using Gimp I had to export the fil
 The [Demo PNG](https://opengameart.org/content/pixel-art-practice) was downloaded from OpenGameArt.org.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_16.png
-./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_32.png
-./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_64.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./images/demo_16.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./images/demo_32.png
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./images/demo_64.png
 ```
 
 ###### --process-image
@@ -275,7 +275,7 @@ The [Demo PNG](https://opengameart.org/content/pixel-art-practice) was downloade
 If specified it will process the given image. If used, the Python3 library Pillow will be utilized to convert the given image to a PNG with the given amount of pixels (e.g. 32 for 32x32 or 16 for 16x16 pixels). Technically you could use all kind of sizes and variations of images. Keep in mind: processing could take some time depending on your computer. In my tests the given demo.png file takes around 1 second without processing and three seconds with processing.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./demo_512.png --process-image 32
+./run_in_venv.sh --address 00:11:22:33:44:ff --image true --set-image ./images/demo_512.png --process-image 32
 ```
 
 ##### --set-gif
@@ -283,7 +283,7 @@ If specified it will process the given image. If used, the Python3 library Pillo
 Path to an GIF to display on the device. See --process-gif for more information! The [Demo GIF](https://opengameart.org/content/animated-pixel-torch) was downloaded from OpenGameArt.org.
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./demo.gif
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./images/demo.gif
 ```
 
 ###### --process-gif
@@ -291,7 +291,7 @@ Path to an GIF to display on the device. See --process-gif for more information!
 If specified it will process the given image. If used, the Python3 library Pillow will be utilized to convert the given image to a GIF with the given amount of pixels (e.g. 32 for 32x32 or 16 for 16x16 pixels). Technically you could use all kind of sizes for the GIF. Keep in mind: processing could take some time depending on your computer and using larger GIFs may result in a bad image quality. You should hand-craft your GIFs in the correct format for best results!
 
 ```sh
-./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./demo.gif --process-gif 32
+./run_in_venv.sh --address 00:11:22:33:44:ff --set-gif ./images/demo.gif --process-gif 32
 ```
 
 ##### --set-text
