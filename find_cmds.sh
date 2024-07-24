@@ -22,7 +22,7 @@ if [ -z "$PIP_CMD" ]; then
 		PIP_CMD=pip3
 	else
 		if command -v pip &>/dev/null; then
-			PIP_CMD=python
+			PIP_CMD=pip
 		else
 			echo "Pip not found" >&2
 			exit 1
