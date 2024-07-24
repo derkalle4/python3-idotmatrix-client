@@ -29,6 +29,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [GUI](#gui)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -49,6 +50,8 @@ The initial reason for this project was to have a foundation to update one or mu
 * [asyncio](https://docs.python.org/3/library/asyncio.html)
 * [bleak](https://github.com/hbldh/bleak)
 * [pillow](https://python-pillow.org)
+* [PyQt5](https://pypi.org/project/PyQt5/)
+* [pyinstaller](https://pyinstaller.org)
 
 ## Getting Started
 
@@ -358,6 +361,41 @@ Sets the background color of the text.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-color 0-0-255
 ```
 
+## GUI
+### Run Methods
+You can run the GUI uncompiled with python, or you can build an executible with Pyinstaller.
+
+#### Method 1) Run via Python
+* Open terminal at ```/python3-idotmatrix-client```
+* Run ```pip install pyqt5```
+* Run ```py gui.py```
+
+#### Method 2) Build and Run
+* Run ```build.bat``` for **Windows** or ```build.sh``` for **Linux**
+* Click the new ```iDotMatrix Controller``` program in ```/python3-idotmatrix-client```
+
+### Features
+* **Device Search**: *Scans for nearby devices, asks for name, adds to home screen.*
+* **Clock Style**: *Set the Clock Style and Color. Auto sync time.*
+* **Sync Time**: *Sync time to machine clock.*
+* **Set Time**: *Set time.*
+* **Screen On/Off**: *Turn the screen On or Off.*
+* **Stop Watch**: *Use a stop watch.*
+* **Countdown Timer**: *Use a Countdown Timer.*
+* **Set Text**: *Set the text value and effects.*
+* **Color Studio**: *Set background color, or paint your own designs and save them for later use.*
+* **Scoreboard**: *Show a three-digit, two player scoreboard.*
+* **Set Image**: *Pick an image from the file browser to set. Auto Image Processing.*
+* **Set GIF**: *Pick a GIF from the file browser to set. Auto GIF Processing is attempted but does not always work. Source material closer to 16x16 or 32x32 works best.*
+
+### Known Issues
+* [ ] Commands somtimes fail to connect to the device. Usually rerunning the last command will work.
+* [ ] Screen Flip & Screen Freeze work inconsistantly and are not included with the GUI.
+
+*Found a GUI bug? Submitting a new GUI request? Tag [@TheBigWazz](https://github.com/thebigwazz)*
+
+</br>
+
 ## Roadmap
 
 If you want to contribute please focus on the reverse-engineering part (find more information in the [iDotMatrix Library](https://github.com/derkalle4/python3-idotmatrix-library)). Many thanks for all contributions! If you want to dive deep into other issues please check for "#TODO" comments in the source code as well.
@@ -367,8 +405,8 @@ If you want to contribute please focus on the reverse-engineering part (find mor
 * [ ] Build command line interface with all features to interact with the device
 * [ ] Build RestAPI to interact with the device remotely
     * [ ] Homeassistant Integration
-* [ ] Build GUI to allow non-technical people to use this software
-* [ ] build search tool to find displays nearby
+* [X] Build GUI to allow non-technical people to use this software
+* [X] build search tool to find displays nearby
 * [ ] make this software compatible with Windows and Linux
 * [ ] provide executables for Windows
 
@@ -405,3 +443,4 @@ Distributed under the GNU GENERAL PUBLIC License. See [LICENSE](https://github.c
 * [schorsch3000](https://github.com/schorsch3000) - *smaller fixes*
 * [tekka007](https://github.com/tekka007) - *code refactoring and reverse engineering*
 * [inselberg](https://github.com/inselberg) - *Reverse Engineering for the Displays*
+* [TheBigWazz](https://github.com/thebigwazz) - *GUI and Device Search*
