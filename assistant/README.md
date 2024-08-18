@@ -39,3 +39,11 @@ This script uses OpenAI's function calling functionality to perform tasks with y
     pause timer
 
 ```
+
+
+# Checklist
+- [x] Implement basic functionality
+- [] Implement image and gif functionality to allow assitant to create and send pictures to the screen
+- [] Fix buggy text
+- [] Put together a simple web GUI to interact with the agent
+- [] Add support for multiple agent backends
