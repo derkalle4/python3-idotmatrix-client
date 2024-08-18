@@ -1,0 +1,291 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "fullscreenColor",
+      "description": "Sets all pixels on the display to the specified color based on RGB Format.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "r": {
+            "type": "number",
+            "description": "Specifies the RED part of the pixel between 0 and 255."
+          },
+          "g": {
+            "type": "number",
+            "description": "Specifies the GREEN part of the pixel between 0 and 255."
+          },
+          "b": {
+            "type": "number",
+            "description": "Specifies the BLUE part of the pixel between 0 and 255."
+          }
+        },
+        "required": [
+          "r",
+          "g",
+          "b"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "sync_time",
+      "description": "Synchronize the local time to the device. You can optionally pass a date-time string in the format 'dd-mm-YYYY-HH:MM:SS'. If no time is provided, the current time will be used.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "datetime_str": {
+            "type": "string",
+            "description": "The date and time string in the format 'dd-mm-YYYY-HH:MM:SS'."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "flip_screen",
+      "description": "Flip the device screen 180 degrees. By default, the screen is flipped if no parameter is provided.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "flip": {
+            "type": "string",
+            "description": "Specify whether to flip the screen. Use 'TRUE' to flip or 'FALSE' to keep the current orientation. Defaults to 'TRUE'."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "toggle_screen_freeze",
+      "description": "Toggle the screen freeze state. This function alternates between freezing and unfreezing the screen.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "screen",
+      "description": "Turn the screen on or off based on the provided toggle value.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "toggle": {
+            "type": "string",
+            "description": "Specify 'ON' to turn the screen on or 'OFF' to turn it off."
+          }
+        },
+        "required": [
+          "toggle"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "set_brightness",
+      "description": "Set the brightness of the screen. The brightness value should be between 5 and 100.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "intensity": {
+            "type": "integer",
+            "description": "The brightness level to set, ranging from 5 to 100."
+          }
+        },
+        "required": [
+          "intensity"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "chronograph",
+      "description": "Set the chronograph mode. Acceptable modes range from 0 to 3.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "chronograph_mode": {
+            "type": "string",
+            "description": "The chronograph mode to set, specified as a string. Valid values are '0', '1', '2', or '3'."
+          }
+        },
+        "required": [
+          "chronograph_mode"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "clock",
+      "description": "Set the clock mode with various customizable options including clock mode, color, date display, and 24-hour format.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clock_mode": {
+            "type": "string",
+            "description": "The clock mode to set. Valid values range from '0' to '7'. 0 = default. 1 = christmas. 2 = racing. 3 = inverted full screen. 4 = animated hourglass"
+          },
+          "clock_color": {
+            "type": "string",
+            "description": "The color of the clock in 'R-G-B' format where R, G, and B are integers between 0 and 255."
+          },
+          "clock_with_date": {
+            "type": "string",
+            "description": "Specify 'TRUE' to include the date with the clock, or 'FALSE' to omit it. This is optional."
+          },
+          "clock_24h": {
+            "type": "string",
+            "description": "Specify 'TRUE' to use a 24-hour format, or 'FALSE' to use a 12-hour format. This is optional."
+          }
+        },
+        "required": [
+          "clock_mode",
+          "clock_color"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "countdown",
+      "description": "Set the countdown mode with the specified time in minutes and seconds. Valid modes range from 0 to 3.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "countdown_mode": {
+            "type": "string",
+            "description": "The countdown mode to set. Valid values range from '0' to '3'. 0 = disable. 1 = start. 2 = pause. 3 = restart"
+          },
+          "countdown_timer_minutes": {
+            "type": "string",
+            "description": "The number of minutes for the countdown. Valid values range from '0' to '99'."
+          },
+          "countdown_timer_seconds": {
+            "type": "string",
+            "description": "The number of seconds for the countdown. Valid values range from '0' to '59'."
+          }
+        },
+        "required": [
+          "countdown_mode"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pixelColor",
+      "description": "Set the colors of specific pixels based on the given list of arguments. Each pixel requires five values: x, y, r, g, and b.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pixel_argument": {
+            "type": "array",
+            "description": "A list of pixel settings. Each setting is a string in the format 'x-y-r-g-b', where x and y specify the pixel coordinates, and r, g, b specify the color values (0-255).",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "pixel_argument"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "setText",
+      "description": "Set the text to be displayed on the device with customizable options including font size, color, background color, speed, and mode.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text_str": {
+            "type": "string",
+            "description": "The text to be displayed. This is optional and can be left empty."
+          },
+          "text_size": {
+            "type": "number",
+            "description": "The font size for the text. The default size is 16."
+          },
+          "text_mode": {
+            "type": "string",
+            "description": "The mode for text display. This is a numeric value where 0 is the default."
+          },
+          "text_speed": {
+            "type": "string",
+            "description": "The speed at which the text moves. The default value is 95."
+          },
+          "text_color": {
+            "type": "string",
+            "description": "The color of the text in 'R-G-B' format where R, G, and B are integers between 0 and 255. The default is '255-0-0' (red)."
+          },
+          "text_bg_color": {
+            "type": "string",
+            "description": "The background color of the text in 'R-G-B' format where R, G, and B are integers between 0 and 255. The default is '255-255-255' (white)."
+          },
+          "text_color_mode": {
+            "type": "string",
+            "description": "The color mode for the text. This is a numeric value where 1 is the default."
+          },
+          "text_bg_mode": {
+            "type": "string",
+            "description": "The background mode for the text. This is a numeric value where 0 is the default."
+          }
+        },
+        "required": ["text_str"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "scoreboard",
+      "description": "Set the scoreboard with two scores and display them. Each score must be between 0 and 999.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "argument": {
+            "type": "string",
+            "description": "The scores to set on the scoreboard, formatted as 'score1-score2'. Both scores must be non-negative integers between 0 and 999."
+          }
+        },
+        "required": [
+          "argument"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+]
