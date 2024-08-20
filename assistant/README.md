@@ -47,3 +47,4 @@ This script uses OpenAI's function calling functionality to perform tasks with y
 - [] Fix buggy text
 - [] Put together a simple web GUI to interact with the agent
 - [] Add support for multiple agent backends
+- [] Add voice support

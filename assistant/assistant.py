@@ -1,12 +1,13 @@
-import openai, os
-from openai import OpenAI
-import json
+
+
 
 # python imports
 from datetime import datetime
 import logging
 import os
 from PIL import Image
+import asyncio
+import json
 
 # idotmatrix imports
 from idotmatrix import ConnectionManager
@@ -22,41 +23,47 @@ from idotmatrix import Scoreboard
 from idotmatrix import Graffiti
 from idotmatrix import Text
 
-import asyncio
+# OpenAI imports
+import openai
+from openai import OpenAI
 
 
+# Load tools
 with open("assistant/tools.json") as f:
     tools = json.load(f)
 
+# Initialize OpenAI client with API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI()
+
+
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('openai').setLevel(logging.INFO)
 
 
 class GPTController:
     conn = ConnectionManager()
     logging = logging.getLogger("gptcontroller." + __name__)
-    # def __init__(self):
-        
-    #     self.device_on = False
-    #     self.countdown_state = None 
-
+    
+    
     async def initialize(self):
+        """Initializes the connection to the device and starts the controller"""
         
-        if 'IDOTMATRIX_ADDRESS' in os.environ:
+        
+        if 'IDOTMATRIX_ADDRESS' in os.environ: # if the address is provided in the environment
             print("Connecting to device at address: ", os.getenv("IDOTMATRIX_ADDRESS"))
             address = os.getenv("IDOTMATRIX_ADDRESS")
             await self.conn.connectByAddress(address)
             print("Connected to device at address: ", address)
-        else:
+        else: # if the address is not provided in the environment, search for the device
             print("Searching for device...")
             await self.conn.connectBySearch()
-
 
         await self.controller()
 
     async def controller(self):
         
-
+        # mapping of function names to their respective functions
         function_mapping = {'fullscreenColor': self.fullscreenColor,
                 'sync_time': self.sync_time,
                     'flip_screen': self.flip_screen,
@@ -71,29 +78,32 @@ class GPTController:
                     'setText': self.setText,
                     'scoreboard': self.scoreboard}
 
-        # await self.fullscreenColor(255, 255, 255)
-
+        # Start loop to converse with the user
         while True:
+
+            # Get user input
             inp = input("Enter a message: ")
 
-            if inp == "exit":
+            # Exit if user types "exit"
+            if inp.lower() == "exit":
                 break
                 
+            # Call GPT-4o-mini model
             response = gpt_call(messages = [inp])
 
-            print(response.choices[0])
+            # Execute the functions returned by GPT-4o-mini
+            self.logging.info(response.choices[0])
             for tool_call in response.choices[0].message.tool_calls:
-                print(tool_call)
+                
                 function_name = tool_call.function.name
                 function_args = json.loads(tool_call.function.arguments)
-                print(function_name)
-                print(function_args)
 
-                print("Executing Function")
+                self.logging.info(function_name)
+                self.logging.info(function_args)
+
+                self.logging.info("Executing Function")
+
                 await function_mapping[function_name](**function_args)
-
-
-        
 
     async def sync_time(self, datetime_str = None) -> None:
         """Synchronize local time to device"""
@@ -217,11 +227,7 @@ class GPTController:
                 "wrong argument for --countdown-time - seconds must be between 0 and 59"
             )
             return
-        # if minutes == 0 and seconds == 0:
-        #     self.logging.error(
-        #         "wrong argument for --countdown-time - time cannot be zero"
-        #     )
-        #     return
+
         await Countdown().setMode(
             mode=mode,
             minutes=minutes,
