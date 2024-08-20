@@ -287,5 +287,51 @@
         "additionalProperties": false
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "setImage",
+      "description": "Enable or disable the image mode and upload a given image file. You can also choose to process the image with a specified pixel size.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "image_name": {
+            "type": "string",
+            "description": "The name of the image file to upload, located in the 'images/' directory. If not provided, the image mode will be disabled."
+          },
+          "process_image": {
+            "type": "integer",
+            "description": "The pixel size for processing the image before uploading. If not provided, the image will be uploaded without processing."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "setGif",
+      "description": "Enable or disable the image mode and upload a given GIF file. You can also choose to process the GIF with a specified pixel size.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "gif_name": {
+            "type": "string",
+            "description": "The name of the GIF file to upload, located in the 'images/' directory."
+          },
+          "process_gif": {
+            "type": "integer",
+            "description": "The pixel size for processing the GIF before uploading. If not provided, the GIF will be uploaded without processing."
+          }
+        },
+        "required": [
+          "gif_name"
+        ],
+        "additionalProperties": false
+      }
+    }
   }
 ]
