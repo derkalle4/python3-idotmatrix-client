@@ -26,24 +26,25 @@ This script uses OpenAI's function calling functionality to perform tasks with y
 ```
 
 ```
-    # Turn on the screen
     Screen on 
     
-    # Set color
     set screen color to red
 
-    # start timer
     timer for 10 minutes
 
-    # pause timer
     pause timer
+
+    set demo.gif and process it to 32 pixels
 
 ```
 
 
 # Checklist
 - [x] Implement basic functionality
-- [] Implement image and gif functionality to allow assitant to create and send pictures to the screen
+- [x] Implement image and gif functionality to allow assitant to create and send pictures to the screen
+- [] Allow assistant to find relevant image and gifs from local
+- [] Allow assistant to find relevant image and gifs from internet
+- [] Allow assistant to create images and gifs
 - [] Fix buggy text
 - [] Put together a simple web GUI to interact with the agent
 - [] Add support for multiple agent backends
