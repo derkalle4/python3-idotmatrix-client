@@ -19,4 +19,4 @@ else
 fi
 
 # install dependencies from pyproject.toml
-$PYTHON_CMD -m $PIP_CMD install "$IDO_DIR/"
+$PYTHON_CMD -m pip install "$IDO_DIR/"
