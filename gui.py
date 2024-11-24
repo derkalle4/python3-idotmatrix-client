@@ -1,3 +1,8 @@
+import requests
+from datetime import datetime
+from PIL import Image, ImageDraw
+
+from utils.utils import digits,patterns, colors, api_key
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget,
     QPlainTextEdit, QHBoxLayout, QMessageBox, QListWidgetItem, QGridLayout,
@@ -625,7 +630,9 @@ class DevicePage(QWidget):
             ("Color Studio", self.color_control),
             ("Scoreboard", self.open_scoreboard),
             ("Set Image", self.set_image),
-            ("Set GIF", self.set_gif)
+            ("Set GIF", self.set_gif),
+            ("Set Weather", self.set_weather),
+            
         ]
 
         for index, (text, func) in enumerate(actions):
@@ -743,6 +750,102 @@ class DevicePage(QWidget):
         time, ok_pressed = QInputDialog.getText(self, "Set Time", "Enter the time (DD-MM-YYYY-HH:MM:SS):")
         if ok_pressed:
             self.run_command(["--address", self.mac_address, "--set-time", time])
+    pass
+    def set_weather(self):
+        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Enter the city:")
+
+        if ok_pressed and city:  # Verificar si se ingresó una ciudad
+            def get_current_data(city):
+                url = f"https://api.weatherapi.com/v1/current.json?q={city}&key={api_key}"
+                response = requests.get(url)
+                data = response.json()
+                if response.status_code == 200:
+                    return data
+                else:
+                    raise ValueError("No se pudo obtener la información meteorológica.")
+
+            def draw_digit(draw, x_offset, y_offset, digit):
+                pattern = digits[digit]
+                for y, row in enumerate(pattern):
+                    for x, pixel in enumerate(row):
+                        if pixel == "1":
+                            draw.point((x + x_offset, y + y_offset), fill="white")
+
+            def draw_colored_pattern(draw, x_offset, y_offset, key):
+                if key not in patterns:
+                    raise ValueError(f"El patrón '{key}' no está definido.")
+                pattern = patterns[key]
+                for y, row in enumerate(pattern):
+                    for x, pixel in enumerate(row):
+                        if pixel in colors:
+                            draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
+
+            def get_weather_category(condition_code,is_day):
+               
+                weather_switch = {
+                    "sun": [1000],
+                    "partly cloudy": [1003],
+                    "cloudy": [1006, 1009],
+                    "fog": [1030, 1135, 1147],
+                    "raining": [
+                    1063, 1150, 1153, 1180, 1183, 1186, 1189, 1192, 1195, 1240,
+                    1243, 1246, 1273, 1276
+                    ],
+                    "snowing": [
+                    1066, 1114, 1117, 1168, 1171, 1204, 1207, 1210, 1213, 1216,
+                    1219, 1222, 1225, 1255, 1258, 1279, 1282
+                    ],
+                    "thundering": [1087, 1273, 1276, 1279, 1282],
+                    "windy": [1114, 1117]
+                }
+                if is_day == 0:
+                # Si es de noche, cambiamos las categorías
+                    weather_switch["moon"] = weather_switch.pop("sun", [1000])
+                    weather_switch["partly cloudy night"] = weather_switch.pop("partly cloudy", [1003])
+
+               
+
+                for category, codes in weather_switch.items():
+                    if condition_code in codes:
+                        return category
+                return "unknown"
+
+        # Obtener datos meteorológicos
+            data_api = get_current_data(city)
+
+            current_weather_code = data_api["current"]["condition"]["code"]
+            is_day = data_api["current"]["is_day"]
+            
+            weather_category = get_weather_category(current_weather_code,is_day)
+            
+
+            temperature_celsius = int(round(data_api["current"]["temp_c"])) 
+            
+        # Crear imagen de 16x16 píxeles
+            img = Image.new('RGB', (16, 16), color='black')
+            draw = ImageDraw.Draw(img)
+
+        # Extraer los dígitos de la hora
+            first_digit = str(temperature_celsius).zfill(2)[0]
+            second_digit = str(temperature_celsius).zfill(2)[1]
+
+        # Dibujar los dígitos y el patrón meteorológico
+            draw_digit(draw, 3, 8, first_digit)
+            draw_digit(draw, 9, 8, second_digit)
+            draw_colored_pattern(draw, 4, 0, weather_category)
+
+        # Guardar la imagen
+            file_path = "weather.png"
+            img.save(file_path)
+
+        # Ejecutar el comando con la imagen generada
+            self.run_command([
+            "--address", self.mac_address,
+            "--image", "true",
+            "--set-image", file_path,
+            "--process-image", str(16)
+        ])
+
     pass
 
     def screen_control(self, state):
