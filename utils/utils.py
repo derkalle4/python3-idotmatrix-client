@@ -100,15 +100,15 @@ digits = {
     ]
 }
 colors = {
-    "b": "#000000",   # Negro
-    "y1": "#e5ff00",  # Amarillo claro
-    "y2": "#e6bd09",  # Amarillo medio
-    "y3": "#e6a307",   # Amarillo oscuro
-    "w": "#FFFFFF",   # Blanco (nube)
-    "g": "#AAAAAA",   # Gris claro (nube)
+    "b": "#000000",   # Black
+    "y1": "#e5ff00",  # Light yellow
+    "y2": "#e6bd09",  # Medium yellow
+    "y3": "#e6a307",   # Dark yellow
+    "w": "#FFFFFF",   # White 
+    "g": "#AAAAAA",   # Dark gray 
     "gD":"#4f4f4f", # gray dark
-    "y": "#FFFF00",   # Amarillo (trueno)
-    "c": "#00FFFF",   # Azul claro (lluvia)
+    "y": "#FFFF00",   # Yellow (thunder)
+    "c": "#00FFFF",   # Light blue (rain)
     "bl":"#0088ff", #blue
     
 }

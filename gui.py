@@ -754,7 +754,7 @@ class DevicePage(QWidget):
     def set_weather(self):
         city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Enter the city:")
 
-        if ok_pressed and city:  # Verificar si se ingresó una ciudad
+        if ok_pressed and city:  # Check if there is a city
             def get_current_data(city):
                 url = f"https://api.weatherapi.com/v1/current.json?q={city}&key={api_key}"
                 response = requests.get(url)
@@ -762,7 +762,7 @@ class DevicePage(QWidget):
                 if response.status_code == 200:
                     return data
                 else:
-                    raise ValueError("No se pudo obtener la información meteorológica.")
+                    raise ValueError("It could not get the info")
 
             def draw_digit(draw, x_offset, y_offset, digit):
                 pattern = digits[digit]
@@ -773,7 +773,7 @@ class DevicePage(QWidget):
 
             def draw_colored_pattern(draw, x_offset, y_offset, key):
                 if key not in patterns:
-                    raise ValueError(f"El patrón '{key}' no está definido.")
+                    raise ValueError(f"The pattern '{key}' is not defined.")
                 pattern = patterns[key]
                 for y, row in enumerate(pattern):
                     for x, pixel in enumerate(row):
@@ -799,7 +799,7 @@ class DevicePage(QWidget):
                     "windy": [1114, 1117]
                 }
                 if is_day == 0:
-                # Si es de noche, cambiamos las categorías
+                # If it is night , we change the category
                     weather_switch["moon"] = weather_switch.pop("sun", [1000])
                     weather_switch["partly cloudy night"] = weather_switch.pop("partly cloudy", [1003])
 
@@ -810,7 +810,7 @@ class DevicePage(QWidget):
                         return category
                 return "unknown"
 
-        # Obtener datos meteorológicos
+        # OGet weather data
             data_api = get_current_data(city)
 
             current_weather_code = data_api["current"]["condition"]["code"]
@@ -821,24 +821,24 @@ class DevicePage(QWidget):
 
             temperature_celsius = int(round(data_api["current"]["temp_c"])) 
             
-        # Crear imagen de 16x16 píxeles
+        # Do pixel img
             img = Image.new('RGB', (16, 16), color='black')
             draw = ImageDraw.Draw(img)
 
-        # Extraer los dígitos de la hora
+        # Extract the celsius digits
             first_digit = str(temperature_celsius).zfill(2)[0]
             second_digit = str(temperature_celsius).zfill(2)[1]
 
-        # Dibujar los dígitos y el patrón meteorológico
+        # Draw temperature and weather
             draw_digit(draw, 3, 8, first_digit)
             draw_digit(draw, 9, 8, second_digit)
             draw_colored_pattern(draw, 4, 0, weather_category)
 
-        # Guardar la imagen
+        # Save the img
             file_path = "weather.png"
             img.save(file_path)
 
-        # Ejecutar el comando con la imagen generada
+        # Run the command with the new img
             self.run_command([
             "--address", self.mac_address,
             "--image", "true",
