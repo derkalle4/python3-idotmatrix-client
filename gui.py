@@ -1,6 +1,10 @@
 import requests
 from datetime import datetime
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageSequence
+import imageio
+import numpy
+
+
 
 from utils.utils import digits,patterns, colors, api_key
 from PyQt5.QtWidgets import (
@@ -632,6 +636,8 @@ class DevicePage(QWidget):
             ("Set Image", self.set_image),
             ("Set GIF", self.set_gif),
             ("Set Weather", self.set_weather),
+            ("Set Weather GIF", self.set_weather_gif),
+
             
         ]
 
@@ -781,7 +787,6 @@ class DevicePage(QWidget):
                             draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
 
             def get_weather_category(condition_code,is_day):
-               
                 weather_switch = {
                     "sun": [1000],
                     "partly cloudy": [1003],
@@ -847,6 +852,116 @@ class DevicePage(QWidget):
         ])
 
     pass
+    def set_weather_gif(self):
+        
+        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Enter the city:")
+
+        if ok_pressed and city:
+            def get_current_data(city):
+                #2 days, just in case the actual hour +6 is the next day
+                url = f"https://api.weatherapi.com/v1/forecast.json?q={city}&days=2&key={api_key}"
+                response = requests.get(url)
+                data = response.json()
+                if response.status_code == 200:
+                    return data
+                else:
+                    raise ValueError("It could not get the info")
+                
+            def draw_digit(draw, x_offset, y_offset, digit):
+                pattern = digits[digit]
+                for y, row in enumerate(pattern):
+                    for x, pixel in enumerate(row):
+                        if pixel == "1":
+                            draw.point((x + x_offset, y + y_offset), fill=(255,255,255))
+            def draw_colored_pattern(draw, x_offset, y_offset, key):
+                if key not in patterns:
+                    raise ValueError(f"The pattern '{key}' is not defined.")
+                pattern = patterns[key]
+                for y, row in enumerate(pattern):
+                    for x, pixel in enumerate(row):
+                        if pixel in colors:
+                            draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
+            
+            def get_weather_category(condition_code,is_day):
+                weather_switch = {
+                    "sun": [1000],
+                    "partly cloudy": [1003],
+                    "cloudy": [1006, 1009],
+                    "fog": [1030, 1135, 1147],
+                    "raining": [
+                    1063, 1150, 1153, 1180, 1183, 1186, 1189, 1192, 1195, 1240,
+                    1243, 1246, 1273, 1276
+                    ],
+                    "snowing": [
+                    1066, 1114, 1117, 1168, 1171, 1204, 1207, 1210, 1213, 1216,
+                    1219, 1222, 1225, 1255, 1258, 1279, 1282
+                    ],
+                    "thundering": [1087, 1273, 1276, 1279, 1282],
+                    "windy": [1114, 1117]
+                }
+                if is_day == 0:
+                # If it is night , we change the category
+                    weather_switch["moon"] = weather_switch.pop("sun", [1000])
+                    weather_switch["partly cloudy night"] = weather_switch.pop("partly cloudy", [1003])
+
+                for category, codes in weather_switch.items():
+                    if condition_code in codes:
+                        return category
+                return "unknown"
+
+            data_api = get_current_data(city)
+            current_hour = int(data_api["location"]["localtime"].split()[1].split(":")[0])
+            
+            hourly_forecast = data_api["forecast"]["forecastday"][0]["hour"]
+            #Array for all the images
+            images=[]
+            #range must be max 6 because specs
+            for i in range(6):
+                #Checking if the next hour is in the same day or next
+                hour_index = (current_hour + i) % 24
+                if current_hour + i < 24:  # Same day
+                    hour_data = data_api["forecast"]["forecastday"][0]["hour"][hour_index]
+                else:  # Next day
+                    hour_data = data_api["forecast"]["forecastday"][1]["hour"][hour_index]
+
+                condition_code = hour_data["condition"]["code"]
+                is_day = hour_data["is_day"]
+                
+                #Celsius temperature
+                temperature_celsius = int(round(hour_data["temp_c"]))
+
+                weather_category = get_weather_category(condition_code, is_day)
+                
+                # Create the pixel image
+                img = Image.new('RGB', (16, 16), color=1)
+                draw = ImageDraw.Draw(img)
+
+                # Extract the Celsius digits
+                first_digit = str(temperature_celsius).zfill(2)[0]
+                second_digit = str(temperature_celsius).zfill(2)[1]
+                # Determine the digit color (red for the first image, white for others)
+                
+                draw.rectangle([0, 15, i, 15], fill=(255, 255, 255))  #horizontal line to draw the hour, each point is the index of the hour
+
+                draw_digit(draw, 3, 8, first_digit)
+                draw_digit(draw, 9, 8, second_digit)
+                draw_colored_pattern(draw, 4, 0, weather_category)
+                
+                # Save the gif with a unique name
+                if img.getbbox():
+                    images.append(img)
+                else:
+                    print(f"IMG {i} is empty, it will not be added")
+
+            # Run the command with the new image
+            
+            images_array = [numpy.array(img) for img in images]
+
+            gif_path = "weather_forecast.gif"
+
+            images[0].save(gif_path, save_all=True, append_images=images[1:], duration=[1000, 1000, 1000, 1000, 1000, 1000], loop=0)
+            self.run_command(["--address", self.mac_address, "--set-gif", gif_path, "--process-gif", str(16)])
+
 
     def screen_control(self, state):
         self.run_command(["--address", self.mac_address, "--screen", state])
