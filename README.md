@@ -68,7 +68,8 @@ Please install the following for your OS:
 
 If you're using windows you can get Python3 via https://scoop.sh/, or the official Python website.
 
-You can start by using the `.ps1` PowerShell scripts to set things up automatically. These are opened by right clicking them and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing their filename as a command. 
+You can start by using the `.ps1` PowerShell scripts to set things up automatically. These are opened by right clicking them and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing their filename as a command.
+
 If you want to use the `.sh` scripts in this repo instead, you will need `msys2` or `git bash` so Windows can run them.
 
 
@@ -80,11 +81,29 @@ If you want to use the `.sh` scripts in this repo instead, you will need `msys2`
 git clone https://github.com/derkalle4/python3-idotmatrix-client.git
 ```
 
-2. Create virtual environment and install all dependencies
+2. `cd` to it
 
+```sh
+cd python3-idotmatrix-client
+```
+
+3. Create virtual environment and install all dependencies
+
+* For all platforms:
+ 
 ```sh
 ./create_venv.sh
 ```
+
+* Alternative method for Windows:
+ 
+```ps1
+.\build.ps1
+```
+This script automatically sets up the virtual environment and a shortcut to the GUI. You can alternately open it by right clicking the file in Windows Explorer and choosing "Run with powershell".
+
+
+
 
 ## Usage
 
