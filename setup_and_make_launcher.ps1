@@ -1,5 +1,6 @@
 # Starts by making sure the app is set up
 echo "Setting up iDotMatrix..."
+echo "(If something goes wrong, try running the script with an administrator instance of Powershell)"
 
 if (Test-Path -Path '.\gui.py') {
     echo "gui.py found, assuming the script has launched from the correct path."
@@ -45,5 +46,6 @@ if ($userInput -eq "y") {
 
 $Shortcut.WorkingDirectory = split-path -parent $MyInvocation.MyCommand.Definition
 $Shortcut.Save()
-echo "`n--------`nA shortcut should now have been created on your desktop. `nIf commands here fail, make sure you have Python installed, and see if you can open the GUI manually through powershell, by manually using the commands in this file."
+echo "`n--------`nA shortcut should now have been created on your desktop. `nIf some commands in the script fails, first re-run without a hidden terminal if you chose to hide it, then make sure you have Python installed, and see if you can open the GUI manually through powershell, by manually using the commands in this file."
+echo "(If something went wrong, try running the script with an administrator instance of Powershell)"
 pause
