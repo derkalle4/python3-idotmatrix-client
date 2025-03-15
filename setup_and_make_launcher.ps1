@@ -1,7 +1,19 @@
 # Starts by making sure the app is set up
 echo "Setting up iDotMatrix..."
-echo "This script will now open the VENV and install the required PIP dependencies."
 
+if (Test-Path -Path '.\gui.py') {
+    echo "gui.py found, assuming the script has launched from the correct path."
+} else {
+    echo "`nERROR: gui.py not found!`nThis means that the script wasn't launched from the correct folder.`n"
+    echo "To work correctly, you need to launch this script from the root folder of the iDotMatrix git folder."
+    echo "To do this, open the folder this script is located in in Windws Explorer, right click the script, and press 'Run in powershell'.`n"
+    echo "If that doesn't work, either open a powershell window and cd to the folder, or open the iDotMatrix git folder in Windows Explorer, then shift-right-click inside in an empty spot in the folder window, and click 'Open in powershell'."
+    echo "With powershell open, write .\\setup_and_make_launcher.ps1 and press enter"
+    pause
+    exit
+}
+
+echo "This script will now open the VENV and install the required PIP dependencies."
 if (Test-Path -Path '.\venv\Scripts\Activate.ps1') {
     echo "Venv set up, opening it."
 } else {
