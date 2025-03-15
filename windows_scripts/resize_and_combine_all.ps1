@@ -1,4 +1,4 @@
-# Image resizer, gif-ifier, and merger.
+# Image/gif resizer, gif-ifier, and merger.
 #
 # Requirements:
 #	Requires ImageMagick to be installed and on your path.
@@ -15,7 +15,7 @@
 #	Find the `magick` commands in the functions below, and copy them into your terminal, replacing the variables with your own values directly.
 #
 # What this does:
-# 	This script will convert every jpg+png+webp image in the input-folder to a gif of given pixel-size. 
+# 	This script will convert every jpg+png+webp+gif+mp4 file in the input-folder to a gif of given pixel-size. 
 #	It then combines every gif in the output-folder into a single gif.
 #
 # 	If you want to merge your own gifs without converting anything, 
@@ -24,7 +24,7 @@
 #
 #	You don't need to put any images in your input folder for this.
 
-$outFolderName = "out"
+$outFolderName = "gif_output"
 $outGifName = "_combined"
 
 
@@ -108,6 +108,8 @@ do {
 MassForceResize -InDirPath $inPath -OutDirPath "$outPath" -InFiletype "jpg"  -OutFiletype "gif" -PixelSize $targetsize
 MassForceResize -InDirPath $inPath -OutDirPath "$outPath" -InFiletype "png"  -OutFiletype "gif" -PixelSize $targetsize
 MassForceResize -InDirPath $inPath -OutDirPath "$outPath" -InFiletype "webp" -OutFiletype "gif" -PixelSize $targetsize
+MassForceResize -InDirPath $inPath -OutDirPath "$outPath" -InFiletype "gif"  -OutFiletype "gif" -PixelSize $targetsize
+MassForceResize -InDirPath $inPath -OutDirPath "$outPath" -InFiletype "mp4"  -OutFiletype "gif" -PixelSize $targetsize
 
 
 Write-Host "`n## IMAGE LOOPING ##"
