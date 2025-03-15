@@ -478,7 +478,7 @@ class PixelPaintDialog(QDialog):
 
     def run_command(self, command_array):
         process = QProcess(self)
-        process.start("cmd.exe", ["/c", "py", "app.py"] + command_array)
+        process.start("cmd.exe", ["/c", "python3", "app.py"] + command_array)
         process.waitForFinished()
 
     def clear_device(self):
@@ -671,7 +671,7 @@ class DevicePage(QWidget):
             self.process.setProcessChannelMode(QProcess.MergedChannels)
             self.process.readyRead.connect(self.handle_ready_read)
             self.process.finished.connect(self.process_finished)
-            self.process.start("cmd.exe", ["/c", "py", "app.py"] + args)
+            self.process.start("cmd.exe", ["/c", "python3", "app.py"] + args)
 
     def handle_ready_read(self):
         data = self.process.readAll()
@@ -1214,7 +1214,7 @@ class MainWindow(QWidget):
         self.process.setProcessChannelMode(QProcess.MergedChannels)
         self.process.readyRead.connect(self.handle_ready_read)
         self.process.finished.connect(self.process_finished)
-        self.process.start("cmd.exe", ["/c", "py app.py --scan"])
+        self.process.start("cmd.exe", ["/c", "python3 app.py --scan"])
 
     def handle_ready_read(self):
         data = self.process.readAll()
