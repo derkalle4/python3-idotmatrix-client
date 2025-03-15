@@ -2,7 +2,11 @@
 Write-Host "`n# SETTING UP iDotMatrix #"
 Write-Host "NOTE: If something goes wrong, try running the script with an administrator instance of Powershell."
 
-$root = "$PSScriptRoot\.."
+
+$RelativeRoot = ".."  # Also used for pip installing the pyproject.toml, which needs to be relative
+$root = Resolve-Path -Path "$PSScriptRoot\$RelativeRoot"
+
+
 Write-Host "`n## PYTHON SETUP ##"
 Write-Host "`n### VERIFYING LAUNCH DIRECTORY ###"
 Write-Host "INFO: Launching from $PSScriptRoot"
@@ -44,7 +48,7 @@ if (-not $?){
 
 Write-Host "`n### CHECKING/INSTALLING DEPENDENCIES ###"
 Write-Host "Making sure PIP requirements are met, otherwise they will be installed."
-python3 -m pip install "$root"
+python3 -m pip install "$RelativeRoot\"  # Installs the pyproject.toml. Note that pip install requires relative paths
 python3 -m pip install pyqt5
 python3 -m pip install requests
 
