@@ -29,6 +29,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [External tools](#external-tools)
 * [GUI](#gui)
 * [Troubleshooting](#troubleshooting)
 * [Roadmap](#roadmap)
@@ -401,6 +402,13 @@ Sets the background color of the text.
 ```sh
 ./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-color 0-0-255
 ```
+
+### External tools
+
+To create compilations of images or videos, external tools like https://ezgifs.com/ can be used to compile a single GIF that can be uploaded.
+There's also an internal helper script for Windows to convert and compile all images and videos in a folder: `/windows_scripts/resize_and_compile_all.ps1`
+The above script is for Powershell, but at its core it just uses two small ImageMagick commands, which you can look at and use on any plataform.
+
 
 ## GUI
 
