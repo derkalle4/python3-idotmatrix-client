@@ -406,8 +406,15 @@ Sets the background color of the text.
 ### External tools
 
 To create compilations of images or videos, external tools like https://ezgifs.com/ can be used to compile a single GIF that can be uploaded.
-There's also an internal helper script for Windows to convert and compile all images and videos in a folder: `/windows_scripts/resize_and_compile_all.ps1`
+
+There's also an internal helper script for Windows to convert and compile all images and videos in a folder: `/windows_scripts/resize_and_compile_all.ps1`.
+
 The above script is for Powershell, but at its core it just uses two small ImageMagick commands, which you can look at and use on any plataform.
+
+After compiling a GIF, you can upload it with the GUI or the command
+```sh
+./run_in_venv.sh --address auto --set-gif /path/to/your/gif.gif --process-gif 32
+```
 
 
 ## GUI
