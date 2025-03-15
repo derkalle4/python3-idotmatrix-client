@@ -24,6 +24,11 @@ $VenvFileFound = Test-Path -Path "$root\venv\Scripts\Activate.ps1"
 if (-not $VenvFileFound) {
     Write-Host "`nVenv doesn't exist, creating it. Make sure you have python installed."
     python3 -m venv "$root\venv"
+	if (-not $?){
+		Write-Host "`nERROR: Failed to create venv, exiting program. Make sure Python is installed."
+		pause
+		exit
+	}
     Write-Host "INFO: Venv created, opening it."
 }
 
@@ -32,6 +37,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 . "$root\venv\Scripts\Activate.ps1"
 if (-not $?){
 	Write-Host "`nERROR: Failed to open venv, exiting program. Make sure Python is installed."
+	pause
 	exit
 }
 
