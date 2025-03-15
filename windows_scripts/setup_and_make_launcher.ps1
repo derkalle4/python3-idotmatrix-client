@@ -3,7 +3,7 @@ Write-Host "Setting up iDotMatrix..."
 Write-Host "(If something goes wrong, try running the script with an administrator instance of Powershell)"
 
 $root = "$PSScriptRoot\.."
-Write-Host "Launching from: $root"
+Write-Host "Launching from: $PSScriptRoot"
 
 if (Test-Path -Path "$root\gui.py") {
 	Write-Host "gui.py found, assuming the script has launched from the correct path."
@@ -45,10 +45,10 @@ $Shortcut.TargetPath = "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.
 
 $userInput = Read-Host -Prompt "`nDo you want the terminal to be hidden when launching the GUI?`n> [y/n]"
 if ($userInput -eq "y") {
-	$Shortcut.Arguments = "-WindowStyle Hidden -File `"$root\windows_scripts\gui.ps1`""
+	$Shortcut.Arguments = "-WindowStyle Hidden -File `"$PSScriptRoot\gui.ps1`""
 	Write-Host "If the GUI isn't opening, re-run this script without hiding the terminal, so you can see what went wrong."
 } else {
-	$Shortcut.Arguments = "-File `"$root\windows_scripts\gui.ps1`""  #-WindowStyle Hidden 
+	$Shortcut.Arguments = "-File `"$PSScriptRoot\gui.ps1`""  #-WindowStyle Hidden 
 }
 
 $Shortcut.IconLocation = "$root\idmc.ico"
