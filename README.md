@@ -88,19 +88,19 @@ cd python3-idotmatrix-client
 ```
 
 3. Create virtual environment and install all dependencies
-
-* For all platforms:
- 
+    
 ```sh
 ./create_venv.sh
 ```
 
-* Alternative method for Windows:
- 
+* Alternative automated method for Windows Powershell
+
 ```ps1
 .\build.ps1
+# This script automatically sets up the virtual environment and a shortcut to the GUI.
+# You can alternately open it by right clicking the file in Windows Explorer and choosing "Run with powershell".
 ```
-This script automatically sets up the virtual environment and a shortcut to the GUI. You can alternately open it by right clicking the file in Windows Explorer and choosing "Run with powershell".
+
 
 
 
