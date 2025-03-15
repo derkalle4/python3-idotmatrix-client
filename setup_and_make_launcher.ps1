@@ -41,7 +41,7 @@ $Shortcut.TargetPath = "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.
 
 $userInput = Read-Host -Prompt "`nDo you want the terminal to be hidden when launching the GUI?`n> [y/n]"
 if ($userInput -eq "y") {
-	$Shortcut.Arguments = "-WindowStyle Hidden -File `"$root\run.ps1`""
+	$Shortcut.Arguments = "-WindowStyle Hidden -File `"$root\gui.ps1`""
 	echo "If the GUI isn't opening, re-run this script without hiding the terminal, so you can see what went wrong."
 } else {
 	$Shortcut.Arguments = "-File `"$root\run.ps1`""  #-WindowStyle Hidden 
