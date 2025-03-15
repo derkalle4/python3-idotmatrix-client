@@ -3,15 +3,21 @@ Write-Host "`n# SETTING UP iDotMatrix #"
 Write-Host "NOTE: If something goes wrong, try running the script with an administrator instance of Powershell."
 
 
-$RelativeRoot = ".."  # Also used for pip installing the pyproject.toml, which needs to be relative
-$root = Resolve-Path -Path "$PSScriptRoot\$RelativeRoot"
+$root = Resolve-Path -Path "$PSScriptRoot\.."
+
+cd "$root"
+if (-not $?) {
+	Write-Host "\nERROR: Failed to navigate to root of repository"
+	pause
+	exit
+}
 
 
 Write-Host "`n## PYTHON SETUP ##"
 Write-Host "`n### VERIFYING LAUNCH DIRECTORY ###"
 Write-Host "INFO: Launching from $PSScriptRoot"
 
-$GuiFileFound = Test-Path -Path "$root\gui.py"
+$GuiFileFound = Test-Path -Path ".\gui.py"
 if (-not $GuiFileFound) {
 	Write-Host "`nERROR: gui.py not found. `nThis means that the script wasn't launched from the correct folder.`n"
 		Write-Host "`nTo work correctly, you need to launch this script from the root folder of the iDotMatrix git folder."
@@ -48,7 +54,7 @@ if (-not $?){
 
 Write-Host "`n### CHECKING/INSTALLING DEPENDENCIES ###"
 Write-Host "Making sure PIP requirements are met, otherwise they will be installed."
-python3 -m pip install "$RelativeRoot\"  # Installs the pyproject.toml. Note that pip install requires relative paths
+python3 -m pip install .  # Installs the pyproject.toml. Note that pip install requires relative paths
 python3 -m pip install pyqt5
 python3 -m pip install requests
 
