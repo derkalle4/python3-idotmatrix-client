@@ -61,10 +61,16 @@ To get a local copy up and running follow these simple example steps:
 
 Please install the following for your OS:
 
-* latest Python3
-* Python3 Virtual Env
+* Latest Python3
+* Python3 venv (`python3 -m pip install venv`)
 
-windows users, to use the `.sh` scripts below you will need to use msys/gitbash, or roll your own
+#### For windows
+
+If you're using windows you can get Python3 via https://scoop.sh/, or the official Python website.
+
+You can start by using the `.ps1` PowerShell scripts to set things up automatically. These are opened by right clicking them and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing their filename as a command. 
+If you want to use the `.sh` scripts in this repo instead, you will need `msys2` or `git bash` so Windows can run them.
+
 
 ### Installation
 
@@ -370,9 +376,13 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 * Run ```pip install pyqt5```
 * Run ```py gui.py```
 
-#### Method 2) Build and Run
+#### Method 2) Build and Run using PyInstaller
 * Run ```build.bat``` for **Windows** or ```build.sh``` for **Linux**
 * Click the new ```iDotMatrix Controller``` program in ```/python3-idotmatrix-client```
+
+#### Method 3) Build and Run using Windows Powershell
+* Open ```build.ps1``` and follow instructions
+* Click the new ```iDotMatrix GUI``` program on your desktop
 
 ### Features
 * **Device Search**: *Scans for nearby devices, asks for name, adds to home screen.*
