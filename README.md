@@ -30,6 +30,7 @@
   * [Installation](#installation)
 * [Usage](#usage)
 * [GUI](#gui)
+* [Troubleshooting](#troubleshooting)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -61,16 +62,30 @@ To get a local copy up and running follow these simple example steps:
 
 Please install the following for your OS:
 
-* Latest Python3
-* Python3 venv (`python3 -m pip install venv`)
+* Latest version of Python (Python3)
+
 
 #### For windows
 
-If you're using windows you can get Python3 via https://scoop.sh/, or the official Python website.
+The `build.ps1` script automatically handles setting up the python virtual environment and a shortcut to the GUI. Powershell scripts can be opened by right clicking them and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing their filename as a command.
 
-You can start by using the `.ps1` PowerShell scripts to set things up automatically. These are opened by right clicking them and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing their filename as a command.
+If you want to use the `.sh` scripts included in this repo on in Windows, you will need `msys2` or `git bash`.
+The Python CLI program can be used without the `.sh` scripts in plain powershell/cmd, by manually opening the VENV like so:
 
-If you want to use the `.sh` scripts in this repo instead, you will need `msys2` or `git bash` so Windows can run them.
+```ps1
+git clone https://github.com/derkalle4/python3-idotmatrix-client.git
+cd python3-idotmatrix-client
+pwd 				# Make sure that this is the path to your copy of this repository. 
+				# If its not, navigate to it with cd, or shift-right-click the folder and click "open in powershell".
+python3 -m venv venv  		# Creates the venv, not necessary if you've used the build.ps1 script.
+.\venv\Scripts\Activate.ps1  	# Opens the venv. Omit ".ps1" if you're using cmd.
+python3 -m pip install .\	# Downloads requirements from pyproject.toml
+python3 -m pip install pyqt5	# Only necessary for the GUI
+python3 .\app.py -h		# Replace -h with your commandline arguments
+```
+
+
+
 
 
 ### Installation
@@ -93,7 +108,7 @@ cd python3-idotmatrix-client
 ./create_venv.sh
 ```
 
-* Alternative automated method for Windows Powershell
+* This can alternatively be done with the automated venv & GUI setup script for Windows Powershell
 
 ```ps1
 .\build.ps1
@@ -112,7 +127,8 @@ If you used the ./create_venv.sh you should use this command to run the app:
 ```sh
 ./run_in_venv.sh <YOUR_COMMAND_LINE_ARGUMENTS>
 ```
-If you do not use a virtual environment the command will look like this:
+
+If you have manually opened the virtual environment, or are not using a virtual environment, the same can be accomplished with the following:
 
 ```sh
 python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
@@ -387,6 +403,7 @@ Sets the background color of the text.
 ```
 
 ## GUI
+
 ### Run Methods
 You can run the GUI uncompiled with python, or you can build an executible with Pyinstaller.
 
@@ -424,6 +441,21 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 *Found a GUI bug? Submitting a new GUI request? Tag [@TheBigWazz](https://github.com/thebigwazz)*
 
 </br>
+
+## Troubleshooting
+
+### Can't find device ID 
+
+Make sure that bluetooth is on, and that the iDotMatrix display is on and within range.
+
+One thing that can cause this issue is an instance of Python running the script in the background, especially for the GUI.
+After quitting open instances of this program, open up the task manager for your platform, and see if you can find and kill a task starting with "Python", before trying to use this program again.
+
+If that doesn't work, try restarting your computer and disconnect/reconnect the iDotMatrix display from power.
+
+If all else fails, open an issue in GitHub.
+
+
 
 ## Roadmap
 
