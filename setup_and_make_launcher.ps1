@@ -44,7 +44,7 @@ if ($userInput -eq "y") {
 	$Shortcut.Arguments = "-WindowStyle Hidden -File `"$root\gui.ps1`""
 	echo "If the GUI isn't opening, re-run this script without hiding the terminal, so you can see what went wrong."
 } else {
-	$Shortcut.Arguments = "-File `"$root\run.ps1`""  #-WindowStyle Hidden 
+	$Shortcut.Arguments = "-File `"$root\gui.ps1`"" 
 }
 
 $Shortcut.IconLocation = "$root\idmc.ico"
