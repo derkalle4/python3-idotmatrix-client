@@ -41,14 +41,14 @@ Function MassForceResize {
 	}
 	Get-ChildItem "$InDirPath\" -Filter "*.$InFiletype" | 
 	Foreach-Object {
-	$base = $_.BaseName
-	$out  = "$OutDirPath\$base.$OutFiletype"
+		$base = $_.BaseName
+		$out  = "$OutDirPath\$base.$OutFiletype"
 
-	#____ The ImageMagick command ____#
-	#| If you're not on Windows, you can copy this line and input your own values, and it'll work on any platform that can use ImageMagick.
-	magick $_.FullName -resize "${PixelSize}x${PixelSize}^" -gravity center -extent "${PixelSize}x${PixelSize}" $out
+		#____ The ImageMagick command ____#
+		#| If you're not on Windows, you can copy this line and input your own values, and it'll work on any platform that can use ImageMagick.
+		magick "$_.FullName" -resize "${PixelSize}x${PixelSize}^" -gravity center -extent "${PixelSize}x${PixelSize}" "$out"
 
-	Write-Output "Created file: $out"
+		Write-Output "Created file: $out"
 	}
 }
 
@@ -69,7 +69,7 @@ Function MergeGifs {
 
 	#____ The ImageMagick command ____#
 	#| If you're not on Windows, you can copy this line and input your own values, and it'll work on any platform that can use ImageMagick.
-	magick -delay $DelayInCentiSeconds $inp $out
+	magick -delay $DelayInCentiSeconds $inp "$out"
 
 	Write-Output "Created file: $out"
 }
