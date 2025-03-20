@@ -98,6 +98,27 @@ class CustomInputDialog(QDialog):
         else:
             return '', False
 
+class SizeDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Choose Pixel Display Size")
+        layout = QVBoxLayout()
+        self.size_combo = QComboBox()
+        self.size_combo.addItems(["16x16", "32x32"])
+        layout.addWidget(self.size_combo)
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        button_box.accepted.connect(self.accept)
+        layout.addWidget(button_box)
+        self.setLayout(layout)
+
+    def get(self):
+        if self.exec_() == QDialog.Accepted:
+            return self.size_combo.currentText().split("x")[0], True
+        else:
+            return "16", False
+
+
+
 class TextStyleDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
