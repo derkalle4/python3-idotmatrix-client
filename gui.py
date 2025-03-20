@@ -1,12 +1,11 @@
 import requests
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageSequence
-import imageio
 import numpy
 
 
 
-from utils.utils import digits,patterns, colors, fallback_weather_api_key 
+from utils.utils import digits, patterns, colors
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget,
     QPlainTextEdit, QHBoxLayout, QMessageBox, QListWidgetItem, QGridLayout,
@@ -618,7 +617,7 @@ class DevicePage(QWidget):
         self.last_command = None
         self.clock_styles = ['Default', 'Christmas', 'Racing', 'Inverted Full Screen',
                              'Animated Hourglass', 'Frame 1', 'Frame 2', 'Frame 3']
-        self.weatherapi_api_key = fallback_weather_api_key or None
+        self.weatherapi_api_key = None
         self.init_ui()
         self.flip_screen_state = False
 

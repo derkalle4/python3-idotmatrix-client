@@ -118,10 +118,6 @@ colors = {
 }
 
 
-
-#TODO rename file to weather.py to preserve original weather committer, then create new utils.py for the above.
-
-
 patterns = {
     "sun": [
         ["b", "b", "b", "b", "b", "b", "b", "b"],
@@ -225,13 +221,8 @@ patterns = {
     ],
 }
 
-#You need to create a free account in www.weatherapi.com , completely free , no credit card needed
-#Copy and paste your api key between the ""
-#example : "4bda1f92e2d64d3b9352567947a8900"
-#this key acts as a default. Changing it at runtime won't work.
-fallback_weather_api_key = ""
 
-def get_current_data(city_query, api_key=fallback_weather_api_key):
+def get_current_weather_data(city_query, api_key):
     url = f"https://api.weatherapi.com/v1/current.json?q={city_query}&key={api_key}"
     response = requests.get(url)
     data = response.json()
@@ -241,7 +232,7 @@ def get_current_data(city_query, api_key=fallback_weather_api_key):
         raise ValueError("API could not get info on given city query, or invalid API key.")
 
 
-def get_current_data_forecast(city_query, api_key=fallback_weather_api_key):  
+def get_current_weather_data_forecast(city_query, api_key):  
     #2 days, just in case the actual hour +6 is the next day
     url = f"https://api.weatherapi.com/v1/forecast.json?q={city_query}&days=2&key={api_key}"
     response = requests.get(url)
@@ -251,8 +242,6 @@ def get_current_data_forecast(city_query, api_key=fallback_weather_api_key):
     else:
         raise ValueError("API could not get info on given city query, or invalid API key.")
 
-def draw_digit(draw, x_offset, y_offset, digit):
-    pattern = digits[digit]
     for y, row in enumerate(pattern):
         for x, pixel in enumerate(row):
             if pixel == "1":
@@ -295,9 +284,9 @@ def get_weather_category(condition_code,is_day):
     return "unknown"
 
 
-def get_weather_img(city_query:str, api_key=fallback_weather_api_key, pixels:int=16) -> str:
+def get_weather_img(city_query:str, api_key, pixels:int=16) -> str:
     # Get weather data
-    data_api = get_current_data(city_query, api_key)
+    data_api = get_current_weather_data(city_query, api_key)
 
     current_weather_code = data_api["current"]["condition"]["code"]
     is_day = data_api["current"]["is_day"]
@@ -325,8 +314,8 @@ def get_weather_img(city_query:str, api_key=fallback_weather_api_key, pixels:int
     return file_path,
 
 
-def get_weather_gif(city_query:str, api_key:str=fallback_weather_api_key, pixels:int=16) -> str:
-    data_api = get_current_data_forecast(city_query, api_key=api_key)
+def get_weather_gif(city_query:str, api_key:str, pixels:int=16) -> str:
+    data_api = get_current_weather_data_forecast(city_query, api_key=api_key)
     current_hour = int(data_api["location"]["localtime"].split()[1].split(":")[0])
 
     hourly_forecast = data_api["forecast"]["forecastday"][0]["hour"]
