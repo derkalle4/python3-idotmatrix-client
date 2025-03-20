@@ -1,4 +1,5 @@
 $originalArgs = $args
+$originalPath = Get-Location
 & {
 	Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 	$root = $PSScriptRoot
@@ -10,5 +11,5 @@ $originalArgs = $args
 	}
 	Set-Location -Path $root
 	python "$root\app.py" $originalArgs
-	#Set-Location -Path $originalDir
+	Set-Location -Path $originalPath
 }
