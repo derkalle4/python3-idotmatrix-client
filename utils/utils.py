@@ -222,6 +222,23 @@ patterns = {
 }
 
 
+def draw_digit(draw, x_offset, y_offset, digit):
+    pattern = digits[digit]
+    for y, row in enumerate(pattern):
+        for x, pixel in enumerate(row):
+            if pixel == "1":
+                draw.point((x + x_offset, y + y_offset), fill=(255,255,255))
+
+def draw_colored_pattern(draw, x_offset, y_offset, key):
+    if key not in patterns:
+        raise ValueError(f"The pattern '{key}' is not defined.")
+    pattern = patterns[key]
+    for y, row in enumerate(pattern):
+        for x, pixel in enumerate(row):
+            if pixel in colors:
+                draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
+
+
 def get_current_weather_data(city_query, api_key):
     url = f"https://api.weatherapi.com/v1/current.json?q={city_query}&key={api_key}"
     response = requests.get(url)
@@ -242,19 +259,6 @@ def get_current_weather_data_forecast(city_query, api_key):
     else:
         raise ValueError("API could not get info on given city query, or invalid API key.")
 
-    for y, row in enumerate(pattern):
-        for x, pixel in enumerate(row):
-            if pixel == "1":
-                draw.point((x + x_offset, y + y_offset), fill=(255,255,255))
-
-def draw_colored_pattern(draw, x_offset, y_offset, key):
-    if key not in patterns:
-        raise ValueError(f"The pattern '{key}' is not defined.")
-    pattern = patterns[key]
-    for y, row in enumerate(pattern):
-        for x, pixel in enumerate(row):
-            if pixel in colors:
-                draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
 
 def get_weather_category(condition_code,is_day):
     weather_switch = {
