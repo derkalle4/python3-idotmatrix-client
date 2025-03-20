@@ -1,4 +1,4 @@
-$og_args = $args
+$originalArgs = $args
 & {
 	Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 	$root = $PSScriptRoot
@@ -9,6 +9,6 @@ $og_args = $args
 		pause
 	}
 	Set-Location -Path $root
-	python3 "$root\app.py" $og_args
+	python "$root\app.py" $originalArgs
 	#Set-Location -Path $originalDir
 }

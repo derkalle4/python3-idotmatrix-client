@@ -6,5 +6,5 @@ if (-not $?){
 	exit
 }
 cd $root  # Python needs to open in the root of the git folder for relative paths to be correct.
-python3 ".\gui.py"
+python ".\gui.py"
 pause

@@ -33,7 +33,7 @@ Write-Host "This script will now open the VENV and install the required PIP depe
 $VenvFileFound = Test-Path -Path "$root\venv\Scripts\Activate.ps1"
 if (-not $VenvFileFound) {
     Write-Host "`nVenv doesn't exist, creating it. Make sure you have python installed."
-    python3 -m venv "$root\venv"
+    python -m venv "$root\venv"
 	if (-not $?){
 		Write-Host "`nERROR: Failed to create venv, exiting program. Make sure Python is installed."
 		pause
@@ -54,9 +54,9 @@ if (-not $?){
 
 Write-Host "`n### CHECKING/INSTALLING DEPENDENCIES ###"
 Write-Host "Making sure PIP requirements are met, otherwise they will be installed."
-python3 -m pip install .  # Installs the pyproject.toml. Note that pip install requires relative paths
-python3 -m pip install pyqt5
-python3 -m pip install requests
+python -m pip install .  # Installs the pyproject.toml. Note that pip install requires relative paths
+python -m pip install pyqt5
+python -m pip install requests
 
 
 Write-Host "`n## CREATING LAUNCHER SHORTCUT ##"
@@ -88,7 +88,7 @@ Write-Host "`n## FINISHED ##"
 Write-Host "`n### OPTIONAL TROUBLESHOOTING ###"
 Write-Host "- If something went wrong with the shortcut, try running the script with an administrator instance of Powershell, as Windows might require this for making the shortcut."
 Write-Host "- If some commands in the script fails, first re-run without a hidden terminal if you chose to hide it, to see the errors."
-Write-Host "- If that doesn't help, make sure you have Python installed, and see if you can open the GUI manually through powershell, by copying the commands in this file that start with `"python3`"."
+Write-Host "- If that doesn't help, make sure you have Python installed, and see if you can open the GUI manually through powershell, by copying the commands in this file that start with `"python`"."
 Write-Host "`n### SUMMARY ###"
 Write-Host "A shortcut should now have been created on your desktop, and a copy of it added to $ProgramsPath to make the program searchable."
 Write-Host "Try opening it, if the shortcut isn't there or nothing shows up, read the TROUBLESHOOTING section above."
