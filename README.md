@@ -103,6 +103,10 @@ python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
 
 #### command line arguments
 
+##### -h or --help
+
+Shows you every available command line argument. This will always show the newest args, try it if something from this section doesn't work, in case an argument here is outdated.
+
 ##### --address (required for all commands except "scan")
 
 Specifies the address of the pixel display device. Use "auto" to use the first available device (automatically looking for IDM-* devices in range).
