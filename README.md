@@ -62,8 +62,8 @@ To get a local copy up and running follow these simple example steps:
 
 Please install the following for your OS:
 
-* latest Python3
-* Python3 Virtual Env
+* Latest version of Python (Python3)
+
 
 windows users, to use the `.sh` scripts below you will need to use msys/gitbash, or roll your own
 
@@ -75,8 +75,14 @@ windows users, to use the `.sh` scripts below you will need to use msys/gitbash,
 git clone https://github.com/derkalle4/python3-idotmatrix-client.git
 ```
 
-2. Create virtual environment and install all dependencies
+2. `cd` to it
 
+```sh
+cd python3-idotmatrix-client
+```
+
+3. Create virtual environment and install all dependencies
+    
 ```sh
 ./create_venv.sh
 ```
@@ -88,7 +94,8 @@ If you used the ./create_venv.sh you should use this command to run the app:
 ```sh
 ./run_in_venv.sh <YOUR_COMMAND_LINE_ARGUMENTS>
 ```
-If you do not use a virtual environment the command will look like this:
+
+If you have manually opened the virtual environment, or are not using a virtual environment, the same can be accomplished with the following:
 
 ```sh
 python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
