@@ -29,6 +29,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Gif Compilations](#gif-compilations)
 * [GUI](#gui)
 * [Troubleshooting](#troubleshooting)
 * [Roadmap](#roadmap)
@@ -373,7 +374,15 @@ Sets the background color of the text.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-color 0-0-255
 ```
 
+### Gif Compilations
+
+There's no internal method for creating a compilation of gifs or images, similar to what the app offers, 
+but you can create this manually with external tools like ImageMaick or https://ezgif.com/, 
+and upload it to the iDotMatrix device as a single gif.
+
+
 ## GUI
+
 ### Run Methods
 You can run the GUI uncompiled with python, or you can build an executible with Pyinstaller.
 
