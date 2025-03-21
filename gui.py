@@ -646,6 +646,7 @@ class DevicePage(QWidget):
         grid_layout = QGridLayout()
         self.action_buttons = []
         actions = [
+            ("Reset", self.reset),
             ("Clock Style", self.clock_control),
             ("Sync Time", self.sync_time),
             ("Set Time", self.set_time),
@@ -927,6 +928,21 @@ class DevicePage(QWidget):
                 if size_dialog.exec_() == QDialog.Accepted:
                     image_size = size_combo.currentText().split("x")[0]
                     self.run_command(["--address", self.mac_address, "--set-gif", file_path, "--process-gif", image_size])
+
+    def set_gif_unprocessed(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select GIF", "", "GIF Files (*.gif);;All Files (*)", options=options)
+
+        if file_path:
+            self.run_command(["--address", self.mac_address, "--set-gif", file_path])
+
+    def reset(self):
+        self.run_command([
+            "--address", self.mac_address,
+            "--reset",
+        ])
+        
 
 class ConfigurationPage(QWidget):
     def __init__(self, main_window):
