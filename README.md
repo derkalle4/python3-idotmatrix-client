@@ -66,9 +66,10 @@ Please install the following for your OS:
 * Latest version of Python (Python3)
 
 
-windows users, to use the `.sh` scripts below you will need to use msys/gitbash, or roll your own
 
 ### Installation
+
+#### For Linux or MSYS2/Git Bash
 
 1. Clone the repo
 
@@ -87,6 +88,32 @@ cd python3-idotmatrix-client
 ```sh
 ./create_venv.sh
 ```
+
+#### For windows
+
+1. Download the repository 
+
+Either click the green "Code" button in GitHub and clicking "Download ZIP", and extracting this file to a folder, or by using Git:
+
+```ps1
+git clone https://github.com/derkalle4/python3-idotmatrix-client.git
+```
+
+2. Install Python
+
+Go to https://www.python.org/downloads/windows/ and install the latets stable release.
+
+
+3. Open it in Explorer and run "build.ps1"
+
+The `build.ps1` script automatically handles setting up the python virtual environment and a shortcut to the GUI. 
+
+Open this script by right clicking it, and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing "./" followed by its filename.
+
+
+
+
+
 
 ## Usage
 
@@ -391,9 +418,13 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 * Run ```pip install pyqt5```
 * Run ```py gui.py```
 
-#### Method 2) Build and Run
+#### Method 2) Build and Run using PyInstaller
 * Run ```build.bat``` for **Windows** or ```build.sh``` for **Linux**
 * Click the new ```iDotMatrix Controller``` program in ```/python3-idotmatrix-client```
+
+#### Method 3) (Windows only) Build and Run using `build.ps1`
+* Right click ```build.ps1``` in Windows Explorer, and click "Run with PowerShell", and answer its prompt.
+* Open the new ```iDotMatrix GUI``` program on your desktop
 
 ### Features
 * **Device Search**: *Scans for nearby devices, asks for name, adds to home screen.*
