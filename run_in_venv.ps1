@@ -11,6 +11,22 @@ $originalPath = Get-Location
         pause
         exit
     }
+
+
+    $venvAlreadyExists = Test-Path -Path "$root\venv_windows\Scripts\Activate.ps1" -PathType Leaf
+    if (-not $venvAlreadyExists) {
+        Write-Host "Venv for Windows doesn't exist, creating it. "
+        python -m venv "$root\venv_windows"
+        if (-not $?){
+            Write-Host "`nERROR: Failed to create venv, exiting program. Make sure Python is installed."
+            Set-Location -Path $originalPath
+            pause
+            exit
+        }
+        Write-Host "Venv created."
+    }
+
+
     Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
     . "$root\venv_windows\Scripts\Activate.ps1"
     if (-not "$?"){
@@ -21,6 +37,10 @@ $originalPath = Get-Location
     }
 
     $py_cmd = "python"
+    if (-not $venvAlreadyExists){
+        Write-Host "Istalling dependencies into venv."
+        & $py_cmd -m pip install "$root/"
+    }
         & $py_cmd "$root/app.py" $originalArgs
 
     Set-Location -Path $originalPath
