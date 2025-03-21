@@ -27,6 +27,22 @@ get_venv_dir() {
     fi
 }
 
+setup_venv() {
+    local pwd_dir="$1"
+    local py_cmd=$(get_py)
+    # make venv
+    echo "Creating venv..."
+    $py_cmd -m venv "$pwd_dir/venv"
+    local venv_dir=$(get_venv_dir "$pwd_dir")
+    # open venv
+    source "$venv_dir/activate"
+    venv_py_cmd=$(get_venv_py "$venv_dir")
+    # install dependencies from pyproject.toml
+    echo "Installing dependencies into venv..."
+    $venv_py_cmd -m pip install "$pwd_dir/"
+    return 0
+}
+
 get_venv_py() {
     # find and return a direct path to the python binary in the venv.
     # this ensures we're not calling the global python binary,
@@ -43,6 +59,10 @@ get_venv_py() {
 
 pwd_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)  # POSIX-safe script directory fetching. Details: https://stackoverflow.com/a/29835459
 py_cmd=$(get_py)
+venv_dir=$(get_venv_dir "$pwd_dir")
+
+# create venv if it doesn't exist
+test -d "$venv_dir" || setup_venv "$pwd_dir"
 # open venv
 source "$venv_dir/activate"
 # make sure we use the python binary belonging to the venv
