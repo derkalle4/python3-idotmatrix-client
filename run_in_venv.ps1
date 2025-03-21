@@ -1,3 +1,7 @@
+param(
+    [switch]$DontInvokeApp  # Used to pass args directly to python, not app.py, e.g. for installing non-standard pip packages.
+    )
+
 $originalArgs = $args
 $originalPath = Get-Location
 & {
@@ -37,11 +41,27 @@ $originalPath = Get-Location
     }
 
     $py_cmd = "python"
+    if (Test-Path -Path "$root/venv_windows/Scripts/python3.exe" -PathType Leaf ){
+        $py_cmd = "$root/venv_windows/Scripts/python3.exe"
+    } elseif (Test-Path -Path "$root/venv_windows/Scripts/python.exe" -PathType Leaf){
+        $py_cmd = "$root/venv_windows/Scripts/python.exe"
+    } else {
+        Write-Host "ERROR: Failed to find venv's python executable, try re-making the venv by deleting the 'venv_windows' folder and running build.ps1."
+        Set-Location -Path $originalPath
+        pause
+        exit
+    }
+
     if (-not $venvAlreadyExists){
         Write-Host "Istalling dependencies into venv."
         & $py_cmd -m pip install "$root/"
     }
+
+    if ($DontInvokeApp){
+        & $py_cmd $originalArgs
+    } else {
         & $py_cmd "$root/app.py" $originalArgs
+    }
 
     Set-Location -Path $originalPath
 
