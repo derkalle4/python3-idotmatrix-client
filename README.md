@@ -30,6 +30,7 @@
   * [Installation](#installation)
 * [Usage](#usage)
 * [GUI](#gui)
+* [Troubleshooting](#troubleshooting)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -395,6 +396,32 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 *Found a GUI bug? Submitting a new GUI request? Tag [@TheBigWazz](https://github.com/thebigwazz)*
 
 </br>
+
+## Troubleshooting
+
+### Can't upload gifs/images
+
+Try:
+
+- Sending the "reset" command (`--reset`)
+- Use `--process-image` so the program tries to scale your images correctly for you
+- Pre-scale your image to 32x32 or 16x16 pixels using an image editor, and send it unprocessed ("raw" in the GUI)
+- Convert your image to a gif and upload it (You can use ImageMagick or something like http://ezgif.com)
+
+### Can't find device ID 
+
+Try:
+
+- Check that bluetooth is on
+- Place the iDotMatrix display nearby
+- Unplug and replug the iDotMatrix display
+- Restart your PC
+    - If that's not an option for you, killing every "Python" task might work instead.
+
+### Other
+
+If all else fails, you can open an issue on the repository's GitHub.
+
 
 ## Roadmap
 
