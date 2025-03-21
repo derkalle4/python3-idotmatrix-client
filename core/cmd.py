@@ -4,6 +4,7 @@ import logging
 import os
 from PIL import Image
 import time
+from utils import utils
 
 # idotmatrix imports
 from idotmatrix import ConnectionManager
@@ -235,6 +236,24 @@ class CMD:
             action="store_true",
             help="Sends the reset command to the display. This can sometimes help fix persistent glitches.",
         )
+        parser.add_argument(
+            "--weather-api-key",
+            action="store",
+            type=str,
+            help="The 'https://weatherapi.com' api key for weather commands.",
+        )
+        parser.add_argument(
+            "--weather-image-query",
+            action="store",
+            type=str,
+            help="Query to send weatherapi, e.g. city name. Displays an image representing the current weather. \nThis arg requires you to also pass '--process-image' with your pixel size, and the '--weather-api-key' with your 'https://weatherapi.com/' API key.",
+        )
+        parser.add_argument(
+            "--weather-gif-query",
+            action="store",
+            type=str,
+            help="Query to send weatherapi, e.g. city name. Displays a gif representing current weather. \nThis arg requires you to also pass '--process-image' with your pixel size, and the '--weather-api-key' with your 'https://weatherapi.com/' API key.",
+        )
 
     async def run(self, args):
         self.logging.info("initializing command line")
@@ -291,6 +310,10 @@ class CMD:
             await self.gif(args)
         elif args.set_text:
             await self.text(args)
+        elif args.weather_image_query:
+            await self.weather_image_query(args)
+        elif args.weather_gif_query:
+            await self.weather_gif_query(args)
 
     async def test(self):
         """Tests all available options for the device"""
@@ -585,3 +608,25 @@ class CMD:
             ]
         for packet in reset_packets:
             await self.conn.send(packet)
+
+    async def weather_image_query(self, args):
+        api_key = args.weather_api_key
+        pixels  = args.process_image
+        try:
+            img_path = utils.get_weather_img(args.weather_image_query, pixels, api_key)
+        except Exception as e:
+            self.logging.error(f"failed to get weather info or make weather image: {e}")
+        else:
+            setattr(args, 'image', img_path)
+            self.image(args)
+
+    async def weather_gif_query(self, args):
+        api_key = args.weather_api_key
+        pixels  = args.process_image
+        try:
+            gif_path = utils.get_weather_gif(args.weather_gif_query, pixels, api_key)
+        except Exception as e:
+            self.logging.error(f"failed to get weather info or make weather gif: {e}")
+        else:
+            setattr(args, 'gif', gif_path)
+            self.gif(args)
