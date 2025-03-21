@@ -636,6 +636,8 @@ class DevicePage(QWidget):
             ("Scoreboard", self.open_scoreboard),
             ("Set Image", self.set_image),
             ("Set GIF", self.set_gif),
+            ("Set Raw Image", self.set_image_unprocessed),
+            ("Set Raw GIF", self.set_gif_unprocessed),
             ("Set Weather", self.set_weather),
             ("Set Weather GIF", self.set_weather_gif),
 
@@ -1052,8 +1054,17 @@ class DevicePage(QWidget):
                 image_size = size_combo.currentText().split("x")[0]
                 self.run_command(["--address", self.mac_address, "--image", "true", "--set-image", file_path, "--process-image", image_size])
 
+    def set_image_unprocessed(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Image", "", "PNG Files (*.png);;All Files (*)", options=options)
+
+        if file_path:
+            self.run_command(["--address", self.mac_address, "--image", "true", "--set-image", file_path])
+
+
     def set_gif(self):
-        confirmation = QMessageBox.question(self, "GIF Notice", "All GIFs are processed by default to ensure maximum compatibility. \n\nThis doesn't always work for all GIFs. \n\nGIFs closer to 32x32 or 16x16 have better chances of working.",
+        confirmation = QMessageBox.question(self, "GIF Notice", "All GIFs are processed by default to ensure maximum compatibility. If you get errors try setting with the other button. \n\nThis doesn't always work for all GIFs. \n\nGIFs closer to 32x32 or 16x16 have better chances of working.",
                                             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if confirmation == QMessageBox.Yes:
@@ -1078,6 +1089,14 @@ class DevicePage(QWidget):
                     image_size = size_combo.currentText().split("x")[0]
                     self.run_command(["--address", self.mac_address, "--set-gif", file_path, "--process-gif", image_size])
 
+
+    def set_gif_unprocessed(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select GIF", "", "GIF Files (*.gif);;All Files (*)", options=options)
+
+        if file_path:
+            self.run_command(["--address", self.mac_address, "--set-gif", file_path])
     def reset(self):
         self.run_command([
             "--address", self.mac_address,
