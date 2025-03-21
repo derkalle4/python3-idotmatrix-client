@@ -232,6 +232,11 @@ class CMD:
             default="255-255-255",
         )
         parser.add_argument(
+            "--reset",
+            action="store_true",
+            help="Sends the reset command to the display. This can sometimes help fix persistent glitches.",
+        )
+        parser.add_argument(
             "--weather-api-key",
             action="store",
             type=str,
@@ -282,6 +287,8 @@ class CMD:
             await self.set_brightness(int(args.set_brightness))
         if args.set_password:
             await self.set_password(args.set_password)
+        if args.reset:
+            await self.reset(args)
         # arguments which cannot run in parallel
         if args.test:
             await self.test()
@@ -591,6 +598,17 @@ class CMD:
             text_bg_mode=args.text_bg_mode,
             text_bg_color=(int(bg_color[0]), int(bg_color[1]), int(bg_color[2])),
         )
+
+    async def reset(self, args):
+        # The following was figured out by 8none1:
+        # https://github.com/8none1/idotmatrix/commit/1a08e1e9b82d78427ab1c896c24c2a7fb45bc2f0
+        reset_packets = [
+            bytes(bytearray.fromhex("04 00 03 80")),
+            bytes(bytearray.fromhex("05 00 04 80 50")),
+            ]
+        for packet in reset_packets:
+            await self.conn.send(packet)
+
     async def weather_image_query(self, args):
         api_key = args.weather_api_key
         pixels  = args.process_image
