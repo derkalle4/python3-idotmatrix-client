@@ -782,37 +782,6 @@ class DevicePage(QWidget):
         if ok_pressed:
             self.run_command(["--address", self.mac_address, "--set-time", time])
 
-    def set_weather_api_key(self):
-        response, responded = QInputDialog.getText(self, "API Key", "Enter your 'https://weatherapi.com' api key")
-        if responded:
-            self.weatherapi_api_key = response
-        else:
-            print("No api key was provided, this is needed for the weather functionality.")
-
-    def set_weather(self):
-        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Remember to set the API key first. \nEnter the city query, e.g. name:")
-        size, ignore     = SizeDialog().get()
-
-        if ok_pressed and city:
-            self.run_command([
-                "--address", self.mac_address,
-                "--process-image", str(size),
-                "--weather-api-key", self.weatherapi_api_key,
-                "--weather-image-query", city,
-            ])
-
-    def set_weather_gif(self):
-        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Remember to set the API key first. \nEnter the city query, e.g. name:")
-        size, ignore     = SizeDialog().get()
-
-        if ok_pressed and city:
-            self.run_command([
-                "--address", self.mac_address,
-                "--process-image", str(size),
-                "--weather-api-key", self.weatherapi_api_key,
-                "--weather-gif-query", city,
-            ])
-
 
     def screen_control(self, state):
         self.run_command(["--address", self.mac_address, "--screen", state])
@@ -936,6 +905,37 @@ class DevicePage(QWidget):
 
         if file_path:
             self.run_command(["--address", self.mac_address, "--set-gif", file_path])
+
+    def set_weather_api_key(self):
+        response, responded = QInputDialog.getText(self, "API Key", "Enter your 'https://weatherapi.com' api key")
+        if responded:
+            self.weatherapi_api_key = response
+        else:
+            print("No api key was provided, this is needed for the weather functionality.")
+
+    def set_weather(self):
+        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Remember to set the API key first. \nEnter the city query, e.g. name:")
+        size, ignore     = SizeDialog().get()
+
+        if ok_pressed and city:
+            self.run_command([
+                "--address", self.mac_address,
+                "--process-image", str(size),
+                "--weather-api-key", self.weatherapi_api_key,
+                "--weather-image-query", city,
+            ])
+
+    def set_weather_gif(self):
+        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Remember to set the API key first. \nEnter the city query, e.g. name:")
+        size, ignore     = SizeDialog().get()
+
+        if ok_pressed and city:
+            self.run_command([
+                "--address", self.mac_address,
+                "--process-image", str(size),
+                "--weather-api-key", self.weatherapi_api_key,
+                "--weather-gif-query", city,
+            ])
 
     def reset(self):
         self.run_command([
