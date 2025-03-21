@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 # get directory of file
 IDO_DIR="$(dirname "$0")"
