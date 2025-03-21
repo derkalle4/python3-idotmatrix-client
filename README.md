@@ -29,7 +29,9 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Gif Compilations](#gif-compilations)
 * [GUI](#gui)
+* [Troubleshooting](#troubleshooting)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -61,10 +63,31 @@ To get a local copy up and running follow these simple example steps:
 
 Please install the following for your OS:
 
-* latest Python3
-* Python3 Virtual Env
+* Latest version of Python (Python3)
 
-windows users, to use the `.sh` scripts below you will need to use msys/gitbash, or roll your own
+
+#### For windows
+
+The `build.ps1` script automatically handles setting up the python virtual environment and a shortcut to the GUI. Powershell scripts can be opened by right clicking them and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing their filename as a command.
+
+If you want to use the `.sh` scripts included in this repo on in Windows, you will need `msys2` or `git bash`.
+The Python CLI program can be used without the `.sh` scripts in plain powershell/cmd, by manually opening the VENV like so:
+
+```ps1
+git clone https://github.com/derkalle4/python3-idotmatrix-client.git
+cd python3-idotmatrix-client
+pwd 				# Make sure that this is the path to your copy of this repository. 
+				# If its not, navigate to it with cd, or shift-right-click the folder and click "open in powershell".
+python3 -m venv venv  		# Creates the venv, not necessary if you've used the build.ps1 script.
+.\venv\Scripts\Activate.ps1  	# Opens the venv. Omit ".ps1" if you're using cmd.
+python3 -m pip install .\	# Downloads requirements from pyproject.toml
+python3 -m pip install pyqt5	# Only necessary for the GUI
+python3 .\app.py -h		# Replace -h with your commandline arguments
+```
+
+
+
+
 
 ### Installation
 
@@ -74,11 +97,29 @@ windows users, to use the `.sh` scripts below you will need to use msys/gitbash,
 git clone https://github.com/derkalle4/python3-idotmatrix-client.git
 ```
 
-2. Create virtual environment and install all dependencies
+2. `cd` to it
 
+```sh
+cd python3-idotmatrix-client
+```
+
+3. Create virtual environment and install all dependencies
+    
 ```sh
 ./create_venv.sh
 ```
+
+* This can alternatively be done with the automated venv & GUI setup script for Windows Powershell
+
+```ps1
+.\build.ps1
+# This script automatically sets up the virtual environment and a shortcut to the GUI.
+# You can alternately open it by right clicking the file in Windows Explorer and choosing "Run with powershell".
+```
+
+
+
+
 
 ## Usage
 
@@ -87,7 +128,8 @@ If you used the ./create_venv.sh you should use this command to run the app:
 ```sh
 ./run_in_venv.sh <YOUR_COMMAND_LINE_ARGUMENTS>
 ```
-If you do not use a virtual environment the command will look like this:
+
+If you have manually opened the virtual environment, or are not using a virtual environment, the same can be accomplished with the following:
 
 ```sh
 python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
@@ -361,7 +403,23 @@ Sets the background color of the text.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-color 0-0-255
 ```
 
+### Gif Compilations
+
+There's no internal method for creating a compilation of gifs or images, similar to what the app offers, 
+but you can create this manually with external tools like https://ezgifs.com/, and upload it to the iDotMatrix device as a single gif.
+
+There's also an internal helper script for Windows to convert and compile all images and videos in a folder: `/windows_scripts/resize_and_compile_all.ps1`.
+
+The above script is for Powershell, but at its core it just uses two small ImageMagick commands, which you can look at and use on any plataform.
+
+After compiling a GIF, you can upload it with the GUI, or with a command:
+```sh
+./run_in_venv.sh --address auto --set-gif /path/to/your/gif.gif
+```
+
+
 ## GUI
+
 ### Run Methods
 You can run the GUI uncompiled with python, or you can build an executible with Pyinstaller.
 
@@ -370,9 +428,13 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 * Run ```pip install pyqt5```
 * Run ```py gui.py```
 
-#### Method 2) Build and Run
+#### Method 2) Build and Run using PyInstaller
 * Run ```build.bat``` for **Windows** or ```build.sh``` for **Linux**
 * Click the new ```iDotMatrix Controller``` program in ```/python3-idotmatrix-client```
+
+#### Method 3) Build and Run using Windows Powershell
+* Open ```build.ps1``` and follow instructions
+* Click the new ```iDotMatrix GUI``` program on your desktop
 
 ### Features
 * **Device Search**: *Scans for nearby devices, asks for name, adds to home screen.*
@@ -395,6 +457,21 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 *Found a GUI bug? Submitting a new GUI request? Tag [@TheBigWazz](https://github.com/thebigwazz)*
 
 </br>
+
+## Troubleshooting
+
+### Can't find device ID 
+
+Make sure that bluetooth is on, and that the iDotMatrix display is on and within range.
+
+One thing that can cause this issue is an instance of Python running the script in the background, especially for the GUI.
+After quitting open instances of this program, open up the task manager for your platform, and see if you can find and kill a task starting with "Python", before trying to use this program again.
+
+If that doesn't work, try restarting your computer and disconnect/reconnect the iDotMatrix display from power.
+
+If all else fails, open an issue in GitHub.
+
+
 
 ## Roadmap
 

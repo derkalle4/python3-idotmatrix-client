@@ -656,6 +656,8 @@ class DevicePage(QWidget):
             ("Countdown Timer", lambda: self.countdown_control(1)),
             ("Color Studio", self.color_control),
             ("Scoreboard", self.open_scoreboard),
+            ("Set Raw Image", self.set_image_unprocessed),
+            ("Set Raw GIF", self.set_gif_unprocessed),
             ("Set Image", self.set_image),
             ("Set GIF", self.set_gif),
             ("Set Raw Image", self.set_image_unprocessed),
