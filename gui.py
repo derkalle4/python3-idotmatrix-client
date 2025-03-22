@@ -900,6 +900,14 @@ class DevicePage(QWidget):
                     image_size = size_combo.currentText().split("x")[0]
                     self.run_command(["--address", self.mac_address, "--set-gif", file_path, "--process-gif", image_size])
 
+    def set_image_unprocessed(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Image", "", "PNG Files (*.png);;All Files (*)", options=options)
+
+        if file_path:
+            self.run_command(["--address", self.mac_address, "--image", "true", "--set-image", file_path])
+
     def set_gif_unprocessed(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
