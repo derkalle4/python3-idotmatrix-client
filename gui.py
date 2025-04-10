@@ -15,7 +15,18 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QFont, QIcon, QColor
 from PyQt5.QtCore import Qt, QProcess, QSettings, pyqtSignal
-import sys, re, copy
+import sys, os, re, copy
+
+
+# --- Module-Scope Variables ---
+proj_dir = os.path.dirname(os.path.abspath(__file__))
+if sys.platform == 'win32':
+    shell_cmd       = 'powershell.exe'
+    shell_init_args = ['-File', f"{proj_dir}\\run_in_venv.ps1"]
+else:
+    shell_cmd       = 'sh'
+    shell_init_args = [f"{proj_dir}/run_in_venv.sh"]
+
 
 # --- Dialog Classes ---
 class ClockStyleDialog(QDialog):
@@ -476,9 +487,9 @@ class PixelPaintDialog(QDialog):
         command_array = ["--address", self.mac_address]
         self.run_command(command_array)
 
-    def run_command(self, command_array):
+    def run_command(self, command_array:list):
         process = QProcess(self)
-        process.start("cmd.exe", ["/c", "py", "app.py"] + command_array)
+        process.start(shell_cmd, [*shell_init_args, *command_array])
         process.waitForFinished()
 
     def clear_device(self):
@@ -666,12 +677,12 @@ class DevicePage(QWidget):
         self.main_window.stacked_widget.setCurrentWidget(self.main_window.homepage)
 
     def run_command(self, args):
-            self.console_output.clear()
-            self.process = QProcess(self)
-            self.process.setProcessChannelMode(QProcess.MergedChannels)
-            self.process.readyRead.connect(self.handle_ready_read)
-            self.process.finished.connect(self.process_finished)
-            self.process.start("cmd.exe", ["/c", "py", "app.py"] + args)
+        self.console_output.clear()
+        self.process = QProcess(self)
+        self.process.setProcessChannelMode(QProcess.MergedChannels)
+        self.process.readyRead.connect(self.handle_ready_read)
+        self.process.finished.connect(self.process_finished)
+        self.process.start(shell_cmd, [*shell_init_args, *args])
 
     def handle_ready_read(self):
         data = self.process.readAll()
@@ -1214,7 +1225,7 @@ class MainWindow(QWidget):
         self.process.setProcessChannelMode(QProcess.MergedChannels)
         self.process.readyRead.connect(self.handle_ready_read)
         self.process.finished.connect(self.process_finished)
-        self.process.start("cmd.exe", ["/c", "py app.py --scan"])
+        self.process.start(shell_cmd, [*shell_init_args, "--scan"])
 
     def handle_ready_read(self):
         data = self.process.readAll()

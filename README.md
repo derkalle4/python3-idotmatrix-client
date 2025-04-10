@@ -29,7 +29,9 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Gif Compilations](#gif-compilations)
 * [GUI](#gui)
+* [Troubleshooting](#troubleshooting)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -61,12 +63,13 @@ To get a local copy up and running follow these simple example steps:
 
 Please install the following for your OS:
 
-* latest Python3
-* Python3 Virtual Env
+* Latest version of Python (Python3)
 
-windows users, to use the `.sh` scripts below you will need to use msys/gitbash, or roll your own
+
 
 ### Installation
+
+#### For Linux or MSYS2/Git Bash
 
 1. Clone the repo
 
@@ -74,11 +77,43 @@ windows users, to use the `.sh` scripts below you will need to use msys/gitbash,
 git clone https://github.com/derkalle4/python3-idotmatrix-client.git
 ```
 
-2. Create virtual environment and install all dependencies
+2. `cd` to it
 
+```sh
+cd python3-idotmatrix-client
+```
+
+3. Create virtual environment and install all dependencies
+    
 ```sh
 ./create_venv.sh
 ```
+
+#### For windows
+
+1. Download the repository 
+
+Either click the green "Code" button in GitHub and clicking "Download ZIP", and extracting this file to a folder, or by using Git:
+
+```ps1
+git clone https://github.com/derkalle4/python3-idotmatrix-client.git
+```
+
+2. Install Python
+
+Go to https://www.python.org/downloads/windows/ and install the latets stable release.
+
+
+3. Open it in Explorer and run "build.ps1"
+
+The `build.ps1` script automatically handles setting up the python virtual environment and a shortcut to the GUI. 
+
+Open this script by right clicking it, and clicking "Run with PowerShell", or by nagivating to them in a PowerShell terminal and writing "./" followed by its filename.
+
+
+
+
+
 
 ## Usage
 
@@ -87,13 +122,18 @@ If you used the ./create_venv.sh you should use this command to run the app:
 ```sh
 ./run_in_venv.sh <YOUR_COMMAND_LINE_ARGUMENTS>
 ```
-If you do not use a virtual environment the command will look like this:
+
+If you have manually opened the virtual environment, or are not using a virtual environment, the same can be accomplished with the following:
 
 ```sh
 python3 .\app.py <YOUR_COMMAND_LINE_ARGUMENTS>
 ```
 
 #### command line arguments
+
+##### -h or --help
+
+Shows you every available command line argument. This will always show the newest args, try it if something from this section doesn't work, in case an argument here is outdated.
 
 ##### --address (required for all commands except "scan")
 
@@ -361,7 +401,15 @@ Sets the background color of the text.
 ./run_in_venv.sh --address 00:11:22:33:44:ff --set-text "Hello World" --text-bg-color 0-0-255
 ```
 
+### Gif Compilations
+
+There's no internal method for creating a compilation of gifs or images, similar to what the app offers, 
+but you can create this manually with external tools like ImageMaick or https://ezgif.com/, 
+and upload it to the iDotMatrix device as a single gif.
+
+
 ## GUI
+
 ### Run Methods
 You can run the GUI uncompiled with python, or you can build an executible with Pyinstaller.
 
@@ -370,9 +418,13 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 * Run ```pip install pyqt5```
 * Run ```py gui.py```
 
-#### Method 2) Build and Run
+#### Method 2) Build and Run using PyInstaller
 * Run ```build.bat``` for **Windows** or ```build.sh``` for **Linux**
 * Click the new ```iDotMatrix Controller``` program in ```/python3-idotmatrix-client```
+
+#### Method 3) (Windows only) Build and Run using `build.ps1`
+* Right click ```build.ps1``` in Windows Explorer, and click "Run with PowerShell", and answer its prompt.
+* Open the new ```iDotMatrix GUI``` program on your desktop
 
 ### Features
 * **Device Search**: *Scans for nearby devices, asks for name, adds to home screen.*
@@ -395,6 +447,32 @@ You can run the GUI uncompiled with python, or you can build an executible with 
 *Found a GUI bug? Submitting a new GUI request? Tag [@TheBigWazz](https://github.com/thebigwazz)*
 
 </br>
+
+## Troubleshooting
+
+### Can't upload gifs/images
+
+Try:
+
+- Sending the "reset" command (`--reset`)
+- Use `--process-image` so the program tries to scale your images correctly for you
+- Pre-scale your image to 32x32 or 16x16 pixels using an image editor, and send it unprocessed ("raw" in the GUI)
+- Convert your image to a gif and upload it (You can use ImageMagick or something like http://ezgif.com)
+
+### Can't find device ID 
+
+Try:
+
+- Check that bluetooth is on
+- Place the iDotMatrix display nearby
+- Unplug and replug the iDotMatrix display
+- Restart your PC
+    - If that's not an option for you, killing every "Python" task might work instead.
+
+### Other
+
+If all else fails, you can open an issue on the repository's GitHub.
+
 
 ## Roadmap
 
