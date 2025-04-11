@@ -618,12 +618,15 @@ class CMD:
             return
 
         try:
-            img_path = utils.get_weather_img(args.weather_image_query, pixels, api_key)
+            img_path = utils.get_weather_img(args.weather_image_query, api_key, int(pixels))
         except Exception as e:
             self.logging.error(f"failed to get weather info or make weather image: {e}")
-        else:
-            setattr(args, 'image', img_path)
-            self.image(args)
+            return
+
+        setattr(args, 'image', 'on')
+        setattr(args, 'set_image', img_path)
+        await self.image(args)
+
 
     async def weather_gif_query(self, args):
         api_key = args.weather_api_key
@@ -634,9 +637,10 @@ class CMD:
             return
 
         try:
-            gif_path = utils.get_weather_gif(args.weather_gif_query, pixels, api_key)
+            gif_path = utils.get_weather_gif(args.weather_gif_query, api_key, int(pixels))
         except Exception as e:
             self.logging.error(f"failed to get weather info or make weather gif: {e}")
-        else:
-            setattr(args, 'gif', gif_path)
-            self.gif(args)
+            return
+
+        setattr(args, 'set_gif', gif_path)
+        await self.gif(args)
