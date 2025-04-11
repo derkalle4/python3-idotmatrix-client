@@ -612,6 +612,11 @@ class CMD:
     async def weather_image_query(self, args):
         api_key = args.weather_api_key
         pixels  = args.process_image
+        if pixels==None:
+            self.logging.error("The pixel-size wasn't given. "
+                               "The arg '--process-image' must be used to provide this, e.g. '--process-image 32'.")
+            return
+
         try:
             img_path = utils.get_weather_img(args.weather_image_query, pixels, api_key)
         except Exception as e:
@@ -623,6 +628,11 @@ class CMD:
     async def weather_gif_query(self, args):
         api_key = args.weather_api_key
         pixels  = args.process_image
+        if pixels==None:
+            self.logging.error("The pixel-size wasn't given. "
+                               "The arg '--process-gif' must be used to provide this, e.g. '--process-gif 32'.")
+            return
+
         try:
             gif_path = utils.get_weather_gif(args.weather_gif_query, pixels, api_key)
         except Exception as e:
