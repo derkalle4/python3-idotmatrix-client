@@ -288,7 +288,10 @@ def get_weather_category(condition_code,is_day):
     return "unknown"
 
 
-def get_weather_img(city_query:str, api_key, pixels:int=16) -> str:
+def get_weather_img(city_query:str, api_key:str, pixels:int) -> str:
+    if None in {city_query, api_key, pixels}:
+        raise Exception("Insufficient args given.")
+    pixels = int(pixels)
     # Get weather data
     data_api = get_current_weather_data(city_query, api_key)
 
@@ -315,10 +318,13 @@ def get_weather_img(city_query:str, api_key, pixels:int=16) -> str:
     file_path = "weather.png"
     img.save(file_path)
 
-    return file_path,
+    return file_path
 
 
-def get_weather_gif(city_query:str, api_key:str, pixels:int=16) -> str:
+def get_weather_gif(city_query:str, api_key:str, pixels:int) -> str:
+    if None in {city_query, api_key, pixels}:
+        raise Exception("Insufficient args given.")
+    pixels = int(pixels)
     data_api = get_current_weather_data_forecast(city_query, api_key=api_key)
     current_hour = int(data_api["location"]["localtime"].split()[1].split(":")[0])
 
@@ -370,6 +376,7 @@ def get_weather_gif(city_query:str, api_key:str, pixels:int=16) -> str:
     gif_path = "weather_forecast.gif"
 
     images[0].save(gif_path, save_all=True, append_images=images[1:], duration=[1000, 1000, 1000, 1000, 1000, 1000], loop=0)
+
     return gif_path
 
 
