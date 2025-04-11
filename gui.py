@@ -1,12 +1,11 @@
 import requests
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageSequence
-import imageio
 import numpy
 
 
 
-from utils.utils import digits,patterns, colors, api_key
+from utils.utils import digits, patterns, colors
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget,
     QPlainTextEdit, QHBoxLayout, QMessageBox, QListWidgetItem, QGridLayout,
@@ -26,6 +25,8 @@ if sys.platform == 'win32':
 else:
     shell_cmd       = 'sh'
     shell_init_args = [f"{proj_dir}/run_in_venv.sh"]
+
+
 
 
 # --- Dialog Classes ---
@@ -108,6 +109,27 @@ class CustomInputDialog(QDialog):
             return self.line_edit.text(), True
         else:
             return '', False
+
+class SizeDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Choose Pixel Display Size")
+        layout = QVBoxLayout()
+        self.size_combo = QComboBox()
+        self.size_combo.addItems(["16x16", "32x32"])
+        layout.addWidget(self.size_combo)
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        button_box.accepted.connect(self.accept)
+        layout.addWidget(button_box)
+        self.setLayout(layout)
+
+    def get(self):
+        if self.exec_() == QDialog.Accepted:
+            return self.size_combo.currentText().split("x")[0], True
+        else:
+            return "16", False
+
+
 
 class TextStyleDialog(QDialog):
     def __init__(self, parent=None):
@@ -606,6 +628,7 @@ class DevicePage(QWidget):
         self.last_command = None
         self.clock_styles = ['Default', 'Christmas', 'Racing', 'Inverted Full Screen',
                              'Animated Hourglass', 'Frame 1', 'Frame 2', 'Frame 3']
+        self.weatherapi_api_key = None
         self.init_ui()
         self.flip_screen_state = False
 
@@ -634,18 +657,22 @@ class DevicePage(QWidget):
         grid_layout = QGridLayout()
         self.action_buttons = []
         actions = [
+            ("Reset", self.reset),
             ("Clock Style", self.clock_control),
             ("Sync Time", self.sync_time),
             ("Set Time", self.set_time),
+            ("Set Text", self.set_text),
             ("Screen On", lambda: self.screen_control("on")),
             ("Screen Off", lambda: self.screen_control("off")),
             ("Stop Watch", self.chronograph_control),
             ("Countdown Timer", lambda: self.countdown_control(1)),
-            ("Set Text", self.set_text),
             ("Color Studio", self.color_control),
             ("Scoreboard", self.open_scoreboard),
             ("Set Image", self.set_image),
             ("Set GIF", self.set_gif),
+            ("Set Raw Image", self.set_image_unprocessed),
+            ("Set Raw GIF", self.set_gif_unprocessed),
+            ("Set Weather API-Key", self.set_weather_api_key),
             ("Set Weather", self.set_weather),
             ("Set Weather GIF", self.set_weather_gif),
 
@@ -767,211 +794,6 @@ class DevicePage(QWidget):
         time, ok_pressed = QInputDialog.getText(self, "Set Time", "Enter the time (DD-MM-YYYY-HH:MM:SS):")
         if ok_pressed:
             self.run_command(["--address", self.mac_address, "--set-time", time])
-    pass
-    def set_weather(self):
-        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Enter the city:")
-
-        if ok_pressed and city:  # Check if there is a city
-            def get_current_data(city):
-                url = f"https://api.weatherapi.com/v1/current.json?q={city}&key={api_key}"
-                response = requests.get(url)
-                data = response.json()
-                if response.status_code == 200:
-                    return data
-                else:
-                    raise ValueError("It could not get the info")
-
-            def draw_digit(draw, x_offset, y_offset, digit):
-                pattern = digits[digit]
-                for y, row in enumerate(pattern):
-                    for x, pixel in enumerate(row):
-                        if pixel == "1":
-                            draw.point((x + x_offset, y + y_offset), fill="white")
-
-            def draw_colored_pattern(draw, x_offset, y_offset, key):
-                if key not in patterns:
-                    raise ValueError(f"The pattern '{key}' is not defined.")
-                pattern = patterns[key]
-                for y, row in enumerate(pattern):
-                    for x, pixel in enumerate(row):
-                        if pixel in colors:
-                            draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
-
-            def get_weather_category(condition_code,is_day):
-                weather_switch = {
-                    "sun": [1000],
-                    "partly cloudy": [1003],
-                    "cloudy": [1006, 1009],
-                    "fog": [1030, 1135, 1147],
-                    "raining": [
-                    1063, 1150, 1153, 1180, 1183, 1186, 1189, 1192, 1195, 1240,
-                    1243, 1246, 1273, 1276
-                    ],
-                    "snowing": [
-                    1066, 1114, 1117, 1168, 1171, 1204, 1207, 1210, 1213, 1216,
-                    1219, 1222, 1225, 1255, 1258, 1279, 1282
-                    ],
-                    "thundering": [1087, 1273, 1276, 1279, 1282],
-                    "windy": [1114, 1117]
-                }
-                if is_day == 0:
-                # If it is night , we change the category
-                    weather_switch["moon"] = weather_switch.pop("sun", [1000])
-                    weather_switch["partly cloudy night"] = weather_switch.pop("partly cloudy", [1003])
-
-               
-
-                for category, codes in weather_switch.items():
-                    if condition_code in codes:
-                        return category
-                return "unknown"
-
-        # OGet weather data
-            data_api = get_current_data(city)
-
-            current_weather_code = data_api["current"]["condition"]["code"]
-            is_day = data_api["current"]["is_day"]
-            
-            weather_category = get_weather_category(current_weather_code,is_day)
-            
-
-            temperature_celsius = int(round(data_api["current"]["temp_c"])) 
-            
-        # Do pixel img
-            img = Image.new('RGB', (16, 16), color='black')
-            draw = ImageDraw.Draw(img)
-
-        # Extract the celsius digits
-            first_digit = str(temperature_celsius).zfill(2)[0]
-            second_digit = str(temperature_celsius).zfill(2)[1]
-
-        # Draw temperature and weather
-            draw_digit(draw, 3, 8, first_digit)
-            draw_digit(draw, 9, 8, second_digit)
-            draw_colored_pattern(draw, 4, 0, weather_category)
-
-        # Save the img
-            file_path = "weather.png"
-            img.save(file_path)
-
-        # Run the command with the new img
-            self.run_command([
-            "--address", self.mac_address,
-            "--image", "true",
-            "--set-image", file_path,
-            "--process-image", str(16)
-        ])
-
-    pass
-    def set_weather_gif(self):
-        
-        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Enter the city:")
-
-        if ok_pressed and city:
-            def get_current_data(city):
-                #2 days, just in case the actual hour +6 is the next day
-                url = f"https://api.weatherapi.com/v1/forecast.json?q={city}&days=2&key={api_key}"
-                response = requests.get(url)
-                data = response.json()
-                if response.status_code == 200:
-                    return data
-                else:
-                    raise ValueError("It could not get the info")
-                
-            def draw_digit(draw, x_offset, y_offset, digit):
-                pattern = digits[digit]
-                for y, row in enumerate(pattern):
-                    for x, pixel in enumerate(row):
-                        if pixel == "1":
-                            draw.point((x + x_offset, y + y_offset), fill=(255,255,255))
-            def draw_colored_pattern(draw, x_offset, y_offset, key):
-                if key not in patterns:
-                    raise ValueError(f"The pattern '{key}' is not defined.")
-                pattern = patterns[key]
-                for y, row in enumerate(pattern):
-                    for x, pixel in enumerate(row):
-                        if pixel in colors:
-                            draw.point((x + x_offset, y + y_offset), fill=colors[pixel])
-            
-            def get_weather_category(condition_code,is_day):
-                weather_switch = {
-                    "sun": [1000],
-                    "partly cloudy": [1003],
-                    "cloudy": [1006, 1009],
-                    "fog": [1030, 1135, 1147],
-                    "raining": [
-                    1063, 1150, 1153, 1180, 1183, 1186, 1189, 1192, 1195, 1240,
-                    1243, 1246, 1273, 1276
-                    ],
-                    "snowing": [
-                    1066, 1114, 1117, 1168, 1171, 1204, 1207, 1210, 1213, 1216,
-                    1219, 1222, 1225, 1255, 1258, 1279, 1282
-                    ],
-                    "thundering": [1087, 1273, 1276, 1279, 1282],
-                    "windy": [1114, 1117]
-                }
-                if is_day == 0:
-                # If it is night , we change the category
-                    weather_switch["moon"] = weather_switch.pop("sun", [1000])
-                    weather_switch["partly cloudy night"] = weather_switch.pop("partly cloudy", [1003])
-
-                for category, codes in weather_switch.items():
-                    if condition_code in codes:
-                        return category
-                return "unknown"
-
-            data_api = get_current_data(city)
-            current_hour = int(data_api["location"]["localtime"].split()[1].split(":")[0])
-            
-            hourly_forecast = data_api["forecast"]["forecastday"][0]["hour"]
-            #Array for all the images
-            images=[]
-            #range must be max 6 because specs
-            for i in range(6):
-                #Checking if the next hour is in the same day or next
-                hour_index = (current_hour + i) % 24
-                if current_hour + i < 24:  # Same day
-                    hour_data = data_api["forecast"]["forecastday"][0]["hour"][hour_index]
-                else:  # Next day
-                    hour_data = data_api["forecast"]["forecastday"][1]["hour"][hour_index]
-
-                condition_code = hour_data["condition"]["code"]
-                is_day = hour_data["is_day"]
-                
-                #Celsius temperature
-                temperature_celsius = int(round(hour_data["temp_c"]))
-
-                weather_category = get_weather_category(condition_code, is_day)
-                
-                # Create the pixel image
-                img = Image.new('RGB', (16, 16), color=1)
-                draw = ImageDraw.Draw(img)
-
-                # Extract the Celsius digits
-                first_digit = str(temperature_celsius).zfill(2)[0]
-                second_digit = str(temperature_celsius).zfill(2)[1]
-                # Determine the digit color (red for the first image, white for others)
-                
-                draw.rectangle([0, 15, i, 15], fill=(255, 255, 255))  #horizontal line to draw the hour, each point is the index of the hour
-
-                draw_digit(draw, 3, 8, first_digit)
-                draw_digit(draw, 9, 8, second_digit)
-                draw_colored_pattern(draw, 4, 0, weather_category)
-                
-                # Save the gif with a unique name
-                if img.getbbox():
-                    images.append(img)
-                else:
-                    print(f"IMG {i} is empty, it will not be added")
-
-            # Run the command with the new image
-            
-            images_array = [numpy.array(img) for img in images]
-
-            gif_path = "weather_forecast.gif"
-
-            images[0].save(gif_path, save_all=True, append_images=images[1:], duration=[1000, 1000, 1000, 1000, 1000, 1000], loop=0)
-            self.run_command(["--address", self.mac_address, "--set-gif", gif_path, "--process-gif", str(16)])
 
 
     def screen_control(self, state):
@@ -1002,6 +824,7 @@ class DevicePage(QWidget):
         else:
             print("Countdown canceled, no command will be executed.")
 
+	
     def set_text(self):
         dialog = TextStyleDialog(self)
         settings = dialog.get_settings()
@@ -1087,6 +910,60 @@ class DevicePage(QWidget):
                 if size_dialog.exec_() == QDialog.Accepted:
                     image_size = size_combo.currentText().split("x")[0]
                     self.run_command(["--address", self.mac_address, "--set-gif", file_path, "--process-gif", image_size])
+
+    def set_image_unprocessed(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Image", "", "PNG Files (*.png);;All Files (*)", options=options)
+
+        if file_path:
+            self.run_command(["--address", self.mac_address, "--image", "true", "--set-image", file_path])
+
+    def set_gif_unprocessed(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select GIF", "", "GIF Files (*.gif);;All Files (*)", options=options)
+
+        if file_path:
+            self.run_command(["--address", self.mac_address, "--set-gif", file_path])
+
+    def set_weather_api_key(self):
+        response, responded = QInputDialog.getText(self, "API Key", "Enter your 'https://weatherapi.com' api key")
+        if responded:
+            self.weatherapi_api_key = response
+        else:
+            print("No api key was provided, this is needed for the weather functionality.")
+
+    def set_weather(self):
+        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Remember to set the API key first. \nEnter the city query, e.g. name:")
+        size, ignore     = SizeDialog().get()
+
+        if ok_pressed and city:
+            self.run_command([
+                "--address", self.mac_address,
+                "--process-image", str(size),
+                "--weather-api-key", self.weatherapi_api_key,
+                "--weather-image-query", city,
+            ])
+
+    def set_weather_gif(self):
+        city, ok_pressed = QInputDialog.getText(self, "Set Weather", "Remember to set the API key first. \nEnter the city query, e.g. name:")
+        size, ignore     = SizeDialog().get()
+
+        if ok_pressed and city:
+            self.run_command([
+                "--address", self.mac_address,
+                "--process-image", str(size),
+                "--weather-api-key", self.weatherapi_api_key,
+                "--weather-gif-query", city,
+            ])
+
+    def reset(self):
+        self.run_command([
+            "--address", self.mac_address,
+            "--reset",
+        ])
+        
 
 class ConfigurationPage(QWidget):
     def __init__(self, main_window):
