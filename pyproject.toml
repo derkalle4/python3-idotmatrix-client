@@ -18,7 +18,9 @@ dependencies = [
   "idotmatrix==0.0.7",
   "bleak",
   "pillow",
-  "argparse"
+  "argparse",
+  "requests",
+  "numpy"
 ]
 
 [project.urls]
