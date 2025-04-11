@@ -252,7 +252,7 @@ class CMD:
             "--weather-gif-query",
             action="store",
             type=str,
-            help="Query to send weatherapi, e.g. city name. Displays a gif representing current weather. \nThis arg requires you to also pass '--process-image' with your pixel size, and the '--weather-api-key' with your 'https://weatherapi.com/' API key.",
+            help="Query to send weatherapi, e.g. city name. Displays a gif representing current weather. \nThis arg requires you to also pass '--process-gif' with your pixel size, and the '--weather-api-key' with your 'https://weatherapi.com/' API key.",
         )
 
     async def run(self, args):
@@ -627,7 +627,7 @@ class CMD:
 
     async def weather_gif_query(self, args):
         api_key = args.weather_api_key
-        pixels  = args.process_image
+        pixels  = args.process_gif
         if pixels==None:
             self.logging.error("The pixel-size wasn't given. "
                                "The arg '--process-gif' must be used to provide this, e.g. '--process-gif 32'.")
