@@ -35,7 +35,6 @@ $py_cmd = "$root/run_in_venv.ps1"
 Write-Host "`n### OPENING/MAKING VENV & INSTALLING DEPENDENCIES ###"
 & $py_cmd -DontInvokeApp -m pip install pyqt5 requests numpy
 
-
 Write-Host "`n## CREATING LAUNCHER SHORTCUT ##"
 Write-Host "This script will now create the shortcut on your desktop and in Windows list of programs."
 

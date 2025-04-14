@@ -3,6 +3,16 @@ from datetime import datetime
 from PIL import Image, ImageDraw, ImageSequence
 import numpy
 
+# Add to the imports at the top of gui.py
+import os
+import subprocess
+import tempfile
+import shutil
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtCore import QPoint
+
+from utils.gif_converter.gui import GifConverterWidget
 
 
 from utils.utils import digits, patterns, colors
@@ -669,14 +679,13 @@ class DevicePage(QWidget):
             ("Color Studio", self.color_control),
             ("Scoreboard", self.open_scoreboard),
             ("Set Image", self.set_image),
+            ("Video to GIF", self.convert_video_to_gif),  # Add this line
             ("Set GIF", self.set_gif),
             ("Set Raw Image", self.set_image_unprocessed),
             ("Set Raw GIF", self.set_gif_unprocessed),
             ("Set Weather API-Key", self.set_weather_api_key),
             ("Set Weather", self.set_weather),
             ("Set Weather GIF", self.set_weather_gif),
-
-            
         ]
 
         for index, (text, func) in enumerate(actions):
@@ -702,6 +711,16 @@ class DevicePage(QWidget):
     # --- Helpers ---
     def go_back_to_homepage(self):
         self.main_window.stacked_widget.setCurrentWidget(self.main_window.homepage)
+
+    # Add the convert_video_to_gif method to the DevicePage class
+    def convert_video_to_gif(self):
+        try:
+            from utils.gif_converter.video_converter import VideoToGifDialog
+            video_converter_dialog = VideoToGifDialog(self.mac_address, self)
+            video_converter_dialog.exec_()
+        except ImportError as e:
+            QMessageBox.critical(self, "Error", f"Could not load video converter: {str(e)}")
+
 
     def run_command(self, args):
         self.console_output.clear()
