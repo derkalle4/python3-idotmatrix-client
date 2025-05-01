@@ -15,10 +15,12 @@ maintainers = [
 ]
 dependencies = [
   "asyncio",
-  "idotmatrix==0.0.7",
+  "idotmatrix==0.0.9",
   "bleak",
   "pillow",
-  "argparse"
+  "argparse",
+  "requests",
+  "numpy"
 ]
 
 [project.urls]

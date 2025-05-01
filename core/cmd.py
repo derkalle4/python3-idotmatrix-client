@@ -252,7 +252,7 @@ class CMD:
             "--weather-gif-query",
             action="store",
             type=str,
-            help="Query to send weatherapi, e.g. city name. Displays a gif representing current weather. \nThis arg requires you to also pass '--process-image' with your pixel size, and the '--weather-api-key' with your 'https://weatherapi.com/' API key.",
+            help="Query to send weatherapi, e.g. city name. Displays a gif representing current weather. \nThis arg requires you to also pass '--process-gif' with your pixel size, and the '--weather-api-key' with your 'https://weatherapi.com/' API key.",
         )
 
     async def run(self, args):
@@ -612,21 +612,35 @@ class CMD:
     async def weather_image_query(self, args):
         api_key = args.weather_api_key
         pixels  = args.process_image
+        if pixels==None:
+            self.logging.error("The pixel-size wasn't given. "
+                               "The arg '--process-image' must be used to provide this, e.g. '--process-image 32'.")
+            return
+
         try:
-            img_path = utils.get_weather_img(args.weather_image_query, pixels, api_key)
+            img_path = utils.get_weather_img(args.weather_image_query, api_key, int(pixels))
         except Exception as e:
             self.logging.error(f"failed to get weather info or make weather image: {e}")
-        else:
-            setattr(args, 'image', img_path)
-            self.image(args)
+            return
+
+        setattr(args, 'image', 'on')
+        setattr(args, 'set_image', img_path)
+        await self.image(args)
+
 
     async def weather_gif_query(self, args):
         api_key = args.weather_api_key
-        pixels  = args.process_image
+        pixels  = args.process_gif
+        if pixels==None:
+            self.logging.error("The pixel-size wasn't given. "
+                               "The arg '--process-gif' must be used to provide this, e.g. '--process-gif 32'.")
+            return
+
         try:
-            gif_path = utils.get_weather_gif(args.weather_gif_query, pixels, api_key)
+            gif_path = utils.get_weather_gif(args.weather_gif_query, api_key, int(pixels))
         except Exception as e:
             self.logging.error(f"failed to get weather info or make weather gif: {e}")
-        else:
-            setattr(args, 'gif', gif_path)
-            self.gif(args)
+            return
+
+        setattr(args, 'set_gif', gif_path)
+        await self.gif(args)
